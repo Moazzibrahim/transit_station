@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white
         ),
       ),
-      home: const OnboardingScreen(),
+      home: const SplashScreen(),
     );
   }
 }
