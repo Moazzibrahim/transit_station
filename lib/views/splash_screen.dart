@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transit_station/constants/colors.dart';
-import 'package:transit_station/views/home_views/screens/home_screen.dart';
 import 'package:transit_station/views/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: defaultColor,
       body: Center(
-        child: SvgPicture.asset('assets/images/image 2.svg'),
+        child: Image.asset('assets/images/image 2.png'),
       ),
     );
   }

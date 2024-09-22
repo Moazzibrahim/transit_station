@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transit_station/views/onboarding_screen.dart';
 import 'package:transit_station/views/splash_screen.dart';
 
 void main() {
@@ -12,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
