@@ -103,11 +103,6 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.star, // Placeholder icon; replace with plan-specific icons
-              size: 40,
-              color: Colors.amber,
-            ),
             const SizedBox(height: 8),
             Text(
               title,

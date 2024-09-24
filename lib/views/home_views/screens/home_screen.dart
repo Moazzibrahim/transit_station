@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
-import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
+import 'package:transit_station/views/subscription/views/subscription_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
+// yousef 5wwwwwwwwl[ahmed,marwan]
 class _HomeScreenState extends State<HomeScreen> {
   int? selectedItem;
   @override
@@ -157,10 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 15),
               GestureDetector(
-                onTap: (){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx)=> const SubscriptionPlanScreens())
-                  );
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const SubscriptionScreen()));
                 },
                 child: Container(
                   width: 220,
