@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
+import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -155,20 +156,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
               ),
               const SizedBox(height: 15),
-              Container(
-                width: 220,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: defaultColor),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Subscription Renewal',
-                    style: TextStyle(
-                        color: defaultColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx)=> const SubscriptionPlanScreens())
+                  );
+                },
+                child: Container(
+                  width: 220,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: defaultColor),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Subscription Renewal',
+                      style: TextStyle(
+                          color: defaultColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               )
