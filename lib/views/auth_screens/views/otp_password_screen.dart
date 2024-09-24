@@ -63,12 +63,12 @@ class _OtpPasswordScreenState extends State<OtpPasswordScreen> {
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 214, 212, 212),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.transparent),
+        border: Border.all(color: Colors.blue), // Set blue border here
       ),
     );
 
     return Scaffold(
-      appBar: buildAppBar(context, 'Otp Password'),
+      appBar: buildAppBar(context, 'OTP Verification'),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.w),
         child: Column(
@@ -76,21 +76,20 @@ class _OtpPasswordScreenState extends State<OtpPasswordScreen> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text(
+              child: const Text(
                 "Check your email",
                 style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
-            Text(
+            const Text(
               'We sent a reset link to contact@dscode...com. Enter the 4-digit code mentioned in the email.',
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
-                color: Colors.grey[700],
+                color: Color(0xFF7C7C7C),
               ),
             ),
             const SizedBox(height: 30),
@@ -100,7 +99,8 @@ class _OtpPasswordScreenState extends State<OtpPasswordScreen> {
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: defaultPinTheme.copyWith(
                   decoration: defaultPinTheme.decoration!.copyWith(
-                    border: Border.all(color: Colors.blue),
+                    border: Border.all(
+                        color: defaultColor, width: 2), // Blue border on focus
                   ),
                 ),
                 onCompleted: (pin) => setState(() {}),
@@ -113,6 +113,30 @@ class _OtpPasswordScreenState extends State<OtpPasswordScreen> {
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 18.sp,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Center(
+              child: Text.rich(
+                TextSpan(
+                  text: "Don’t receive code ? ",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF7C7C7C),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "Re-send",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: defaultColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

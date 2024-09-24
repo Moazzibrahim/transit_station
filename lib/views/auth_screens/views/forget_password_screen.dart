@@ -18,8 +18,8 @@ class ForgetPasswordScreen extends StatelessWidget {
             const Text(
               'Forgot Password?',
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const SizedBox(height: 10),
@@ -28,7 +28,7 @@ class ForgetPasswordScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                color: Colors.grey,
+                color: Color(0xFF7C7C7C),
               ),
             ),
             const SizedBox(height: 20),
@@ -42,7 +42,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -60,9 +60,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                 child: const Text(
                   'Reset Password',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

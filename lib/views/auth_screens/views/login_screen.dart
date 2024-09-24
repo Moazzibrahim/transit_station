@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/views/auth_screens/views/signup_screen.dart';
+import 'package:transit_station/views/home_views/screens/home_screen.dart';
 
 import 'forget_password_screen.dart';
 
@@ -14,7 +15,7 @@ class LoginScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text(
           'Login',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -29,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Welcome Back',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -37,7 +38,11 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Log in to your account',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF7C7C7C),
+                    ),
                   ),
                 ],
               ),
@@ -48,6 +53,14 @@ class LoginScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: defaultColor),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: defaultColor),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -56,7 +69,16 @@ class LoginScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: defaultColor),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: defaultColor),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
                   suffixIcon: IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.visibility_outlined),
@@ -75,6 +97,7 @@ class LoginScreen extends StatelessWidget {
                     child: const Text(
                       'Forgot Password?',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,
                         color: defaultColor,
                       ),
@@ -84,7 +107,10 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: defaultColor,
                   padding: const EdgeInsets.symmetric(

@@ -6,7 +6,7 @@ AppBar buildAppBar(BuildContext context, String title) {
     centerTitle: true,
     title: Text(
       title,
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
     ),
     leading: Container(
       margin: const EdgeInsets.all(6),
