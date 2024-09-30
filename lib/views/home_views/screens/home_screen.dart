@@ -11,7 +11,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-// yousef 5wwwwwwwwl[ahmed,marwan]
 class _HomeScreenState extends State<HomeScreen> {
   int? selectedItem;
   @override
@@ -115,8 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Text(
                       'Your Cars',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                     TextButton(
                         onPressed: () {},
@@ -139,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: List.generate(
                       3,
                       (index) {
-                        return const CarContainer(
-                            name: 'BMW X5', image: 'assets/images/bmw.png');
+                        return CarContainer(
+                            name: 'BMW X5', image: 'assets/images/bmw.png',selectedItem: selectedItem);
                       },
                     ),
                   ),
