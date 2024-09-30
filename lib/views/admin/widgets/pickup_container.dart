@@ -10,6 +10,7 @@ class PickupContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: yellowColor,
         borderRadius: BorderRadius.circular(16),
@@ -19,11 +20,15 @@ class PickupContainer extends StatelessWidget {
         children: [
           Image.asset(image),
           const SizedBox(width: 10,),
-          Column(
-            children: [
-              Text(title),
-              Text(subtitle),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
+                const SizedBox(height: 10,),
+                Text(subtitle),
+              ],
+            ),
           )
         ],
       ),

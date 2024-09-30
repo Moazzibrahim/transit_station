@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transit_station/views/admin/screens/admin_dashboard_screen.dart';
 import 'package:transit_station/views/home_views/screens/home_screen.dart';
 
 class TokenModel with ChangeNotifier {
@@ -130,9 +131,15 @@ class LoginModel with ChangeNotifier {
       if (role == 'user') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
-      } else {
+      } else if(role == 'admin'){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
+        );
+      }
+      else {
         _showSnackbar(context, 'Unknown user role');
       }
     } catch (error) {
