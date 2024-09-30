@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/splash_screen.dart';
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<TokenModel>(
           create: (_) => TokenModel(),
+        ),
+        ChangeNotifierProvider<DashboardController>(
+          create: (_) => DashboardController(),
         ),
       ],
       child: ScreenUtilInit(

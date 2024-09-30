@@ -4,7 +4,7 @@ import 'package:transit_station/constants/colors.dart';
 class StatContainer extends StatelessWidget {
   const StatContainer({super.key, required this.title, required this.statNum});
   final String title;
-  final double statNum;
+  final int statNum;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class StatContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
         ],
       ),
     );
