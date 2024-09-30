@@ -10,7 +10,6 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-// yousef 5wwwwwwwwl[ahmed,marwan]
 class _HomeScreenState extends State<HomeScreen> {
   int? selectedItem;
   @override
@@ -135,8 +134,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: List.generate(
                     3,
                     (index) {
-                      return const CarContainer(
-                          name: 'BMW X5', image: 'assets/images/bmw.png');
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedItem = index;
+                          });
+                        },
+                        child: CarContainer(
+                            name: 'BMW X5', image: 'assets/images/bmw.png',selectedItem: selectedItem),
+                      );
                     },
                   ),
                 ),
