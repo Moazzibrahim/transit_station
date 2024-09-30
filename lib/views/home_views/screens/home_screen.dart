@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/views/auth_screens/views/request_screen.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
 import 'package:transit_station/views/subscription/views/subscription_screen.dart';
 
@@ -89,7 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.w400),
                       ),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const RequestForm()));
+                          },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
@@ -114,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Text(
                       'Your Cars',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                     TextButton(
                         onPressed: () {},
@@ -138,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       3,
                       (index) {
                         return CarContainer(
-                            name: 'BMW X5', image: 'assets/images/bmw.png',selectedItem: selectedItem);
+                            name: 'BMW X5',
+                            image: 'assets/images/bmw.png',
+                            selectedItem: selectedItem);
                       },
                     ),
                   ),
