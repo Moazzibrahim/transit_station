@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/auth_screens/views/signup_screen.dart';
-import 'package:transit_station/views/home_views/screens/home_screen.dart';
-
 import 'forget_password_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +56,9 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -65,7 +75,8 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                obscureText: true, // Password is hidden
+                controller: _passwordController,
+                obscureText: _obscurePassword, // Password is hidden
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: const OutlineInputBorder(
@@ -80,8 +91,14 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                   suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.visibility_outlined),
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -108,8 +125,11 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+                  final email = _emailController.text.trim();
+                  final password = _passwordController.text.trim();
+
+                  Provider.of<LoginModel>(context, listen: false)
+                      .loginUser(context, email, password);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: defaultColor,

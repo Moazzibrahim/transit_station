@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:transit_station/constants/colors.dart';
 
 class CarContainer extends StatelessWidget {
-  const CarContainer({super.key, required this.name, required this.image});
+  const CarContainer({super.key, required this.name, required this.image, required this.selectedItem});
   final String name;
   final String image;
+  final int? selectedItem;
 
   @override
   Widget build(BuildContext context) {
