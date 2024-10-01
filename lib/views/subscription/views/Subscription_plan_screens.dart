@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/controllers/subscription_provider.dart';
 import 'package:transit_station/views/auth_screens/widgets/build_appbar.dart';
+import 'package:transit_station/models/subscription_model.dart'; // Your model import
 
 class SubscriptionPlanScreens extends StatefulWidget {
   const SubscriptionPlanScreens({super.key});
@@ -12,62 +14,97 @@ class SubscriptionPlanScreens extends StatefulWidget {
 
 class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
   int selectedIndex = 0; // Track selected card index
+  UserOffersResponse? _userOffersResponse; // To store fetched data
+  bool _isLoading = true; // Loading state
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSubscriptionPlans();
+  }
+
+  Future<void> _fetchSubscriptionPlans() async {
+    ApiService apiService = ApiService();
+    UserOffersResponse? response =
+        await apiService.fetchUserSubscription(context);
+
+    if (response != null) {
+      setState(() {
+        _userOffersResponse = response;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context, 'Subscription Plan'),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Choose The Plan That Suits You",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildSubscriptionCard(
-                    "Platinum", "6 Months", "116\$", "150\$", 0),
-                _buildSubscriptionCard(
-                    "Gold", "12 Months", "116\$", "150\$", 1),
-                _buildSubscriptionCard(
-                    "Silver", "One Month", "116\$", "150\$", 2),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: defaultColor,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 100,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator()) // Loading indicator
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Choose The Plan That Suits You",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 20),
+                  _userOffersResponse != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(
+                              _userOffersResponse!.offers.length, (index) {
+                            Offer offer = _userOffersResponse!.offers[index];
+                            return _buildSubscriptionCard(
+                              offer.offerName,
+                              "${offer.duration} Months", // Assuming duration is in months
+                              "${offer.price}\$",
+                              "150\$", // Adjust as per your requirements
+                              index,
+                            );
+                          }),
+                        )
+                      : const Center(
+                          child: Text("No subscription plans available"),
+                        ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle done action
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: defaultColor,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 100,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                      ),
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  elevation: 4,
-                ),
-                child: const Text(
-                  'Done',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
