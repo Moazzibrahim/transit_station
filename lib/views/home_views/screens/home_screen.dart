@@ -5,9 +5,13 @@ import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/auth_screens/views/request_screen.dart';
+import 'package:transit_station/views/home_views/screens/my_cars_screen.dart';
 import 'package:transit_station/views/home_views/screens/user_profile/user_profile.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
 import 'package:transit_station/views/subscription/views/subscription_screen.dart';
+
+import '../../../controllers/car_provider.dart';
+import '../../../models/cars_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,12 +22,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int? selectedItem;
+  List<Car>? cars; // Store the fetched cars here
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCars();
+  }
+
+  Future<void> fetchCars() async {
+    final fetchedCars = await ApiService().fetchUserCars(context);
+    setState(() {
+      cars = fetchedCars;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GetProfileData>(
       builder: (context, profileProvider, child) {
         if (profileProvider.userProfileModel == null &&
             !profileProvider.isLoading) {
+          // Using WidgetsBinding to ensure it runs after the build phase
           WidgetsBinding.instance.addPostFrameCallback((_) {
             profileProvider.getprofile(context);
           });
@@ -37,16 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Hello,',
                               style: TextStyle(
                                   color: defaultColor,
@@ -54,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontWeight: FontWeight.w400),
                             ),
                             Text(
-                              '${profileProvider.userProfileModel!.name!}',
-                              style: TextStyle(
+                              profileProvider.userProfileModel!.name!,
+                              style: const TextStyle(
                                   fontSize: 32, fontWeight: FontWeight.w400),
                             )
                           ],
@@ -76,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 const UserProfile()));
                                   },
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
+                                const SizedBox(width: 10),
                                 InkWell(
                                   child:
                                       const Icon(Icons.notifications_outlined),
@@ -92,16 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               ],
                             ),
-                            const SizedBox(
-                              height: 50,
-                            ),
+                            const SizedBox(height: 50),
                           ],
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     Container(
                       height: 130,
                       width: double.infinity,
@@ -145,9 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -157,7 +169,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 24, fontWeight: FontWeight.w500),
                         ),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) => const MyCarsScreen()));
+                            },
                             child: const Text(
                               'See all',
                               style: TextStyle(
@@ -168,34 +183,34 @@ class _HomeScreenState extends State<HomeScreen> {
                             )),
                       ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                          3,
-                          (index) {
-                            return CarContainer(
-                                name: 'BMW X5',
-                                image: 'assets/images/bmw.png',
-                                selectedItem: selectedItem);
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 15),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: cars?.map((car) {
+                                    String carImage = (car.carImage != null &&
+                                            car.carImage!.isNotEmpty)
+                                        ? 'https://your-image-url-path/${car.carImage}'
+                                        : 'assets/images/bmw.png';
+
+                                    return CarContainer(
+                                      name: car.carName,
+                                      image: carImage,
+                                      selectedItem: selectedItem,
+                                    );
+                                  }).toList() ??
+                                  [],
+                            ),
+                          ),
+                    const SizedBox(height: 20),
                     const Text(
-                      'Youe active subscription',
+                      'Your active subscription',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     const Text(
                       'Annual subscription was renewed on 25/12/2023 and is valid until 25/12/2024',
                       style:
