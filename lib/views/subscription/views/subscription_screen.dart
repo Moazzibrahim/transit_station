@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
 import 'package:transit_station/models/subscription_model.dart';
-import 'package:transit_station/views/auth_screens/widgets/build_appbar.dart';
 import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch the subscription data when the widget is initialized
     _subscriptionData = ApiService().fetchUserSubscription(context);
   }
 
@@ -32,15 +32,20 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           future: _subscriptionData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // Show a loading spinner while the data is being fetched
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError || snapshot.data == null) {
-              // Show an error message if data loading failed
               return const Center(
                   child: Text("Failed to load subscription data."));
             } else {
-              // Data loaded successfully, display subscription details
               final subscription = snapshot.data!.user[0];
+
+              // Date formatting
+              final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+              final String formattedStartDate =
+                  dateFormat.format(subscription.startDate);
+              final String formattedEndDate =
+                  dateFormat.format(subscription.endDate);
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -65,7 +70,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'Start at: ${subscription.startDate}',
+                            'Start at: $formattedStartDate',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -73,7 +78,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'End at: ${subscription.endDate}',
+                            'End at: $formattedEndDate',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,

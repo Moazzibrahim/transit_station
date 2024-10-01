@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:transit_station/views/auth_screens/views/new_password_screen.dart';
-import 'package:transit_station/views/auth_screens/widgets/build_appbar.dart';
+import 'package:transit_station/constants/build_appbar.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../constants/colors.dart';

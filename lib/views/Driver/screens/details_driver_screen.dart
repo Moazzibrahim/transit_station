@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/views/Driver/screens/arrive.dart';
-import 'package:transit_station/views/auth_screens/widgets/build_appbar.dart';
+import 'package:transit_station/constants/build_appbar.dart';
 
 class DetailsRequestScreen extends StatelessWidget {
   const DetailsRequestScreen({super.key});

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart'; // Required for context and Provider
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -8,7 +9,8 @@ import 'package:transit_station/models/subscription_model.dart'; // Import Provi
 class ApiService {
   final String apiUrl = "https://transitstation.online/api/user/subscription";
 
-  Future<UserOffersResponse?> fetchUserSubscription(BuildContext context) async {
+  Future<UserOffersResponse?> fetchUserSubscription(
+      BuildContext context) async {
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final String? token = tokenProvider.token;
 
@@ -25,15 +27,16 @@ class ApiService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-        UserOffersResponse userOffersResponse = UserOffersResponse.fromJson(jsonResponse);
+        UserOffersResponse userOffersResponse =
+            UserOffersResponse.fromJson(jsonResponse);
 
         return userOffersResponse;
       } else {
-        print("Failed to load data. Status code: ${response.statusCode}");
+        log("Failed to load data. Status code: ${response.statusCode}");
         return null;
       }
     } catch (error) {
-      print("Error occurred: $error");
+      log("Error occurred: $error");
       return null;
     }
   }
