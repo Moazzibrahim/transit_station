@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class UserOffersResponse {
   final List<UserOffer> user;
   final List<Offer> offers;
@@ -44,17 +46,16 @@ class Offer {
 
   factory Offer.fromJson(Map<String, dynamic> json) {
     return Offer(
-      id: json['id'] ?? 0, // Handle missing ID
-      price:
-          (json['price'] as num?)?.toDouble() ?? 0.0, // Null safety for price
-      offerName: json['offer_name'] ?? 'Unknown', // Handle missing offer name
-      duration: json['duration'] ?? 0, // Handle missing duration
+      id: json['id'] ?? 0,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      offerName: json['offer_name'] ?? 'Unknown',
+      duration: json['duration'] ?? 0,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
-          : null, // Handle nullable DateTime
+          : null,
       updatedAt: json['updated_at'] != null
           ? DateTime.tryParse(json['updated_at'])
-          : null, // Handle nullable DateTime
+          : null,
     );
   }
 
@@ -91,24 +92,27 @@ class UserOffer {
 
   factory UserOffer.fromJson(Map<String, dynamic> json) {
     return UserOffer(
-      id: json['id'] ?? 0, // Handle missing ID
-      userId: json['user_id'] ?? 0, // Handle missing user ID
-      offerName: json['offer_name'] ?? 'Unknown', // Handle missing offer name
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      offerName: json['offer_name'] ?? 'Unknown',
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
-      amount:
-          (json['amount'] as num?)?.toDouble() ?? 0.0, // Null safety for amount
-      status: json['status'] ?? 0, // Handle missing status
+      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
+      status: json['status'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
+    final dateFormat =
+        DateFormat('yyyy-MM-dd'); // Ensures date looks like 2024-09-28
+
     return {
       'id': id,
       'user_id': userId,
       'offer_name': offerName,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate.toIso8601String(),
+      'start_date':
+          dateFormat.format(startDate), // Format start date as yyyy-MM-dd
+      'end_date': dateFormat.format(endDate), // Format end date as yyyy-MM-dd
       'amount': amount,
       'status': status,
     };

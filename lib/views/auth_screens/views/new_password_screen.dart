@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transit_station/views/auth_screens/widgets/build_appbar.dart';
+import 'package:transit_station/constants/build_appbar.dart';
 
 import '../../../constants/colors.dart';
 
