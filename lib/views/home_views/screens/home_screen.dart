@@ -68,10 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 Container(
-                  height: 140,
+                  height: 130,
                   width: double.infinity,
                   padding: const EdgeInsets.all(17),
                   decoration: BoxDecoration(
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Enjoy feature-packed parking',
                         style: TextStyle(
                             color: defaultColor,
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.w400),
                       ),
                       ElevatedButton(
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               backgroundColor: defaultColor,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 12)),
+                                  vertical: 9, horizontal: 8)),
                           child: const Text(
                             'Request Now',
                             style: TextStyle(
