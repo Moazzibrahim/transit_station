@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/auth_screens/views/request_screen.dart';
+import 'package:transit_station/views/home_views/screens/user_profile/user_profile.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
 import 'package:transit_station/views/subscription/views/subscription_screen.dart';
 
@@ -53,11 +55,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset('assets/images/person.svg'),
+                            InkWell(
+                              child:
+                                  SvgPicture.asset('assets/images/person.svg'),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UserProfile()));
+                              },
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
-                            const Icon(Icons.notifications_outlined)
+                            InkWell(
+                              child: const Icon(Icons.notifications_outlined),
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const NotificationScreen()));
+                              },
+                            )
                           ],
                         ),
                         const SizedBox(
