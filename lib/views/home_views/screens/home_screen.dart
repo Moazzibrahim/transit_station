@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             InkWell(
                               child: const Icon(Icons.notifications_outlined),
                               onTap: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
