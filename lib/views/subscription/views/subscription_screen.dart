@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
 import 'package:transit_station/constants/build_appbar.dart';
@@ -94,14 +96,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubscriptionPlanScreens()),
+                            builder: (context) =>
+                                const SubscriptionPlanScreens()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: defaultColor,
                       padding: const EdgeInsets.symmetric(
                         vertical: 15,
-                        horizontal: 140,
+                        horizontal: 120,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

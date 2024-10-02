@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
-
+import 'package:transit_station/controllers/get_profile_data.dart';
 
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/splash_screen.dart';
@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<DashboardController>(
           create: (_) => DashboardController(),
         ),
-                ChangeNotifierProvider(create: (_) => GetDropdowndataProvider()),
-
+        ChangeNotifierProvider(create: (_) => GetDropdowndataProvider()),
+        ChangeNotifierProvider(create: (_) => GetProfileData()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

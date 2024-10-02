@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/models/dropdown_model.dart';
-
 class GetDropdowndataProvider with ChangeNotifier {
+  MainData? _mainData;
+
+  MainData? get mainData => _mainData;
+
   Future<void> getdropdown(BuildContext context) async {
     const url = 'https://transitstation.online/api/user/dropdown';
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
@@ -22,13 +24,13 @@ class GetDropdowndataProvider with ChangeNotifier {
       try {
         log("dropdowndata: ${response.body}");
         final responsebody = json.decode(response.body);
-        MainData.fromJson(responsebody);
-        notifyListeners();
+        _mainData = MainData.fromJson(responsebody);  // Store the MainData object
+        notifyListeners();  // Notify listeners after the data is stored
       } catch (e) {
-        log('error $e');
+        log('Error parsing dropdown data: $e');
       }
     } else {
-      log('error in getting data');
+      log('Error in getting dropdown data: ${response.statusCode}');
     }
   }
 }

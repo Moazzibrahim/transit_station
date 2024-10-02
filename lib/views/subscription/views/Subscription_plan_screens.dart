@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
+import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
-import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/models/subscription_model.dart'; // Your model import
 
 class SubscriptionPlanScreens extends StatefulWidget {
@@ -58,19 +59,28 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                   ),
                   const SizedBox(height: 20),
                   _userOffersResponse != null
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: List.generate(
-                              _userOffersResponse!.offers.length, (index) {
-                            Offer offer = _userOffersResponse!.offers[index];
-                            return _buildSubscriptionCard(
-                              offer.offerName,
-                              "${offer.duration} Months", // Assuming duration is in months
-                              "${offer.price}\$",
-                              "150\$", // Adjust as per your requirements
-                              index,
+                      ? LayoutBuilder(
+                          builder: (context, constraints) {
+                            double cardWidth = constraints.maxWidth * 0.3;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: List.generate(
+                                _userOffersResponse!.offers.length,
+                                (index) {
+                                  Offer offer =
+                                      _userOffersResponse!.offers[index];
+                                  return _buildSubscriptionCard(
+                                    offer.offerName,
+                                    "${offer.duration} Months", // Assuming duration is in months
+                                    "${offer.price}\$",
+                                    "150\$", // Adjust as per your requirements
+                                    index,
+                                    cardWidth, // Pass the calculated width
+                                  );
+                                },
+                              ),
                             );
-                          }),
+                          },
                         )
                       : const Center(
                           child: Text("No subscription plans available"),
@@ -109,12 +119,12 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
   }
 
   Widget _buildSubscriptionCard(String title, String duration, String price,
-      String originalPrice, int index) {
+      String originalPrice, int index, double cardWidth) {
     bool isSelected = selectedIndex == index; // Check if this card is selected
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: 120,
+      width: cardWidth, // Use the calculated width
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isSelected ? defaultColor : Colors.white,
@@ -145,7 +155,7 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
               title,
               style: TextStyle(
                 color: isSelected ? Colors.white : defaultColor,
-                fontSize: 18,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -153,15 +163,16 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
             Text(
               duration,
               style: TextStyle(
+                fontSize: 10,
                 color: isSelected ? Colors.white : defaultColor,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               price,
               style: TextStyle(
                 color: isSelected ? Colors.white : defaultColor,
-                fontSize: 20,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
             ),
