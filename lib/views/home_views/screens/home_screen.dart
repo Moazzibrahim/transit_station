@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
+import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
 import 'package:transit_station/views/auth_screens/views/request_screen.dart';
 import 'package:transit_station/views/home_views/screens/my_cars_screen.dart';
 import 'package:transit_station/views/home_views/screens/user_profile/user_profile.dart';
@@ -85,6 +86,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Row(
                               children: [
+                                InkWell(
+                                  child: const Icon(
+                                    Icons.help,
+                                    color: defaultColor,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const TechnicalSupportScreen()));
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
                                 InkWell(
                                   child: SvgPicture.asset(
                                       'assets/images/person.svg'),

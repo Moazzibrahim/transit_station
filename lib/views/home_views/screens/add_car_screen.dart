@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -6,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/controllers/image_services.dart';
+import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/views/home_views/screens/payment_screen.dart';
 import '../../../constants/colors.dart';
 
 class AddCarScreen extends StatefulWidget {
@@ -18,34 +23,47 @@ class AddCarScreen extends StatefulWidget {
 class _AddCarScreenState extends State<AddCarScreen> {
   final TextEditingController _carNameController = TextEditingController();
   final TextEditingController _carNumberController = TextEditingController();
+  String? base64Image;
   File? _image;
-
   Future<void> _postCarDetails() async {
-    _image = Provider.of<ImageServices>(context,listen: false).image;
+    if (_carNameController.text.isEmpty ||
+        _carNumberController.text.isEmpty ||
+        _image == null) {
+      showTopSnackBar(context, 'You must fill all the fields', Icons.error,
+          Colors.red, const Duration(seconds: 4));
+
+      return; // Exit the function if validation fails
+    }
+
+    base64Image = Provider.of<ImageServices>(context, listen: false)
+        .convertImageToBase64(_image!);
+
     // API URL
     const String url = 'https://transitstation.online/api/user/car/add';
 
-    // Create a request
-    final request = http.MultipartRequest('POST', Uri.parse(url));
-
-    request.fields['car_name'] = _carNameController.text;
-    request.fields['car_number'] = _carNumberController.text;
-
-    if (_image != null) {
-      request.files.add(await http.MultipartFile.fromPath(
-        'car_image',
-        _image!.path,
-      ));
-    }
+    // Create request body
+    Map<String, dynamic> body = {
+      'car_name': _carNameController.text,
+      'car_number': int.parse(_carNumberController.text),
+      if (base64Image != null) 'car_image': base64Image
+    };
 
     try {
-      // Send the request and wait for a response
-      final response = await request.send();
+      final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+      final token = tokenProvider.token;
+      // Send the POST request
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      );
 
       if (response.statusCode == 200) {
-        final responseData = await response.stream.toBytes();
-        final responseString = String.fromCharCodes(responseData);
-        log('Success: $responseString');
+        log('Success: ${response.body}');
       } else {
         log('Failed to post data: ${response.statusCode}');
         // Handle failure (e.g., show an error message)
@@ -93,7 +111,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       // Upload button
                       Expanded(
                         child: GestureDetector(
-                          onTap: Provider.of<ImageServices>(context,listen: false).pickImage,
+                          onTap: () async {
+                            await Provider.of<ImageServices>(context,
+                                    listen: false)
+                                .pickImage();
+                            setState(() {
+                              _image = Provider.of<ImageServices>(context,
+                                      listen: false)
+                                  .image;
+                            });
+                          },
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
                             padding: const EdgeInsets.symmetric(
@@ -109,14 +136,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               children: [
                                 Icon(
                                   Icons.upload,
-                                  color: Colors.blueAccent,
+                                  color: defaultColor,
                                   size: 20,
                                 ),
                                 SizedBox(width: 5),
                                 Text(
                                   'Upload Image',
                                   style: TextStyle(
-                                    color: Colors.blueAccent,
+                                    color: defaultColor,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -164,7 +191,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              onPressed: _postCarDetails, // Call the post function
+              onPressed: () {
+                _postCarDetails();
+              }, // Call the post function
               style: ElevatedButton.styleFrom(
                 backgroundColor: defaultColor,
                 padding:
