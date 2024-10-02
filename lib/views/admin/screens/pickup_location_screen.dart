@@ -53,7 +53,7 @@ class PickupLocationScreen extends StatelessWidget {
                   )),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [Icon(Icons.add), Text('Add')],
+                children: [Icon(Icons.add), Text('Add',style: TextStyle(fontSize: 20),)],
               ),
             ),
           ],

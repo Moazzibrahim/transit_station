@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +18,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
     Provider.of<DashboardController>(context,listen: false).fetchDashboardData(context);
-    log('${Provider.of<DashboardController>(context,listen: false).dashboardData}');
     super.initState();
   }
   @override

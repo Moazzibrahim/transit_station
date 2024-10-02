@@ -1,44 +1,27 @@
 import 'dart:developer';
-import 'dart:convert'; // Import for jsonEncode
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http; // Import http package
+import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
+import 'package:transit_station/controllers/image_services.dart';
 import '../../../constants/colors.dart';
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({super.key});
 
   @override
-  _AddCarScreenState createState() => _AddCarScreenState();
+  State<AddCarScreen> createState() => _AddCarScreenState();
 }
 
 class _AddCarScreenState extends State<AddCarScreen> {
-  File? _image; // To store the picked image
   final TextEditingController _carNameController = TextEditingController();
   final TextEditingController _carNumberController = TextEditingController();
-
-  Future<void> _pickImage() async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? pickedFile =
-          await picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      } else {
-        log('No image selected');
-      }
-    } catch (e) {
-      log('Error picking image: $e');
-    }
-  }
+  File? _image;
 
   Future<void> _postCarDetails() async {
+    _image = Provider.of<ImageServices>(context,listen: false).image;
     // API URL
     const String url = 'https://transitstation.online/api/user/car/add';
 
@@ -110,7 +93,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       // Upload button
                       Expanded(
                         child: GestureDetector(
-                          onTap: _pickImage,
+                          onTap: Provider.of<ImageServices>(context,listen: false).pickImage,
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
                             padding: const EdgeInsets.symmetric(
