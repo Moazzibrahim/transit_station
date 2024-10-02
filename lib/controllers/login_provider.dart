@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/views/admin/screens/admin_dashboard_screen.dart';
 import 'package:transit_station/views/home_views/screens/home_screen.dart';
 
@@ -104,10 +105,10 @@ class LoginModel with ChangeNotifier {
 
           _handleuserdata(context, userdata);
         } else {
-          _showSnackbar(context, "خطأ في البريد الالكتروني او الرقم السري");
+          showTopSnackBar(context,'something went wrong',Icons.warning,Colors.red,const Duration(seconds: 5));
         }
       } else {
-        _showSnackbar(context, "خطأ في البريد الالكتروني او الرقم السري");
+        showTopSnackBar(context,'Check your credentials',Icons.warning,Colors.red,const Duration(seconds: 5));
       }
     } catch (error) {
       log('Error during authentication: $error');
