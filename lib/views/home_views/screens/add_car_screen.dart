@@ -10,8 +10,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
-import 'package:transit_station/views/home_views/screens/payment_screen.dart';
-import '../../../constants/colors.dart';
+ import '../../../constants/colors.dart';
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({super.key});
@@ -61,12 +60,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
         },
         body: jsonEncode(body),
       );
-
+      print(body);
       if (response.statusCode == 200) {
-        log('Success: ${response.body}');
       } else {
+        log(response.body);
         log('Failed to post data: ${response.statusCode}');
-        // Handle failure (e.g., show an error message)
       }
     } catch (e) {
       log('Error posting data: $e');

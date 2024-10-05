@@ -7,7 +7,8 @@ import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/models/subscription_model.dart'; // Import Provider
 
 class ApiService {
-  final String apiUrl = "https://transitstation.online/api/user/subscription";
+  final String apiUrl =
+      "https://transitstation.online/api/user/subscription-details";
 
   Future<UserOffersResponse?> fetchUserSubscription(
       BuildContext context) async {

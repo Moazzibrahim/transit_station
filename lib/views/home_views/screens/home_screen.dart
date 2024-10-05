@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, profileProvider, child) {
         if (profileProvider.userProfileModel == null &&
             !profileProvider.isLoading) {
-          // Using WidgetsBinding to ensure it runs after the build phase
           WidgetsBinding.instance.addPostFrameCallback((_) {
             profileProvider.getprofile(context);
           });
