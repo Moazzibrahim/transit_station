@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
-import 'package:transit_station/models/subscription_model.dart'; // Your model import
+import 'package:transit_station/models/subscription_model.dart';
+import 'package:transit_station/views/home_views/screens/payment_screen.dart'; // Your model import
 
 class SubscriptionPlanScreens extends StatefulWidget {
   const SubscriptionPlanScreens({super.key});
@@ -89,7 +90,8 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle done action
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const PaymentScreen()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: defaultColor,
