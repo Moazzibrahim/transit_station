@@ -83,7 +83,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           );
                         },
                         child: StatContainer(title: '#Pick-Up Location', statNum: dashboardProvider.dashboardData!.pickUpLocationCount)),
-                      StatContainer(title: '#Parking', statNum: dashboardProvider.dashboardData!.parkingCount),
+                      GestureDetector(
+                        onTap: (){
+                          
+                        },
+                        child: StatContainer(title: '#Parking', statNum: dashboardProvider.dashboardData!.parkingCount)),
                       StatContainer(title: '#Subscriptions', statNum: dashboardProvider.dashboardData!.subscriptionCount),
                       StatContainer(title: 'Revenue', statNum: dashboardProvider.dashboardData!.revenueAmount.toInt()), // You can customize currency formatting
                       StatContainer(title: 'Expenses', statNum: dashboardProvider.dashboardData!.expenceAmount.toInt()),
