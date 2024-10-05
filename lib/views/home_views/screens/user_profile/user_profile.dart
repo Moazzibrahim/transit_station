@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
-import 'package:transit_station/views/Driver/screens/edit_profile.dart';
 import 'package:transit_station/constants/build_appbar.dart';
-import 'package:transit_station/controllers/get_profile_data.dart'; // Adjust the import as necessary
+import 'package:transit_station/controllers/get_profile_data.dart';
+import 'package:transit_station/views/home_views/screens/user_profile/edit_user_profile.dart'; // Adjust the import as necessary
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
@@ -35,10 +35,16 @@ class UserProfile extends StatelessWidget {
                           Center(
                             child: Stack(
                               children: [
-                                const CircleAvatar(
+                                CircleAvatar(
                                   radius: 50,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/amal.png'), // Default image
+                                  backgroundImage: profileProvider
+                                              .userProfileModel?.image !=
+                                          null
+                                      ? NetworkImage(
+                                          '${profileProvider.userProfileModel!.image}')
+                                      : const AssetImage(
+                                              'assets/images/boy.png')
+                                          as ImageProvider, // Default image
                                 ),
                                 Positioned(
                                   bottom: 0,
@@ -52,7 +58,7 @@ class UserProfile extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const EditProfileDriver()));
+                                                    const EditProfileUser()));
                                       },
                                       icon: const Icon(
                                         Icons.edit,
