@@ -46,10 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, profileProvider, child) {
         if (profileProvider.userProfileModel == null &&
             !profileProvider.isLoading) {
+          // Fetch the profile data if it's not loaded yet
           WidgetsBinding.instance.addPostFrameCallback((_) {
             profileProvider.getprofile(context);
           });
         }
+
+        // Show loading if profile data is not yet loaded
+        if (profileProvider.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         return Container(
           color: Colors.white,
           child: SafeArea(
@@ -73,8 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 32,
                                   fontWeight: FontWeight.w400),
                             ),
+                            // Check if the name is null before displaying it
                             Text(
-                              profileProvider.userProfileModel!.name!,
+                              profileProvider.userProfileModel?.name ?? 'Guest',
                               style: const TextStyle(
                                   fontSize: 32, fontWeight: FontWeight.w400),
                             )

@@ -4,6 +4,7 @@ class UserProfileModel {
   String? email;
   String? phone;
   String? role;
+  String? image;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -13,6 +14,7 @@ class UserProfileModel {
     this.email,
     this.phone,
     this.role,
+    this.image,
     this.createdAt,
     this.updatedAt,
   });
@@ -25,6 +27,7 @@ class UserProfileModel {
       email: json['email'],
       phone: json['phone'],
       role: json['role'],
+      image: json['image'],
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
           : null,
@@ -42,6 +45,7 @@ class UserProfileModel {
       'email': email,
       'phone': phone,
       'role': role,
+      'image': image,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
