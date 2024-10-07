@@ -34,4 +34,32 @@ class ParkingController with ChangeNotifier {
       log('error in fetch dashboard data: $e');
     }
   }
+
+  Future<bool> addParking(BuildContext context,String name, int capacity,String location) async{
+    try {
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+    final response = await http.post(Uri.parse('https://transitstation.online/api/admin/parking/add'),
+    headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode({
+      'name' : name,
+      'capacity' : capacity,
+      'location' : location
+    })
+    );
+    if(response.statusCode == 200){
+      return true;
+    }else {
+      log('status code: ${response.statusCode}');
+      return false;
+    }
+    } catch (e) {
+      log('error in fetch dashboard data: $e');
+      return false;
+    }
+  }
 }
