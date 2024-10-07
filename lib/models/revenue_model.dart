@@ -13,7 +13,7 @@ class Revenue {
   factory Revenue.fromJson(Map<String, dynamic> json) => Revenue(
         type: json['type'],
         id: json['id'],
-        amount: json['revenue_amount'],
+        amount: json['revenue_amount'].toDouble(),
         date: json['date'],
       );
 }

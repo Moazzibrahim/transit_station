@@ -41,7 +41,7 @@ class RevenueProvider with ChangeNotifier {
     try {
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final token = tokenProvider.token;
-    final response =await http.get(Uri.parse('uri'),
+    final response =await http.get(Uri.parse('https://transitstation.online/api/admin/revenue'),
     headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
