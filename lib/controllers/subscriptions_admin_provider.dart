@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:transit_station/controllers/login_provider.dart';
-import 'package:transit_station/models/subscriptions_model.dart';
+import 'package:transit_station/models/subscriptions_admin_model.dart';
 
 class SubscriptionService {
   final String apiUrl = "https://transitstation.online/api/admin/subscription";

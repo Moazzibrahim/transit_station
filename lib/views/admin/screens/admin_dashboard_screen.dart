@@ -8,7 +8,7 @@ import 'package:transit_station/views/admin/screens/pickup_location_screen.dart'
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
 
-import 'subscriptions_screen.dart';
+import 'subscriptions_admin_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -109,7 +109,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => SubscriptionsScreen()));
+                                    builder: (ctx) =>
+                                        const SubscriptionsAdminScreen()));
                               },
                               child: StatContainer(
                                   title: '#Subscriptions',
