@@ -5,6 +5,7 @@ import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
+import 'package:transit_station/views/admin/screens/revenue_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
 
@@ -116,11 +117,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   title: '#Subscriptions',
                                   statNum: dashboardProvider
                                       .dashboardData!.subscriptionCount)),
-                          StatContainer(
-                              title: 'Revenue',
-                              statNum: dashboardProvider
-                                  .dashboardData!.revenueAmount
-                                  .toInt()), // You can customize currency formatting
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (ctx)=> const RevenueScreen())
+                              );
+                            },
+                            child: StatContainer(
+                                title: 'Revenue',
+                                statNum: dashboardProvider
+                                    .dashboardData!.revenueAmount
+                                    .toInt()),
+                          ), // You can customize currency formatting
                           StatContainer(
                               title: 'Expenses',
                               statNum: dashboardProvider
