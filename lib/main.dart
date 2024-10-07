@@ -7,6 +7,7 @@ import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/image_services.dart';
 
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/parking_controller.dart';
 import 'package:transit_station/views/splash_screen.dart';
 
 void main() {
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetDropdowndataProvider()),
         ChangeNotifierProvider(create: (_) => GetProfileData()),
         ChangeNotifierProvider(create: (_) => ImageServices()),
+        ChangeNotifierProvider(create: (_) => ParkingController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
