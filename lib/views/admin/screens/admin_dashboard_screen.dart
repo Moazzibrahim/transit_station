@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
+import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
@@ -85,7 +86,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         child: StatContainer(title: '#Pick-Up Location', statNum: dashboardProvider.dashboardData!.pickUpLocationCount)),
                       GestureDetector(
                         onTap: (){
-                          
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (ctx)=> const ParkingScreen())
+                          );
                         },
                         child: StatContainer(title: '#Parking', statNum: dashboardProvider.dashboardData!.parkingCount)),
                       StatContainer(title: '#Subscriptions', statNum: dashboardProvider.dashboardData!.subscriptionCount),

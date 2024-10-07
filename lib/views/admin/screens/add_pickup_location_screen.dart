@@ -80,7 +80,7 @@ class _AddPickupLocationScreenState extends State<AddPickupLocationScreen> {
                     pickupAddress: _addressIndetailsController.text,
                     locationImage: base64Image!
                     );
-                    
+                    showTopSnackBar(context,'Pick-up location added', Icons.check_circle_outline,defaultColor, const Duration(seconds: 4));
                   }else{
                     showTopSnackBar(context,'please fill all fields', Icons.warning,defaultColor, const Duration(seconds: 4));
                   }

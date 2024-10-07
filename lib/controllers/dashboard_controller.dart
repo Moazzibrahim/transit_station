@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:transit_station/models/dashborad_model.dart';
+import 'package:transit_station/models/location_model.dart';
 
 class DashboardController with ChangeNotifier {
   DashboradModel? _dashboradModel;
@@ -12,6 +13,9 @@ class DashboardController with ChangeNotifier {
 
   bool _isLocationAdded = false;
   bool get isLocationAdded => _isLocationAdded;
+
+  List<LocationModel> _locationsData = [];
+  List<LocationModel> get locationData => _locationsData; 
 
   Future<void> fetchDashboardData(BuildContext context) async{
     try {
@@ -72,4 +76,31 @@ class DashboardController with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> fetchPickupLocations(BuildContext context) async{
+    try {
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+    final response = await http.get(Uri.parse('https://transitstation.online/api/admin/locations'),
+    headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token',
+    },
+    );
+    if(response.statusCode == 200){
+      final Map<String,dynamic> responseData = jsonDecode(response.body);
+      final LocationDataList locationDataList = LocationDataList.fromJson(responseData);
+      List<LocationModel> locationList = locationDataList.locationList.map((e) => LocationModel.fromJson(e),).toList();
+      _locationsData = locationList;
+      notifyListeners();
+    }else {
+      log('status code: ${response.statusCode}');
+    }
+    } catch (e) {
+      log('error in fetch dashboard data: $e');
+    }
+  }
+  
+
 }
