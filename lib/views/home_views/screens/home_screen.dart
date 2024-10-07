@@ -1,10 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
-import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
+import 'package:transit_station/views/auth_screens/views/login_screen.dart';
 import 'package:transit_station/views/auth_screens/views/request_screen.dart';
 import 'package:transit_station/views/home_views/screens/my_cars_screen.dart';
 import 'package:transit_station/views/home_views/screens/user_profile/user_profile.dart';
@@ -13,6 +19,7 @@ import 'package:transit_station/views/subscription/views/subscription_screen.dar
 
 import '../../../controllers/car_provider.dart';
 import '../../../models/cars_model.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -122,14 +129,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 const SizedBox(width: 10),
                                 InkWell(
-                                  child:
-                                      const Icon(Icons.notifications_outlined),
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const NotificationScreen()));
+                                  child: const Icon(
+                                    Icons.logout,
+                                    color: defaultColor,
+                                  ),
+                                  onTap: () async {
+                                    const url =
+                                        'https://transitstation.online/api/user/logout';
+                                    final tokenProvider =
+                                        Provider.of<TokenModel>(context,
+                                            listen: false);
+                                    final token = tokenProvider.token;
+                                    try {
+                                      final response = await http
+                                          .post(Uri.parse(url), headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'Authorization': 'Bearer $token',
+                                      });
+                                      if (response.statusCode == 200) {
+                                        final responseBody =
+                                            json.decode(response.body);
+                                        log('logout response $responseBody');
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginScreen()));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content:
+                                                    Text('logout successful')));
+                                      } else {
+                                        log('Failed to load profile data (Error: ${response.statusCode})');
+                                      }
+                                    } catch (e) {
+                                      log('An error occurred: $e');
+                                    }
                                   },
                                 )
                               ],
