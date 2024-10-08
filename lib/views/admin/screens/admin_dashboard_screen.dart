@@ -6,6 +6,7 @@ import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
 import 'package:transit_station/views/admin/screens/revenue_screen.dart';
+import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
 
@@ -30,6 +31,36 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: defaultColor,
+                ),
+                child: Text('Admin Menu',
+                    style: TextStyle(color: Colors.white, fontSize: 24)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.location_on),
+                title: const Text('Pick-Up Locations'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const PickupLocationScreen()));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.local_parking),
+                title: const Text('Parking'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const ParkingScreen()));
+                },
+              ),
+            ],
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -58,11 +89,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       ),
                       Row(
                         children: [
-                          SvgPicture.asset('assets/images/person.svg'),
+                          const Icon(Icons.notifications_outlined),
                           const SizedBox(
                             width: 10,
                           ),
-                          const Icon(Icons.notifications_outlined)
+                          Builder(
+                            builder: (context) => IconButton(
+                              icon: const Icon(Icons.menu, color: defaultColor),
+                              onPressed: () {
+                                Scaffold.of(context)
+                                    .openDrawer(); // Open the drawer
+                              },
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -92,10 +131,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (ctx) =>
-                                        const PickupLocationScreen()));
+                                        const UsersAdminScreen()));
                               },
                               child: StatContainer(
-                                  title: '#Pick-Up Location',
+                                  title: 'users',
                                   statNum: dashboardProvider
                                       .dashboardData!.pickUpLocationCount)),
                           GestureDetector(
@@ -118,17 +157,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   statNum: dashboardProvider
                                       .dashboardData!.subscriptionCount)),
                           GestureDetector(
-                            onTap: (){
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (ctx)=> const RevenueScreen())
-                              );
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) => const RevenueScreen()));
                             },
                             child: StatContainer(
                                 title: 'Revenue',
                                 statNum: dashboardProvider
                                     .dashboardData!.revenueAmount
                                     .toInt()),
-                          ), // You can customize currency formatting
+                          ),
                           StatContainer(
                               title: 'Expenses',
                               statNum: dashboardProvider

@@ -42,7 +42,6 @@ class _RequestFormState extends State<RequestForm> {
       return;
     }
 
-    // Format the selected date and time to match API format (e.g. 'yyyy-MM-dd' and 'HH:mm')
     String formattedDate =
         "${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}";
     String formattedTime =
@@ -59,9 +58,8 @@ class _RequestFormState extends State<RequestForm> {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(<String, dynamic>{
-          'car_id': selectedCar, // Assuming you're sending car ID
-          'location_id':
-              selectedLocation, // Assuming you're sending location ID
+          'car_id': selectedCar,
+          'location_id': selectedLocation,
           'pick_up_date': formattedDate,
           'request_time': formattedTime,
         }),
@@ -113,7 +111,7 @@ class _RequestFormState extends State<RequestForm> {
                   items: cars.map((car) {
                     return DropdownMenuItem<String>(
                       value: car.id
-                          .toString(), // Assuming carId is the unique identifier
+                          .toString(), 
                       child: Text(car.carName),
                     );
                   }).toList(),
@@ -135,7 +133,7 @@ class _RequestFormState extends State<RequestForm> {
                   items: locations.map((location) {
                     return DropdownMenuItem<String>(
                       value: location.id
-                          .toString(), // Assuming locationId is the unique identifier
+                          .toString(),
                       child: Text(location.address),
                     );
                   }).toList(),
