@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/revenue_provider.dart';
+import 'package:transit_station/views/admin/screens/add_revenue_screen.dart';
 import 'package:transit_station/views/admin/screens/add_type_reveneu.dart';
 
 class RevenueScreen extends StatefulWidget {
@@ -117,9 +118,9 @@ class _RevenueScreenState extends State<RevenueScreen> {
                   ),
                   ElevatedButton(
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(builder: (ctx)=> const AddPickupLocationScreen())
-                    // );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx)=> const AddRevenueScreen())
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: defaultColor,
