@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: cars?.map((car) {
                                     String carImage = (car.carImage != null &&
                                             car.carImage!.isNotEmpty)
-                                        ? 'https://your-image-url-path/${car.carImage}'
+                                        ? car.carImage!
                                         : 'assets/images/bmw.png';
 
                                     return CarContainer(

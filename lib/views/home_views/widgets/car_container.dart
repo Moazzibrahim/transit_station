@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/colors.dart';
 
 class CarContainer extends StatelessWidget {
   const CarContainer({super.key, required this.name, required this.image, required this.selectedItem});
   final String name;
-  final String image;
+  final String? image;
   final int? selectedItem;
 
   @override
@@ -28,7 +30,7 @@ class CarContainer extends StatelessWidget {
               color: Colors.white,
             ),
             child: Center(
-              child: Image.asset(image),
+              child: image == null ? const Text('No image') : Image.memory(base64Decode(image!)),
             ),
           ),
           const SizedBox(height: 10,),

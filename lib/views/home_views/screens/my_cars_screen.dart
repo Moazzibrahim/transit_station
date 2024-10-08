@@ -66,7 +66,7 @@ class _MyCarsScreenState extends State<MyCarsScreen> {
                             },
                             child: CarContainer(
                               name: car.carName,
-                              image: car.carImage ?? 'assets/images/bmw.png',
+                              image: car.carImage,
                               selectedItem:
                                   selectedCarIndex == index ? index : null,
                             ),
