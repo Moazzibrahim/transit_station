@@ -72,7 +72,7 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                                       _userOffersResponse!.offers[index];
                                   return _buildSubscriptionCard(
                                     offer.offerName,
-                                    "${offer.duration} Months", // Assuming duration is in months
+                                    "${offer.duration} days", // Assuming duration is in months
                                     "${offer.price}\$",
                                     "150\$", // Adjust as per your requirements
                                     index,

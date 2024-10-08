@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/views/admin/screens/dropdown_subscriptions.dart';
 import 'package:transit_station/views/admin/screens/plans_admin_screen.dart';
 import '../../../controllers/subscriptions_admin_provider.dart';
 import '../../../models/subscriptions_admin_model.dart';
@@ -11,7 +12,13 @@ class SubscriptionsAdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, 'Subscriptions'),
+      appBar: appBarWithActions(context, 'Subscriptions', () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const DropdownSubscriptions()),
+        );
+      }),
       body: FutureBuilder<List<User>>(
         future: SubscriptionService().fetchSubscriptions(context),
         builder: (context, snapshot) {

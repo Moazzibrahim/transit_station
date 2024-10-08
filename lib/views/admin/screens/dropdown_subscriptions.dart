@@ -1,70 +1,77 @@
-// ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http; // Import http package
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
-import 'package:transit_station/constants/colors.dart';
-import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
+import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/Driver/screens/status_screen.dart';
+import '../../../constants/colors.dart';
 
-class RequestForm extends StatefulWidget {
-  const RequestForm({super.key});
+class DropdownSubscriptions extends StatefulWidget {
+  const DropdownSubscriptions({super.key});
 
   @override
-  State<RequestForm> createState() => _RequestFormState();
+  State<DropdownSubscriptions> createState() => _RequestFormState();
 }
 
-class _RequestFormState extends State<RequestForm> {
-  String? selectedCar;
-  String? selectedLocation;
+class _RequestFormState extends State<DropdownSubscriptions> {
+  String? selectedOffer;
+  String? selectedUser;
+  TextEditingController selectedAmount = TextEditingController();
   DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+  DateTime? selectedEndDate;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<GetDropdowndataProvider>(context, listen: false)
-          .getdropdown(context);
+      Provider.of<GetDropdowndataSubscriptionProvider>(context, listen: false)
+          .getDropdownSubscription(context);
     });
   }
 
   Future<void> makePostRequest(BuildContext context) async {
-    if (selectedCar == null ||
-        selectedLocation == null ||
+    if (selectedOffer == null ||
+        selectedUser == null ||
         selectedDate == null ||
-        selectedTime == null) {
+        selectedAmount.text.isEmpty ||
+        selectedEndDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please complete all fields')),
       );
       return;
     }
 
+    // Format the selected date and time to match API format (e.g. 'yyyy-MM-dd' and 'HH:mm')
     String formattedDate =
         "${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}";
-    String formattedTime =
-        "${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}";
+    String formattedEndDate =
+        "${selectedEndDate!.year}-${selectedEndDate!.month.toString().padLeft(2, '0')}-${selectedEndDate!.day.toString().padLeft(2, '0')}";
+
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final token = tokenProvider.token;
 
     try {
       var response = await http.post(
-        Uri.parse('https://transitstation.online/api/user/make-request'),
+        Uri.parse('https://transitstation.online/api/admin/subscription/add'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(<String, dynamic>{
-          'car_id': selectedCar,
-          'location_id': selectedLocation,
-          'pick_up_date': formattedDate,
-          'request_time': formattedTime,
+          'user_id': selectedUser, // Assuming you're sending car ID
+          'offer_id': selectedOffer, // Assuming you're sending location ID
+          'start_date': formattedDate,
+          'end_time': formattedEndDate,
+          'amount': int.parse(selectedAmount.text),
         }),
       );
+
+      if (!mounted) return; // Ensure the widget is still in the tree
 
       if (response.statusCode == 200) {
         // Success - Handle the response
@@ -82,8 +89,9 @@ class _RequestFormState extends State<RequestForm> {
       } else {
         // Error - Handle the error
         log('Request failed with status: ${response.statusCode}');
+        log(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed: ${response.body}')),
+          SnackBar(content: Text('Failed: ${response.statusCode}')),
         );
       }
     } catch (error) {
@@ -97,11 +105,13 @@ class _RequestFormState extends State<RequestForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, "Request screen"),
-      body: Consumer<GetDropdowndataProvider>(
+      appBar: buildAppBar(context, "Add Subscription"),
+      body: Consumer<GetDropdowndataSubscriptionProvider>(
         builder: (context, getDropdowndataProvider, child) {
-          final cars = getDropdowndataProvider.mainData?.cars ?? [];
-          final locations = getDropdowndataProvider.mainData?.locations ?? [];
+          final offers =
+              getDropdowndataProvider.offersUsersResponse?.offers ?? [];
+          final users =
+              getDropdowndataProvider.offersUsersResponse?.users ?? [];
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -110,42 +120,44 @@ class _RequestFormState extends State<RequestForm> {
               children: [
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Select car type',
+                    labelText: 'Select offer ',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  value: selectedCar,
-                  items: cars.map((car) {
+                  value: selectedOffer,
+                  items: offers.map((offer) {
                     return DropdownMenuItem<String>(
-                      value: car.id.toString(),
-                      child: Text(car.carName),
+                      value: offer.id
+                          .toString(), // Assuming carId is the unique identifier
+                      child: Text(offer.offerName),
                     );
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedCar = newValue;
+                      selectedOffer = newValue;
                     });
                   },
                 ),
                 const SizedBox(height: 16.0),
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Select pick-up Location',
+                    labelText: 'Select user',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  value: selectedLocation,
-                  items: locations.map((location) {
+                  value: selectedUser,
+                  items: users.map((user) {
                     return DropdownMenuItem<String>(
-                      value: location.id.toString(),
-                      child: Text(location.address),
+                      value: user.id
+                          .toString(), // Assuming locationId is the unique identifier
+                      child: Text(user.name),
                     );
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedLocation = newValue;
+                      selectedUser = newValue;
                     });
                   },
                 ),
@@ -153,7 +165,7 @@ class _RequestFormState extends State<RequestForm> {
                 TextFormField(
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: 'Pick up date',
+                    labelText: 'Start date',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -181,27 +193,40 @@ class _RequestFormState extends State<RequestForm> {
                 TextFormField(
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: 'Pick up time',
+                    labelText: 'End date',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   controller: TextEditingController(
-                    text: selectedTime == null
+                    text: selectedEndDate == null
                         ? ''
-                        : "${selectedTime!.hour}:${selectedTime!.minute}",
+                        : "${selectedEndDate!.year}-${selectedEndDate!.month}-${selectedEndDate!.day}",
                   ),
                   onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
+                    DateTime? pickedEndDate = await showDatePicker(
                       context: context,
-                      initialTime: TimeOfDay.now(),
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2101),
                     );
-                    if (pickedTime != null) {
+                    if (pickedEndDate != null) {
                       setState(() {
-                        selectedTime = pickedTime;
+                        selectedEndDate = pickedEndDate;
                       });
                     }
                   },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  controller: selectedAmount,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 32.0),
                 ElevatedButton(
