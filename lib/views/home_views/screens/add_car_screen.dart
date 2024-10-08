@@ -10,7 +10,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
- import '../../../constants/colors.dart';
+import '../../../constants/colors.dart';
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({super.key});

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
+import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/image_services.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ImageServices()),
         ChangeNotifierProvider(create: (_) => ParkingController()),
         ChangeNotifierProvider(create: (_) => RevenueProvider()),
+        ChangeNotifierProvider(create: (_)=> GetDropdowndataSubscriptionProvider())
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
