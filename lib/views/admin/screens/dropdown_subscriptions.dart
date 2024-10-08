@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/login_provider.dart';
-import 'package:transit_station/views/Driver/screens/status_screen.dart';
 import '../../../constants/colors.dart';
 
 class DropdownSubscriptions extends StatefulWidget {
@@ -66,7 +65,7 @@ class _RequestFormState extends State<DropdownSubscriptions> {
           'user_id': selectedUser, // Assuming you're sending car ID
           'offer_id': selectedOffer, // Assuming you're sending location ID
           'start_date': formattedDate,
-          'end_time': formattedEndDate,
+          'end_date': formattedEndDate,
           'amount': int.parse(selectedAmount.text),
         }),
       );
@@ -78,13 +77,6 @@ class _RequestFormState extends State<DropdownSubscriptions> {
         log('Request successful: ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Request successful!')),
-        );
-        Future.delayed(
-          const Duration(seconds: 2),
-          () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const StatusScreen()));
-          },
         );
       } else {
         // Error - Handle the error
