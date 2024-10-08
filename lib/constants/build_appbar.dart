@@ -55,10 +55,10 @@ AppBar appBarWithActions(BuildContext context, String title,void Function() onPr
           borderRadius: BorderRadius.circular(16)
         )
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.add),
-          Text('Type'),
+          const Icon(Icons.add),
+          Text(title),
         ],
       ),
       ),
