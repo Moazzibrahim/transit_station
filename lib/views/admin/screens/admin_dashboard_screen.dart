@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
+import 'package:transit_station/views/admin/screens/expences_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
 import 'package:transit_station/views/admin/screens/revenue_screen.dart';
@@ -167,11 +167,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                     .dashboardData!.revenueAmount
                                     .toInt()),
                           ),
-                          StatContainer(
-                              title: 'Expenses',
-                              statNum: dashboardProvider
-                                  .dashboardData!.expenceAmount
-                                  .toInt()),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (ctx)=> const ExpencesScreen())
+                              );
+                            },
+                            child: StatContainer(
+                                title: 'Expenses',
+                                statNum: dashboardProvider
+                                    .dashboardData!.expenceAmount
+                                    .toInt()),
+                          ),
                           StatContainer(
                               title: '#Drivers',
                               statNum:
