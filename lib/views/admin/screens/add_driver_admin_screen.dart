@@ -1,13 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Import image picker package
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io'; // To work with File
 import 'package:transit_station/constants/build_appbar.dart';
-import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
+import 'package:transit_station/controllers/dashboard_controller.dart';
+import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/parking_controller.dart';
 import '../../../constants/colors.dart';
@@ -30,31 +31,18 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
   TextEditingController salaryController =
       TextEditingController(); // Controller for salary
 
-  File? _selectedImage; // File to hold the selected image
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<GetDropdowndataProvider>(context, listen: false)
-          .getdropdown(context);
       Provider.of<ParkingController>(context, listen: false)
           .fetchParking(context);
+      Provider.of<DashboardController>(context, listen: false)
+          .fetchPickupLocations(context);
     });
   }
 
-  // Function to select image from gallery
-  Future<void> _pickImage() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
-
-  Future<void> submitForm() async {
+  Future<void> submitFormDriver() async {
     if (firstNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         phoneController.text.isEmpty ||
@@ -71,6 +59,10 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
 
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final token = tokenProvider.token;
+    final imageService = Provider.of<ImageServices>(context, listen: false);
+    String? base64Image = imageService.image != null
+        ? imageService.convertImageToBase64(imageService.image!)
+        : null;
 
     const apiUrl = 'https://transitstation.online/api/admin/users/add';
 
@@ -83,10 +75,8 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
         'parking_id': selectedParking,
         'location_id': selectedLocation,
         'cars_per_mounth': carsPerMonthController.text,
-        'salary': salaryController.text, // Add salary to form data
-        'image': _selectedImage != null
-            ? base64Encode(_selectedImage!.readAsBytesSync())
-            : null, // Add image to form data if selected
+        'salary': salaryController.text,
+        'image': base64Image, // Use base64 image from the service
       };
 
       final response = await http.post(
@@ -100,11 +90,16 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User added successfully')),
+          const SnackBar(
+            content: Text('Driver added successfully'),
+            backgroundColor: Colors.green,
+          ),
         );
+        log(response.body);
       } else {
+        log("${response.statusCode}  ${response.body}");
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to add user')),
+          SnackBar(content: Text('Failed to add Driver ${response.body}')),
         );
       }
     } catch (error) {
@@ -125,7 +120,7 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
             children: [
               TextField(
                 controller: firstNameController,
-                decoration: inputDecoration('First Name'),
+                decoration: inputDecoration('Name'),
               ),
               const SizedBox(height: 16.0),
               TextField(
@@ -165,67 +160,55 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
               const SizedBox(height: 16.0),
 
               // Button to select image
-              Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.add_a_photo),
-                    label: const Text('Select Image'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  _selectedImage != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(
-                            _selectedImage!,
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
+              Consumer<ImageServices>(
+                builder: (context, imageServices, child) {
+                  return Row(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: imageServices.pickImage,
+                        icon: const Icon(Icons.add_a_photo),
+                        label: const Text('Select Image'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                        )
-                      : const Icon(
-                          Icons.image_not_supported,
-                          size: 100,
-                          color: Colors.grey,
                         ),
-                ],
+                      ),
+                      const SizedBox(width: 10),
+                      imageServices.image != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                imageServices.image!,
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.image_not_supported,
+                              size: 100,
+                              color: Colors.grey,
+                            ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16.0),
 
               // Dropdown for selecting location
-              Consumer<GetDropdowndataProvider>(
+              Consumer<DashboardController>(
                 builder: (context, getDropdowndataProvider, child) {
-                  final locations =
-                      getDropdowndataProvider.mainData?.locations ?? [];
+                  final locations = getDropdowndataProvider.locationData;
                   return DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Select Location',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: defaultColor),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: defaultColor),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                    ),
+                    decoration: inputDecoration('Select Location'),
                     value: selectedLocation,
                     items: locations.map((location) {
                       return DropdownMenuItem<String>(
                         value: location.id.toString(),
-                        child: Text(location.address),
+                        child: Text(location.pickupAddress),
                       );
                     }).toList(),
                     onChanged: (newValue) {
@@ -281,7 +264,7 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
                 child: ElevatedButton(
-                  onPressed: submitForm,
+                  onPressed: submitFormDriver,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: defaultColor,
                   ),
