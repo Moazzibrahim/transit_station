@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert'; // For jsonDecode and jsonEncode
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

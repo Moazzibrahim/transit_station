@@ -19,7 +19,6 @@ class User {
     required this.status,
   });
 
-  // Factory constructor to create a User from a JSON object
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
@@ -28,7 +27,9 @@ class User {
       offerName: json['offer_name'],
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
-      amount: json['amount'].toDouble(),
+      amount: json['amount'] != null
+          ? json['amount'].toDouble()
+          : 0.0, // Provide a default value if null
       status: json['status'],
     );
   }

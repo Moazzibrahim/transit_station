@@ -30,48 +30,55 @@ class RequestAdminScreen extends StatelessWidget {
               itemCount: carRequests.length,
               itemBuilder: (context, index) {
                 final request = carRequests[index];
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow(
-                        icon: Icons.person,
-                        label: 'User Name',
-                        value: request.user.name,
-                      ),
-                      const SizedBox(height: 5),
-                      _buildInfoRow(
-                        icon: Icons.phone,
-                        label: 'Phone',
-                        value: request.user.phone,
-                      ),
-                      const SizedBox(height: 5),
-                      _buildInfoRow(
-                        icon: Icons.card_giftcard,
-                        label: 'Offer Name',
-                        value: request.user.subscription[0].offer.offerName,
-                      ),
-                      const SizedBox(height: 5),
-                      _buildInfoRow(
-                        icon: Icons.calendar_today,
-                        label: 'Pick-Up Date',
-                        value: request.pickUpDate,
-                      ),
-                      const SizedBox(height: 5),
-                      _buildInfoRow(
-                        icon: Icons.access_time,
-                        label: 'Request Time',
-                        value: request.requestTime,
-                      ),
-                      const SizedBox(height: 5),
-                      _buildInfoRow(
-                        icon: Icons.location_on,
-                        label: 'Pick-Up Address',
-                        value: request.location.pickUpAddress,
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow(
+                          icon: Icons.person,
+                          label: 'User Name',
+                          value: request.user.name,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.phone,
+                          label: 'Phone',
+                          value: request.user.phone,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.card_giftcard,
+                          label: 'Offer Name',
+                          value: request.user.subscription.isNotEmpty
+                              ? request.user.subscription[0].offer.offerName
+                              : 'No offer available',
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.calendar_today,
+                          label: 'Pick-Up Date',
+                          value: request.pickUpDate,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.access_time,
+                          label: 'Request Time',
+                          value: request.requestTime,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.location_on,
+                          label: 'Pick-Up Address',
+                          value: request.location.pickUpAddress,
+                        ),
+                        const SizedBox(height: 8),
+                        const Divider(),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -88,23 +95,31 @@ class RequestAdminScreen extends StatelessWidget {
     required String value,
   }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: defaultColor, size: 20),
+        Icon(icon, color: defaultColor, size: 24),
         const SizedBox(width: 10),
-        Text(
-          '$label:',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: defaultColor,
-          ),
-        ),
-        const SizedBox(width: 5),
         Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$label:',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: defaultColor,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -70,7 +70,9 @@ class _RequestFormState extends State<RequestForm> {
         // Success - Handle the response
         log('Request successful: ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Request successful!')),
+          const SnackBar(
+              backgroundColor: defaultColor,
+              content: Text('Request successful!')),
         );
         Future.delayed(
           const Duration(seconds: 2),

@@ -10,6 +10,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/views/home_views/screens/home_screen.dart';
 import '../../../constants/colors.dart';
 
 class AddCarScreen extends StatefulWidget {
@@ -60,8 +61,20 @@ class _AddCarScreenState extends State<AddCarScreen> {
         },
         body: jsonEncode(body),
       );
-      print(body);
+      log(body.toString());
       if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              backgroundColor: defaultColor,
+              content: Text('Request successful!')),
+        );
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+          },
+        );
       } else {
         log(response.body);
         log('Failed to post data: ${response.statusCode}');

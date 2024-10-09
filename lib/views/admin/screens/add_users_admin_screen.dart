@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http; // Add this import for HTTP requests
@@ -6,6 +8,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/admin/screens/add_plans_screen.dart';
+import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/widgets.dart';
 
@@ -37,7 +40,7 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
     });
   }
 
-  // Function to submit the form data to the API// Function to submit the form data to the API
+  // Function to submit the form data to the API
   Future<void> submitForm() async {
     if (firstNameController.text.isEmpty ||
         emailController.text.isEmpty ||
@@ -45,7 +48,9 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
         passwordController.text.isEmpty ||
         selectedOffer == null ||
         selectedStartDate == null ||
-        selectedEndDate == null) {
+        selectedEndDate == null ||
+        selectedAmount.text.isEmpty) {
+      // Check if amount is empty
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
@@ -59,13 +64,13 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
     const apiUrl = 'https://transitstation.online/api/admin/users/add';
 
     try {
-      
       final Map<String, dynamic> formData = {
         'name': firstNameController.text,
         'email': emailController.text,
         'phone': phoneController.text,
         'password': passwordController.text,
         'offer_id': selectedOffer,
+        'amount': selectedAmount.text, // Include the amount
         'start_date':
             "${selectedStartDate!.year}-${selectedStartDate!.month}-${selectedStartDate!.day}",
         'end_date':
@@ -76,7 +81,7 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', 
+          'Authorization': 'Bearer $token',
         },
         body: json.encode(formData),
       );
@@ -87,13 +92,13 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
           const SnackBar(content: Text('User added successfully')),
         );
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (ctx) => const AddPlansScreen(),
+          builder: (ctx) => const UsersAdminScreen(),
         ));
       } else {
         print(response.body);
         print(response.statusCode);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add user: ')),
+          const SnackBar(content: Text('Failed to add user: ')),
         );
       }
     } catch (error) {
@@ -193,6 +198,14 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
               ),
               const SizedBox(height: 16.0),
 
+              // Amount field
+              TextField(
+                controller: selectedAmount,
+                decoration: inputDecoration('Amount'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16.0),
+
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
@@ -270,7 +283,9 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 16.0),
+
+              // Submit button
               Container(
                 width: double.infinity,
                 height: 50,
@@ -283,7 +298,7 @@ class _AddUsersAdminScreenState extends State<AddUsersAdminScreen> {
                   ),
                   child: const Text(
                     'Add',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
               ),

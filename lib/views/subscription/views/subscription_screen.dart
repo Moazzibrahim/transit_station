@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
 import 'package:transit_station/constants/build_appbar.dart';
@@ -12,6 +10,7 @@ class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SubscriptionScreenState createState() => _SubscriptionScreenState();
 }
 
@@ -36,10 +35,90 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError || snapshot.data == null) {
-              return const Center(
-                  child: Text("Failed to load subscription data."));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Failed to load subscription data."),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const SubscriptionPlanScreens(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: defaultColor,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 40,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Upgrade',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             } else {
-              final subscription = snapshot.data!.user[0];
+              final subscriptionResponse = snapshot.data!;
+
+              // Check if the user list is empty
+              if (subscriptionResponse.user.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("No subscription found."),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const SubscriptionPlanScreens(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: defaultColor,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 40,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Subscribe',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              final subscription = subscriptionResponse.user[0];
 
               // Date formatting
               final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
@@ -96,8 +175,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const SubscriptionPlanScreens()),
+                          builder: (context) => const SubscriptionPlanScreens(),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(

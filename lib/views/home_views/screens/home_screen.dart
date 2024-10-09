@@ -240,28 +240,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w500),
                         ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => const MyCarsScreen()));
-                            },
-                            child: const Text(
-                              'See all',
-                              style: TextStyle(
-                                  color: defaultColor,
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 18,
-                                  decorationColor: defaultColor),
-                            )),
+                        cars == null ||
+                                cars!
+                                    .isEmpty // Show Add icon if cars is null or empty
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.add, color: defaultColor),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const MyCarsScreen(),
+                                  ));
+                                },
+                              )
+                            : TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const MyCarsScreen(),
+                                  ));
+                                },
+                                child: const Text(
+                                  'See all',
+                                  style: TextStyle(
+                                    color: defaultColor,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 18,
+                                    decorationColor: defaultColor,
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                     const SizedBox(height: 15),
                     isLoading
                         ? const Center(child: CircularProgressIndicator())
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: cars?.map((car) {
+                        : (cars == null || cars!.isEmpty
+                            ? const Center(
+                                child: Text(
+                                    'No cars available. You should add your car'))
+                            : SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: cars!.map((car) {
                                     String carImage = (car.carImage != null &&
                                             car.carImage!.isNotEmpty)
                                         ? car.carImage!
@@ -272,10 +291,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       image: carImage,
                                       selectedItem: selectedItem,
                                     );
-                                  }).toList() ??
-                                  [],
-                            ),
-                          ),
+                                  }).toList(),
+                                ),
+                              )),
                     const SizedBox(height: 20),
                     const Text(
                       'Your active subscription',

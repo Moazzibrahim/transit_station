@@ -1,6 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/build_appbar.dart';
-import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/models/cars_model.dart';
 import 'package:transit_station/views/home_views/screens/add_car_screen.dart';
 import '../../../controllers/car_provider.dart';
@@ -38,7 +39,10 @@ class _MyCarsScreenState extends State<MyCarsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, 'Your cars'),
+      appBar: appBarWithActions(context, 'cars', () {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) => const AddCarScreen()));
+      }),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : cars == null || cars!.isEmpty
@@ -74,32 +78,32 @@ class _MyCarsScreenState extends State<MyCarsScreen> {
                         },
                       ),
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (ctx) => const AddCarScreen()));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: defaultColor,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 100),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'add car',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
+                    // Center(
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       Navigator.of(context).pushReplacement(
+                    //           MaterialPageRoute(
+                    //               builder: (ctx) => const AddCarScreen()));
+                    //     },
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: defaultColor,
+                    //       padding: const EdgeInsets.symmetric(
+                    //           vertical: 15, horizontal: 100),
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(12),
+                    //       ),
+                    //     ),
+                    //     child: const Text(
+                    //       'add car',
+                    //       style: TextStyle(
+                    //         fontSize: 20,
+                    //         color: Colors.white,
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(
                       height: 10,
                     )
                   ],

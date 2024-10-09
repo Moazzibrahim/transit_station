@@ -16,16 +16,15 @@ class User {
     required this.amount,
     required this.status,
   });
-
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      userName: json['user_name'],
-      offerName: json['offer_name'],
-      startDate: json['start_date'],
-      endDate: json['end_date'],
-      amount: json['amount'].toDouble(),
-      status: json['status'],
+      userName: json['user_name'] ?? '',
+      offerName: json['offer_name'] ?? '',
+      startDate: json['start_date'] ?? '',
+      endDate: json['end_date'] ?? '',
+      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
+      status: json['status'] ?? 0,
     );
   }
 
