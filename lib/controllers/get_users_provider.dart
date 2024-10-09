@@ -19,14 +19,17 @@ Future<List<User>> fetchUsers(BuildContext context) async {
   );
 
   if (response.statusCode == 200) {
-    print(response.body);
-    List<dynamic> jsonResponse = json.decode(response.body);
+    // Decode the response body as a Map
+    Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-    List<User> users = jsonResponse.map((json) => User.fromJson(json)).toList();
+    // Access the list of users from the 'users' key
+    List<dynamic> usersJson = jsonResponse['users'];
+
+    // Map the list of dynamic to List<User>
+    List<User> users = usersJson.map((json) => User.fromJson(json)).toList();
 
     return users;
   } else {
-    print(response.body);
     throw Exception('Failed to load users: ${response.statusCode}');
   }
 }

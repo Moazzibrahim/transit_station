@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 import 'package:transit_station/constants/build_appbar.dart';
+import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_users_provider.dart';
+import 'package:transit_station/views/admin/screens/add_users_admin_screen.dart';
 
 import '../../../models/users_admin_model.dart';
 
@@ -10,7 +13,12 @@ class UsersAdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWithActions(context, 'Users', () {}),
+      appBar: appBarWithActions(context, 'Users', () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AddUsersAdminScreen()),
+        );
+      }),
       body: FutureBuilder<List<User>>(
         future: fetchUsers(context), // Call the fetchUsers function
         builder: (context, snapshot) {
@@ -39,27 +47,41 @@ class UsersAdminScreen extends StatelessWidget {
                           _buildInfoRow(
                               icon: Icons.person,
                               label: 'Username',
-                              value: user.userName),
+                              value: user.userName,
+                              status: user.status),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           _buildInfoRow(
                               icon: Icons.email,
                               label: 'Email',
                               value: user.userEmail),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           _buildInfoRow(
                               icon: Icons.money,
                               label: 'Amount',
                               value: user.amount.toString()),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           _buildInfoRow(
                               icon: Icons.date_range,
                               label: 'Start Date',
-                              value: user.startDate.toIso8601String()),
+                              value: DateFormat('yyyy-MM-dd')
+                                  .format(user.startDate)),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           _buildInfoRow(
                               icon: Icons.date_range,
                               label: 'End Date',
-                              value: user.endDate.toIso8601String()),
-                          _buildInfoRow(
-                              icon: Icons.check,
-                              label: 'Status',
-                              value: user.status.toString()),
+                              value: DateFormat('yyyy-MM-dd')
+                                  .format(user.endDate)),
+                          const SizedBox(
+                            height: 5,
+                          ),
                         ],
                       ),
                     ),
@@ -77,28 +99,54 @@ class UsersAdminScreen extends StatelessWidget {
     required IconData icon,
     required String label,
     required String value,
+    int? status, // Add status as an optional parameter
   }) {
     return Row(
       children: [
-        Icon(icon, color: Colors.blue, size: 20), // Adjust color as needed
+        Icon(icon, color: defaultColor, size: 20), // Adjust color as needed
         const SizedBox(width: 10),
         Text(
           '$label:',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.blue, // Adjust color as needed
+            color: defaultColor, // Adjust color as needed
           ),
         ),
         const SizedBox(width: 5),
         Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              if (status != null) // Only show badge if status is provided
+                _buildStatusBadge(status),
+            ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildStatusBadge(int status) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color:
+            status == 1 ? defaultColor : Colors.red, // Use your desired colors
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        status == 1 ? 'Active' : 'Inactive',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }
