@@ -68,6 +68,76 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white,
           child: SafeArea(
             child: Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    const DrawerHeader(
+                        decoration: BoxDecoration(color: defaultColor),
+                        child: Text('Menu',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 24))),
+                    ListTile(
+                      leading: SvgPicture.asset('assets/images/person.svg'),
+                      title: const Text('Personal info'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserProfile()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.help,
+                        color: defaultColor,
+                      ),
+                      title: const Text('Technical support'),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const TechnicalSupportScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.logout,
+                        color: defaultColor,
+                      ),
+                      title: const Text('logout'),
+                      onTap: () async {
+                        const url =
+                            'https://transitstation.online/api/user/logout';
+                        final tokenProvider =
+                            Provider.of<TokenModel>(context, listen: false);
+                        final token = tokenProvider.token;
+                        try {
+                          final response =
+                              await http.post(Uri.parse(url), headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer $token',
+                          });
+                          if (response.statusCode == 200) {
+                            final responseBody = json.decode(response.body);
+                            log('logout response $responseBody');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('logout successful')));
+                          } else {
+                            log('Failed to load profile data (Error: ${response.statusCode})');
+                          }
+                        } catch (e) {
+                          log('An error occurred: $e');
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -100,74 +170,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Row(
                               children: [
-                                InkWell(
-                                  child: const Icon(
-                                    Icons.help,
-                                    color: defaultColor,
+                                Builder(
+                                  builder: (context) => IconButton(
+                                    icon: const Icon(Icons.menu,
+                                        color: defaultColor),
+                                    onPressed: () {
+                                      Scaffold.of(context)
+                                          .openDrawer(); // Open the drawer
+                                    },
                                   ),
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const TechnicalSupportScreen()));
-                                  },
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                  child: SvgPicture.asset(
-                                      'assets/images/person.svg'),
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const UserProfile()));
-                                  },
-                                ),
-                                const SizedBox(width: 10),
-                                InkWell(
-                                  child: const Icon(
-                                    Icons.logout,
-                                    color: defaultColor,
-                                  ),
-                                  onTap: () async {
-                                    const url =
-                                        'https://transitstation.online/api/user/logout';
-                                    final tokenProvider =
-                                        Provider.of<TokenModel>(context,
-                                            listen: false);
-                                    final token = tokenProvider.token;
-                                    try {
-                                      final response = await http
-                                          .post(Uri.parse(url), headers: {
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                        'Authorization': 'Bearer $token',
-                                      });
-                                      if (response.statusCode == 200) {
-                                        final responseBody =
-                                            json.decode(response.body);
-                                        log('logout response $responseBody');
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const LoginScreen()));
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('logout successful')));
-                                      } else {
-                                        log('Failed to load profile data (Error: ${response.statusCode})');
-                                      }
-                                    } catch (e) {
-                                      log('An error occurred: $e');
-                                    }
-                                  },
-                                )
                               ],
                             ),
                             const SizedBox(height: 50),
