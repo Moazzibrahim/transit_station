@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/controllers/expences_provider.dart';
+import 'package:transit_station/controllers/get_admin_drivers.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
@@ -39,7 +40,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ParkingController()),
         ChangeNotifierProvider(create: (_) => RevenueProvider()),
         ChangeNotifierProvider(create: (_) => ExpencesProvider()),
-        ChangeNotifierProvider(create: (_) => GetDropdowndataSubscriptionProvider()),
+        ChangeNotifierProvider(
+            create: (_) => GetDropdowndataSubscriptionProvider()),
+        ChangeNotifierProvider(create: (_) => GetDriverDataProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
