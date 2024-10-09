@@ -36,7 +36,6 @@ class TokenModel with ChangeNotifier {
   }
 }
 
-
 class LoginModel with ChangeNotifier {
   String? _role;
   String? _name;
@@ -105,10 +104,12 @@ class LoginModel with ChangeNotifier {
 
           _handleuserdata(context, userdata);
         } else {
-          showTopSnackBar(context,'something went wrong',Icons.warning,Colors.red,const Duration(seconds: 5));
+          showTopSnackBar(context, 'something went wrong', Icons.warning,
+              Colors.red, const Duration(seconds: 5));
         }
       } else {
-        showTopSnackBar(context,'Check your credentials',Icons.warning,Colors.red,const Duration(seconds: 5));
+        showTopSnackBar(context, 'Check your credentials', Icons.warning,
+            Colors.red, const Duration(seconds: 5));
       }
     } catch (error) {
       log('Error during authentication: $error');
@@ -134,13 +135,12 @@ class LoginModel with ChangeNotifier {
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
-      } else if(role == 'admin'){
+      } else if (role == 'admin') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
         );
-      }
-      else {
+      } else {
         _showSnackbar(context, 'Unknown user role');
       }
     } catch (error) {

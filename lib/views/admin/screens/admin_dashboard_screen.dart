@@ -5,6 +5,7 @@ import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
+import 'package:transit_station/views/admin/screens/request_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/revenue_screen.dart';
 import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
@@ -140,10 +141,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const ParkingScreen()));
+                                    builder: (ctx) =>
+                                        const RequestAdminScreen()));
                               },
                               child: StatContainer(
-                                  title: '#Parking',
+                                  title: 'requests',
                                   statNum: dashboardProvider
                                       .dashboardData!.parkingCount)),
                           GestureDetector(
@@ -169,9 +171,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (ctx)=> const ExpencesScreen())
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) => const ExpencesScreen()));
                             },
                             child: StatContainer(
                                 title: 'Expenses',
