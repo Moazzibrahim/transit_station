@@ -23,7 +23,7 @@ class Expences {
 
   Expences({required this.expences});
 
-  factory Expences.fromJson(Map<String,dynamic> json)=> Expences(expences: json['expence']);
+  factory Expences.fromJson(Map<String,dynamic> json)=> Expences(expences: json['expences']);
 }
 
 class ExpenceType {

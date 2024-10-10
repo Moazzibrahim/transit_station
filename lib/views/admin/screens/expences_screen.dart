@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/expences_provider.dart';
+import 'package:transit_station/views/admin/screens/add_expence_screen.dart';
+import 'package:transit_station/views/admin/screens/add_type_expence_screen.dart';
 
 class ExpencesScreen extends StatefulWidget {
   const ExpencesScreen({super.key});
@@ -13,10 +14,57 @@ class ExpencesScreen extends StatefulWidget {
 
 class _ExpencesScreenState extends State<ExpencesScreen> {
   @override
+  void initState() {
+    Provider.of<ExpencesProvider>(context,listen: false).fetchExpences(context);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWithActions(context,'Expenses',(){}),
-       body: Consumer<ExpencesProvider>(
+      appBar: AppBar(
+    centerTitle: true,
+    title: const Text(
+      'Excpences',
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+    ),
+    leading: Container(
+      margin: const EdgeInsets.all(6),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+      child: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: defaultColor,
+        ),
+      ),
+    ),
+    actions: [
+      ElevatedButton(
+      onPressed: (){
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx)=> const AddTypeExpenceScreen())
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: defaultColor,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16)
+        )
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.add),
+          Text('Type'),
+        ],
+      ),
+      ),
+      const SizedBox(width: 3,)
+    ],
+  ),
+        body: Consumer<ExpencesProvider>(
         builder: (context, expenceProvider, _) {
           if(expenceProvider.expenceData.isEmpty){
             return const Center(
@@ -31,7 +79,7 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
                     child: ListView.builder(
                       itemCount:expenceProvider.expenceData.length ,
                               itemBuilder: (context, index) {
-                    final revenue = expenceProvider.expenceData[index];
+                    final expence = expenceProvider.expenceData[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                             elevation: 5,
@@ -47,19 +95,19 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
                             _buildInfoRow(
                                     icon: Icons.date_range,
                                     label: 'Date',
-                                    value: revenue.date,
+                                    value: expence.date,
                                   ),
                                   const SizedBox(height: 8),
                                   _buildInfoRow(
                                     icon: Icons.money,
                                     label: 'Amount',
-                                    value: revenue.amount.toString(),
+                                    value: expence.amount.toString(),
                                   ),
                                   const SizedBox(height: 8),
                                   _buildInfoRow(
                                     icon: Icons.category,
                                     label: 'Type',
-                                    value: revenue.type,
+                                    value: expence.type,
                                   ),
                           ],
                         ),
@@ -70,7 +118,9 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
                   ),
                   ElevatedButton(
                   onPressed: () {
-                    
+                    Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx)=> const AddExpenceScreen())
+        );
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: defaultColor,
