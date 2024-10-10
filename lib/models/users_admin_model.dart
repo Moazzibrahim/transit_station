@@ -21,16 +21,20 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      userName: json['user_name'],
-      userEmail: json['user_email'],
-      offerName: json['offer_name'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
+      id: json['id'] ?? 0, 
+      userName: json['user_name'] ?? '', 
+      userEmail: json['user_email'] ?? '', 
+      offerName: json['offer_name'] ?? '', 
+      startDate: json['start_date'] != null
+          ? DateTime.parse(json['start_date'])
+          : DateTime.now(), 
+      endDate: json['end_date'] != null
+          ? DateTime.parse(json['end_date'])
+          : DateTime.now(), 
       amount: json['amount'] != null
           ? json['amount'].toDouble()
-          : 0.0, // Provide a default value if null
-      status: json['status'],
+          : 0.0, 
+      status: json['status'] ?? 0, 
     );
   }
 
