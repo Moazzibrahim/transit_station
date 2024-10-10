@@ -7,21 +7,23 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/models/get_dropdown_subscriptions_model.dart';
 import '../../../constants/colors.dart';
 
-class DropdownSubscriptions extends StatefulWidget {
-  const DropdownSubscriptions({super.key});
+class AddSubscriptions extends StatefulWidget {
+  const AddSubscriptions({super.key});
 
   @override
-  State<DropdownSubscriptions> createState() => _RequestFormState();
+  State<AddSubscriptions> createState() => _RequestFormState();
 }
 
-class _RequestFormState extends State<DropdownSubscriptions> {
-  String? selectedOffer;
+class _RequestFormState extends State<AddSubscriptions> {
+  String? selectedOfferId;
   String? selectedUser;
   TextEditingController selectedAmount = TextEditingController();
   DateTime? selectedDate;
   DateTime? selectedEndDate;
+  Offer? selectedOffer; // Store the selected offer object
 
   @override
   void initState() {
@@ -33,10 +35,9 @@ class _RequestFormState extends State<DropdownSubscriptions> {
   }
 
   Future<void> makePostRequest(BuildContext context) async {
-    if (selectedOffer == null ||
+    if (selectedOfferId == null ||
         selectedUser == null ||
         selectedDate == null ||
-        selectedAmount.text.isEmpty ||
         selectedEndDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please complete all fields')),
@@ -44,7 +45,7 @@ class _RequestFormState extends State<DropdownSubscriptions> {
       return;
     }
 
-    // Format the selected date and time to match API format (e.g. 'yyyy-MM-dd' and 'HH:mm')
+    // Format the selected date and end date
     String formattedDate =
         "${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}";
     String formattedEndDate =
@@ -62,24 +63,21 @@ class _RequestFormState extends State<DropdownSubscriptions> {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(<String, dynamic>{
-          'user_id': selectedUser, // Assuming you're sending car ID
-          'offer_id': selectedOffer, // Assuming you're sending location ID
+          'user_id': selectedUser,
+          'offer_id': selectedOfferId,
           'start_date': formattedDate,
           'end_date': formattedEndDate,
-          'amount': int.parse(selectedAmount.text),
+          'amount':
+              selectedOffer!.price, // Send the price from the selected offer
         }),
       );
 
-      if (!mounted) return; // Ensure the widget is still in the tree
-
       if (response.statusCode == 200) {
-        // Success - Handle the response
         log('Request successful: ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Request successful!')),
         );
       } else {
-        // Error - Handle the error
         log('Request failed with status: ${response.statusCode}');
         log(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -117,17 +115,20 @@ class _RequestFormState extends State<DropdownSubscriptions> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  value: selectedOffer,
+                  value: selectedOfferId,
                   items: offers.map((offer) {
                     return DropdownMenuItem<String>(
-                      value: offer.id
-                          .toString(), // Assuming carId is the unique identifier
+                      value: offer.id.toString(),
                       child: Text(offer.offerName),
                     );
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedOffer = newValue;
+                      selectedOfferId = newValue;
+                      selectedOffer = offers.firstWhere(
+                          (offer) => offer.id.toString() == newValue);
+                      selectedAmount.text = selectedOffer!.price
+                          .toString(); // Set the amount to the selected offer's price
                     });
                   },
                 ),
@@ -142,8 +143,7 @@ class _RequestFormState extends State<DropdownSubscriptions> {
                   value: selectedUser,
                   items: users.map((user) {
                     return DropdownMenuItem<String>(
-                      value: user.id
-                          .toString(), // Assuming locationId is the unique identifier
+                      value: user.id.toString(),
                       child: Text(user.name),
                     );
                   }).toList(),
@@ -211,14 +211,14 @@ class _RequestFormState extends State<DropdownSubscriptions> {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
+                  controller: selectedAmount,
+                  readOnly: true, // Make the amount field read-only
                   decoration: InputDecoration(
                     labelText: 'Amount',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  controller: selectedAmount,
-                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 32.0),
                 ElevatedButton(

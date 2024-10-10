@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
-import 'package:transit_station/views/admin/screens/dropdown_subscriptions.dart';
+import 'package:transit_station/views/admin/screens/add_subscriptions.dart';
 import 'package:transit_station/views/admin/screens/plans_admin_screen.dart';
 import '../../../controllers/subscriptions_admin_provider.dart';
 import '../../../models/subscriptions_admin_model.dart';
@@ -16,7 +16,7 @@ class SubscriptionsAdminScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const DropdownSubscriptions()),
+              builder: (context) => const AddSubscriptions()),
         );
       }),
       body: FutureBuilder<List<User>>(

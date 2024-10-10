@@ -21,6 +21,7 @@ class _RequestFormState extends State<RequestForm> {
   String? selectedCar;
   String? selectedLocation;
   DateTime? selectedDate;
+  DateTime? selectedReturnDate;
   TimeOfDay? selectedTime;
 
   @override
@@ -36,6 +37,7 @@ class _RequestFormState extends State<RequestForm> {
     if (selectedCar == null ||
         selectedLocation == null ||
         selectedDate == null ||
+        selectedReturnDate == null ||
         selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please complete all fields')),
@@ -45,6 +47,8 @@ class _RequestFormState extends State<RequestForm> {
 
     String formattedDate =
         "${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}";
+    String formattedReturnDate =
+        "${selectedReturnDate!.year}-${selectedReturnDate!.month.toString().padLeft(2, '0')}-${selectedReturnDate!.day.toString().padLeft(2, '0')}";
     String formattedTime =
         "${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}";
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
@@ -63,6 +67,7 @@ class _RequestFormState extends State<RequestForm> {
           'location_id': selectedLocation,
           'pick_up_date': formattedDate,
           'request_time': formattedTime,
+          'return_time': formattedReturnDate
         }),
       );
 
@@ -201,6 +206,34 @@ class _RequestFormState extends State<RequestForm> {
                     if (pickedTime != null) {
                       setState(() {
                         selectedTime = pickedTime;
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: 'Pick up  return date',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  controller: TextEditingController(
+                    text: selectedReturnDate == null
+                        ? ''
+                        : "${selectedReturnDate!.year}-${selectedReturnDate!.month}-${selectedReturnDate!.day}",
+                  ),
+                  onTap: () async {
+                    DateTime? pickedReturnDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedReturnDate != null) {
+                      setState(() {
+                        selectedReturnDate = pickedReturnDate;
                       });
                     }
                   },
