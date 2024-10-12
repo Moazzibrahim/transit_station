@@ -33,8 +33,8 @@ class CarRequest {
       carId: json['car_id'],
       userId: json['user_id'],
       locationId: json['location_id'],
-      requestTime: json['request_time'],
-      pickUpDate: json['pick_up_date'],
+      requestTime: json['request_time']??'',
+      pickUpDate: json['pick_up_date']??'',
       status: json['status'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
@@ -147,8 +147,8 @@ class Offer {
       priceDiscount: json['price_discount'],
       offerName: json['offer_name'],
       duration: json['duration'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      createdAt: json['created_at']??'',
+      updatedAt: json['updated_at']??'',
     );
   }
 }

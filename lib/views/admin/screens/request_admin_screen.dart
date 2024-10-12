@@ -4,6 +4,7 @@ import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/request_admin_provider.dart';
 import 'package:transit_station/models/request_admin_model.dart';
 import 'package:transit_station/views/admin/screens/add_request_admin_screen.dart';
+import 'package:transit_station/views/admin/screens/select_driver_screen.dart';
 
 class RequestAdminScreen extends StatelessWidget {
   const RequestAdminScreen({super.key});
@@ -59,56 +60,63 @@ class RequestAdminScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final filteredRequests = carRequests.where((e) => e.status == 1,).toList();
                               final request = filteredRequests[index];
-                              return Card(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      _buildInfoRow(
-                                        icon: Icons.person,
-                                        label: 'User Name',
-                                        value: request.user.name,
-                                      ),
-                                      _buildInfoRow(
-                                        icon: Icons.phone,
-                                        label: 'Phone',
-                                        value: request.user.phone,
-                                      ),
-                                      _buildInfoRow(
-                                        icon: Icons.card_giftcard,
-                                        label: 'Offer Name',
-                                        value:
-                                            request.user.subscription.isNotEmpty
-                                                ? request.user.subscription[0]
-                                                    .offer.offerName
-                                                : 'No offer available',
-                                      ),
-                                      _buildInfoRow(
-                                        icon: Icons.calendar_today,
-                                        label: 'Pick-Up Date',
-                                        value: request.pickUpDate,
-                                      ),
-                                      _buildInfoRow(
-                                        icon: Icons.access_time,
-                                        label: 'Request Time',
-                                        value: request.requestTime,
-                                      ),
-                                      _buildInfoRow(
-                                        icon: Icons.location_on,
-                                        label: 'Pick-Up Address',
-                                        value: request.location.pickUpAddress,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const Divider(),
-                                      const SizedBox(height: 8),
-                                    ],
+                              return GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (ctx)=> const SelectDriverScreen())
+                                  );
+                                },
+                                child: Card(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        _buildInfoRow(
+                                          icon: Icons.person,
+                                          label: 'User Name',
+                                          value: request.user.name,
+                                        ),
+                                        _buildInfoRow(
+                                          icon: Icons.phone,
+                                          label: 'Phone',
+                                          value: request.user.phone,
+                                        ),
+                                        _buildInfoRow(
+                                          icon: Icons.card_giftcard,
+                                          label: 'Offer Name',
+                                          value:
+                                              request.user.subscription.isNotEmpty
+                                                  ? request.user.subscription[0]
+                                                      .offer.offerName
+                                                  : 'No offer available',
+                                        ),
+                                        _buildInfoRow(
+                                          icon: Icons.calendar_today,
+                                          label: 'Pick-Up Date',
+                                          value: request.pickUpDate,
+                                        ),
+                                        _buildInfoRow(
+                                          icon: Icons.access_time,
+                                          label: 'Request Time',
+                                          value: request.requestTime,
+                                        ),
+                                        _buildInfoRow(
+                                          icon: Icons.location_on,
+                                          label: 'Pick-Up Address',
+                                          value: request.location.pickUpAddress,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Divider(),
+                                        const SizedBox(height: 8),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
