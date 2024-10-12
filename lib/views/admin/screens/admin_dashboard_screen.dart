@@ -44,66 +44,81 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       child: SafeArea(
         child: Scaffold(
           drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: defaultColor,
-                  ),
-                  child: Text('Admin Menu',
-                      style: TextStyle(color: Colors.white, fontSize: 24)),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.location_on),
-                  title: const Text('Pick-Up Locations'),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const PickupLocationScreen()));
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.local_parking),
-                  title: const Text('Parking'),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const ParkingScreen()));
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('logout'),
-                  onTap: () async {
-                    const url =
-                        'https://transitstation.online/api/admin/logout';
-                    final tokenProvider =
-                        Provider.of<TokenModel>(context, listen: false);
-                    final token = tokenProvider.token;
-                    try {
-                      final response =
-                          await http.post(Uri.parse(url), headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer $token',
-                      });
-                      if (response.statusCode == 200) {
-                        final responseBody = json.decode(response.body);
-                        log('logout response $responseBody');
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('logout successful')));
-                      } else {
-                        log('Failed to load profile data (Error: ${response.statusCode})');
-                      }
-                    } catch (e) {
-                      log('An error occurred: $e');
-                    }
-                  },
-                ),
-              ],
+            child: Consumer<DashboardController>(
+              builder: (context, dashboardProvider, _) {
+                if (dashboardProvider.dashboardData == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      const DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: defaultColor,
+                        ),
+                        child: Text('Admin Menu',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 24)),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.location_on),
+                        title: Text(
+                            'Pick-Up Locations (${dashboardProvider.dashboardData!.pickUpLocationCount})'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const PickupLocationScreen()));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.local_parking),
+                        title: Text(
+                            'Parking (${dashboardProvider.dashboardData!.parkingCount})'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const ParkingScreen()));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.logout),
+                        title: const Text('Logout'),
+                        onTap: () async {
+                          const url =
+                              'https://transitstation.online/api/admin/logout';
+                          final tokenProvider =
+                              Provider.of<TokenModel>(context, listen: false);
+                          final token = tokenProvider.token;
+                          try {
+                            final response =
+                                await http.post(Uri.parse(url), headers: {
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                              'Authorization': 'Bearer $token',
+                            });
+                            if (response.statusCode == 200) {
+                              final responseBody = json.decode(response.body);
+                              log('logout response $responseBody');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Logout successful')));
+                            } else {
+                              log('Failed to load profile data (Error: ${response.statusCode})');
+                            }
+                          } catch (e) {
+                            log('An error occurred: $e');
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
           ),
           body: Padding(
@@ -143,8 +158,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 icon:
                                     const Icon(Icons.menu, color: defaultColor),
                                 onPressed: () {
-                                  Scaffold.of(context)
-                                      .openDrawer(); // Open the drawer
+                                  Scaffold.of(context).openDrawer();
                                 },
                               ),
                             ),
@@ -182,7 +196,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 child: StatContainer(
                                     title: 'users',
                                     statNum: dashboardProvider
-                                        .dashboardData!.pickUpLocationCount)),
+                                        .dashboardData!.usercount)),
                             GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -192,7 +206,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 child: StatContainer(
                                     title: 'requests',
                                     statNum: dashboardProvider
-                                        .dashboardData!.parkingCount)),
+                                        .dashboardData!.requestcount)),
                             GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
