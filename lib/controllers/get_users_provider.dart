@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -29,8 +30,7 @@ Future<List<User>> fetchUsers(BuildContext context) async {
 
     return users;
   } else {
-    print(response.body);
-    print(response.statusCode);
+    log(response.body);
     throw Exception('Failed to load users: ${response.statusCode}');
   }
 }
