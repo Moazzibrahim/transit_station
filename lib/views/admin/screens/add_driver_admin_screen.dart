@@ -64,7 +64,7 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
         ? imageService.convertImageToBase64(imageService.image!)
         : null;
 
-    const apiUrl = 'https://transitstation.online/api/admin/users/add';
+    const apiUrl = 'https://transitstation.online/api/admin/drivers/add';
 
     try {
       final Map<String, dynamic> formData = {

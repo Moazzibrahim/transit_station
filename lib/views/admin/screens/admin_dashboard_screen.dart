@@ -1,7 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/admin/screens/drivers_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
@@ -11,8 +17,10 @@ import 'package:transit_station/views/admin/screens/revenue_screen.dart';
 import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
+import 'package:transit_station/views/auth_screens/views/login_screen.dart';
 
 import 'subscriptions_admin_screen.dart';
+import 'package:http/http.dart' as http;
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -60,6 +68,39 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => const ParkingScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('logout'),
+                  onTap: () async {
+                    const url =
+                        'https://transitstation.online/api/admin/logout';
+                    final tokenProvider =
+                        Provider.of<TokenModel>(context, listen: false);
+                    final token = tokenProvider.token;
+                    try {
+                      final response =
+                          await http.post(Uri.parse(url), headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer $token',
+                      });
+                      if (response.statusCode == 200) {
+                        final responseBody = json.decode(response.body);
+                        log('logout response $responseBody');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('logout successful')));
+                      } else {
+                        log('Failed to load profile data (Error: ${response.statusCode})');
+                      }
+                    } catch (e) {
+                      log('An error occurred: $e');
+                    }
                   },
                 ),
               ],
