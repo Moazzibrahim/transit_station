@@ -29,18 +29,18 @@ class CarRequest {
 
   factory CarRequest.fromJson(Map<String, dynamic> json) {
     return CarRequest(
-      id: json['id'],
-      carId: json['car_id'],
-      userId: json['user_id'],
-      locationId: json['location_id'],
-      requestTime: json['request_time']??'',
-      pickUpDate: json['pick_up_date']??'',
-      status: json['status'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      driverId: json['driver_id'],
-      user: User.fromJson(json['user']),
-      location: Location.fromJson(json['location']),
+      id: json['id'] ?? 0,
+      carId: json['car_id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      locationId: json['location_id'] ?? 0,
+      requestTime: json['request_time'] ?? '',
+      pickUpDate: json['pick_up_date'] ?? '',
+      status: json['status'] ?? 0,
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+      driverId: json['driver_id'], 
+      user: User.fromJson(json['user'] ?? {}),
+      location: Location.fromJson(json['location'] ?? {}),
     );
   }
 }
@@ -65,16 +65,17 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    var subs = (json['subscription'] as List)
-        .map((e) => Subscription.fromJson(e))
-        .toList();
+    var subs = (json['subscription'] as List?)
+            ?.map((e) => Subscription.fromJson(e))
+            .toList() ??
+        [];
     return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
       image: json['image'],
-      role: json['role'],
+      role: json['role'] ?? '',
       subscription: subs,
     );
   }
@@ -107,16 +108,16 @@ class Subscription {
 
   factory Subscription.fromJson(Map<String, dynamic> json) {
     return Subscription(
-      id: json['id'],
-      userId: json['user_id'],
-      offerId: json['offer_id'],
-      startDate: json['start_date'],
-      endDate: json['end_date'],
-      amount: json['amount'],
-      status: json['status'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      offer: Offer.fromJson(json['offer']),
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      offerId: json['offer_id'] ?? 0,
+      startDate: json['start_date'] ?? '',
+      endDate: json['end_date'] ?? '',
+      amount: json['amount'] ?? 0,
+      status: json['status'] ?? 0,
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+      offer: Offer.fromJson(json['offer'] ?? {}),
     );
   }
 }
@@ -142,13 +143,13 @@ class Offer {
 
   factory Offer.fromJson(Map<String, dynamic> json) {
     return Offer(
-      id: json['id'],
-      price: json['price'],
-      priceDiscount: json['price_discount'],
-      offerName: json['offer_name'],
-      duration: json['duration'],
-      createdAt: json['created_at']??'',
-      updatedAt: json['updated_at']??'',
+      id: json['id'] ?? 0,
+      price: json['price'] ?? 0,
+      priceDiscount: json['price_discount'] ?? 0,
+      offerName: json['offer_name'] ?? '',
+      duration: json['duration'] ?? 0,
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
     );
   }
 }
@@ -174,13 +175,13 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      id: json['id'],
-      pickUpAddress: json['pick_up_address'],
-      locationImage: json['location_image'],
-      address: json['address'],
-      addressInDetail: json['address_in_detail'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      id: json['id'] ?? 0,
+      pickUpAddress: json['pick_up_address'] ?? '',
+      locationImage: json['location_image'] ?? '',
+      address: json['address'] ?? '',
+      addressInDetail: json['address_in_detail'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
     );
   }
 }
