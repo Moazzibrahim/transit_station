@@ -12,6 +12,7 @@ import 'package:transit_station/views/admin/screens/drivers_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
+import 'package:transit_station/views/admin/screens/plans_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/request_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/revenue_screen.dart';
 import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
@@ -78,6 +79,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => const ParkingScreen()));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.next_plan),
+                        title: const Text('Plans'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const PlansAdminScreen()));
                         },
                       ),
                       ListTile(
