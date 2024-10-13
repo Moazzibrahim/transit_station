@@ -26,7 +26,7 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
   }
 
   Future<void> _fetchSubscriptionPlans() async {
-    ApiService apiService = ApiService();
+    ApiServicesub apiService = ApiServicesub();
     UserOffersResponse? response =
         await apiService.fetchUserSubscription(context);
 

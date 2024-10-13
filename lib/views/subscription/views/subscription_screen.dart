@@ -10,7 +10,6 @@ class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SubscriptionScreenState createState() => _SubscriptionScreenState();
 }
 
@@ -20,7 +19,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   @override
   void initState() {
     super.initState();
-    _subscriptionData = ApiService().fetchUserSubscription(context);
+    _subscriptionData = ApiServicesub().fetchUserSubscription(context);
   }
 
   @override
@@ -76,7 +75,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             } else {
               final subscriptionResponse = snapshot.data!;
 
-              // Check if the user list is empty
               if (subscriptionResponse.user.isEmpty) {
                 return Center(
                   child: Column(
@@ -120,7 +118,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
               final subscription = subscriptionResponse.user[0];
 
-              // Date formatting
               final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
               final String formattedStartDate =
                   dateFormat.format(subscription.startDate);

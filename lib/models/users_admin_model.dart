@@ -3,6 +3,8 @@ class User {
   String userName;
   String userEmail;
   String offerName;
+  String userphone;
+
   DateTime startDate;
   DateTime endDate;
   double amount;
@@ -13,6 +15,7 @@ class User {
     required this.userName,
     required this.userEmail,
     required this.offerName,
+    required this.userphone,
     required this.startDate,
     required this.endDate,
     required this.amount,
@@ -21,20 +24,19 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] ?? 0, 
-      userName: json['user_name'] ?? '', 
-      userEmail: json['user_email'] ?? '', 
-      offerName: json['offer_name'] ?? '', 
+      id: json['id'] ?? 0,
+      userName: json['user_name'] ?? '',
+      userEmail: json['user_email'] ?? '',
+      offerName: json['offer_name'] ?? '',
+      userphone: json['user_phone'] ?? '',
       startDate: json['start_date'] != null
           ? DateTime.parse(json['start_date'])
-          : DateTime.now(), 
+          : DateTime.now(),
       endDate: json['end_date'] != null
           ? DateTime.parse(json['end_date'])
-          : DateTime.now(), 
-      amount: json['amount'] != null
-          ? json['amount'].toDouble()
-          : 0.0, 
-      status: json['status'] ?? 0, 
+          : DateTime.now(),
+      amount: json['amount'] != null ? json['amount'].toDouble() : 0.0,
+      status: json['status'] ?? 0,
     );
   }
 
@@ -45,6 +47,7 @@ class User {
       'user_name': userName,
       'user_email': userEmail,
       'offer_name': offerName,
+      'user_phone': userphone,
       'start_date': startDate.toIso8601String(),
       'end_date': endDate.toIso8601String(),
       'amount': amount,

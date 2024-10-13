@@ -5,21 +5,29 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/subscription_provider.dart';
+import 'package:transit_station/views/Driver/screens/status_screen.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
 import 'package:transit_station/views/auth_screens/views/login_screen.dart';
-import 'package:transit_station/views/auth_screens/views/request_screen.dart';
+import 'package:transit_station/views/home_views/screens/add_car_screen.dart';
+import 'package:transit_station/views/home_views/screens/request_screen.dart';
 import 'package:transit_station/views/home_views/screens/my_cars_screen.dart';
+import 'package:transit_station/views/home_views/screens/return_request_screen.dart';
 import 'package:transit_station/views/home_views/screens/user_profile/user_profile.dart';
 import 'package:transit_station/views/home_views/widgets/car_container.dart';
+import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
 import 'package:transit_station/views/subscription/views/subscription_screen.dart';
 
 import '../../../controllers/car_provider.dart';
 import '../../../models/cars_model.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../models/subscription_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,6 +37,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Future<UserOffersResponse?> _subscriptionData;
+
   int? selectedItem;
   List<Car>? cars; // Store the fetched cars here
   bool isLoading = true;
@@ -36,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _subscriptionData = ApiServicesub().fetchUserSubscription(context);
+
     fetchCars();
   }
 
@@ -189,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 15),
                     Container(
-                      height: 130,
+                      height: 180, // Adjusted height to fit two rows
                       width: double.infinity,
                       padding: const EdgeInsets.all(17),
                       decoration: BoxDecoration(
@@ -203,31 +215,97 @@ class _HomeScreenState extends State<HomeScreen> {
                           const Text(
                             'Enjoy feature-packed parking',
                             style: TextStyle(
-                                color: defaultColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400),
+                              color: defaultColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RequestForm()));
-                              },
-                              style: ElevatedButton.styleFrom(
+                                      builder: (context) => const RequestForm(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   backgroundColor: defaultColor,
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 9, horizontal: 8)),
+                                      vertical: 9, horizontal: 8),
+                                ),
+                                child: const Text(
+                                  'New Request',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ReturnRequestScreen(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  backgroundColor: defaultColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 9, horizontal: 8),
+                                ),
+                                child: const Text(
+                                  'Return Request',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const StatusScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                backgroundColor: defaultColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 15),
+                              ),
                               child: const Text(
-                                'Request Now',
+                                'My Request',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ))
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -243,14 +321,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         cars == null ||
                                 cars!
                                     .isEmpty // Show Add icon if cars is null or empty
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.add, color: defaultColor),
+                            ? TextButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const MyCarsScreen(),
+                                    builder: (ctx) => const AddCarScreen(),
                                   ));
                                 },
+                                child: const Text(
+                                  'ADD',
+                                  style: TextStyle(
+                                    color:
+                                        defaultColor, // Keep this color for the text itself
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration
+                                        .underline, // Underline the text
+                                    decorationColor: defaultColor,
+                                  ),
+                                ),
                               )
                             : TextButton(
                                 onPressed: () {
@@ -295,40 +382,106 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               )),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Your active subscription',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Annual subscription was renewed on 25/12/2023 and is valid until 25/12/2024',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-                    ),
-                    const SizedBox(height: 15),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const SubscriptionScreen()));
+                    FutureBuilder<UserOffersResponse?>(
+                      future: _subscriptionData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasData) {
+                          final userOffer =
+                              snapshot.data?.user.isNotEmpty == true
+                                  ? snapshot.data!.user.first
+                                  : null;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Your active subscription',
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(height: 10),
+                              if (userOffer != null) ...[
+                                // Format the dates
+                                Text(
+                                  '${userOffer.offerName} was renewed on ${DateFormat('yyyy-MM-dd').format(userOffer.startDate)} and is valid until ${DateFormat('yyyy-MM-dd').format(userOffer.endDate)}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16),
+                                ),
+                                const SizedBox(height: 20),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const SubscriptionScreen()));
+                                  },
+                                  child: Container(
+                                    width: 220,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: defaultColor),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Subscription upgrade',
+                                        style: TextStyle(
+                                            color: defaultColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ] else ...[
+                                // Display "Subscription" button if no active subscription
+                                const Text(
+                                  'No subscription found. You should subscribe.',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16),
+                                ),
+                                const SizedBox(height: 20),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const SubscriptionPlanScreens()));
+                                  },
+                                  child: Container(
+                                    width: 220,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors
+                                          .red, // Optional: change color for "Subscription"
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Subscription',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const Text('No subscription data available.');
+                        }
                       },
-                      child: Container(
-                        width: 220,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: defaultColor),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Subscription Renewal',
-                            style: TextStyle(
-                                color: defaultColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
                     )
                   ],
                 ),

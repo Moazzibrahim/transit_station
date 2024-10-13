@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/login_provider.dart';
-import 'package:transit_station/views/auth_screens/views/signup_screen.dart';
 import 'forget_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -152,26 +151,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Don\'t have an account?'),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => const SignUpScreen()));
-                    },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: defaultColor,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     const Text('Don\'t have an account?'),
+              //     TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context).push(MaterialPageRoute(
+              //             builder: (ctx) => const SignUpScreen()));
+              //       },
+              //       child: const Text(
+              //         'Sign up',
+              //         style: TextStyle(
+              //           decoration: TextDecoration.underline,
+              //           color: defaultColor,
+              //           fontSize: 16,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),

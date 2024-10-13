@@ -27,50 +27,6 @@ class UserOffersResponse {
   }
 }
 
-class Offer {
-  final int id;
-  final double price;
-  final String offerName;
-  final int duration;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-
-  Offer({
-    required this.id,
-    required this.price,
-    required this.offerName,
-    required this.duration,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Offer.fromJson(Map<String, dynamic> json) {
-    return Offer(
-      id: json['id'] ?? 0,
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      offerName: json['offer_name'] ?? 'Unknown',
-      duration: json['duration'] ?? 0,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'])
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'])
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'price': price,
-      'offer_name': offerName,
-      'duration': duration,
-      'created_at': createdAt?.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
-    };
-  }
-}
-
 class UserOffer {
   final int id;
   final int userId;
@@ -115,6 +71,50 @@ class UserOffer {
       'end_date': dateFormat.format(endDate), // Format end date as yyyy-MM-dd
       'amount': amount,
       'status': status,
+    };
+  }
+}
+
+class Offer {
+  final int id;
+  final double price;
+  final String offerName;
+  final int duration;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  Offer({
+    required this.id,
+    required this.price,
+    required this.offerName,
+    required this.duration,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory Offer.fromJson(Map<String, dynamic> json) {
+    return Offer(
+      id: json['id'] ?? 0,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      offerName: json['offer_name'] ?? 'Unknown',
+      duration: json['duration'] ?? 0,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'price': price,
+      'offer_name': offerName,
+      'duration': duration,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }

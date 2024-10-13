@@ -161,7 +161,7 @@ class RevenueProvider with ChangeNotifier {
       _filteredRevenues = _revenuesData.where((revenue) {
         DateTime revenueDate = DateTime.parse(revenue.date);
         final currentWeekStart = now.subtract(Duration(days: now.weekday));
-        final currentWeekEnd = currentWeekStart.add(Duration(days: 7));
+        final currentWeekEnd = currentWeekStart.add(const Duration(days: 7));
         return revenueDate.isAfter(currentWeekStart) &&
             revenueDate.isBefore(currentWeekEnd);
       }).toList();

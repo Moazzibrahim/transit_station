@@ -60,6 +60,13 @@ class UsersAdminScreen extends StatelessWidget {
                             height: 5,
                           ),
                           _buildInfoRow(
+                              icon: Icons.phone,
+                              label: 'phone',
+                              value: user.userphone),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          _buildInfoRow(
                             icon: Icons.local_offer,
                             label: 'plan ',
                             value: user.offerName, // Adding offerName here

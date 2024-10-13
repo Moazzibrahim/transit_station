@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http; 
-import 'dart:convert'; 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/login_provider.dart';
