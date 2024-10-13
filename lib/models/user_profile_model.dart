@@ -19,7 +19,6 @@ class UserProfileModel {
     this.updatedAt,
   });
 
-  // Factory method to create a UserProfileModel instance from JSON
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['id'],

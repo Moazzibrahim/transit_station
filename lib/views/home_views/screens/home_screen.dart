@@ -65,13 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, profileProvider, child) {
         if (profileProvider.userProfileModel == null &&
             !profileProvider.isLoading) {
-          // Fetch the profile data if it's not loaded yet
           WidgetsBinding.instance.addPostFrameCallback((_) {
             profileProvider.getprofile(context);
           });
         }
 
-        // Show loading if profile data is not yet loaded
         if (profileProvider.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -169,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 32,
                                   fontWeight: FontWeight.w400),
                             ),
-                            // Check if the name is null before displaying it
                             Text(
                               profileProvider.userProfileModel?.name ?? 'Guest',
                               style: const TextStyle(
@@ -318,9 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w500),
                         ),
-                        cars == null ||
-                                cars!
-                                    .isEmpty // Show Add icon if cars is null or empty
+                        cars == null || cars!.isEmpty
                             ? TextButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -330,11 +325,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: const Text(
                                   'ADD',
                                   style: TextStyle(
-                                    color:
-                                        defaultColor, // Keep this color for the text itself
+                                    color: defaultColor,
                                     fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration
-                                        .underline, // Underline the text
+                                    decoration: TextDecoration.underline,
                                     decorationColor: defaultColor,
                                   ),
                                 ),
@@ -439,7 +432,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 )
                               ] else ...[
-                                // Display "Subscription" button if no active subscription
                                 const Text(
                                   'No subscription found. You should subscribe.',
                                   style: TextStyle(
@@ -458,8 +450,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
                                     decoration: BoxDecoration(
-                                      color: Colors
-                                          .red, // Optional: change color for "Subscription"
+                                      color:
+                                          defaultColor, // Optional: change color for "Subscription"
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: const Center(
