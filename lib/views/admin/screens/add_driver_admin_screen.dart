@@ -21,6 +21,7 @@ class AddDriversAdminScreen extends StatefulWidget {
 }
 
 class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
+  bool _obscurePassword = true;
   String? selectedParking;
   String? selectedLocation;
   TextEditingController carsPerMonthController = TextEditingController();
@@ -40,6 +41,10 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
       Provider.of<DashboardController>(context, listen: false)
           .fetchPickupLocations(context);
     });
+  }
+
+  String getShortenedString(String str, int maxLength) {
+    return (str.length > maxLength) ? '${str.substring(0, maxLength)}...' : str;
   }
 
   Future<void> submitFormDriver() async {
@@ -135,7 +140,7 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
               const SizedBox(height: 16.0),
               TextField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: const OutlineInputBorder(
@@ -152,8 +157,14 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.visibility_outlined),
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -244,7 +255,12 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                     items: locations.map((location) {
                       return DropdownMenuItem<String>(
                         value: location.id.toString(),
-                        child: Text(location.pickupAddress),
+                        child: Text(
+                          getShortenedString(location.pickupAddress,
+                              30), // Apply the substring function
+                          style:
+                              const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
                       );
                     }).toList(),
                     onChanged: (newValue) {

@@ -14,7 +14,8 @@ class DriversAdminScreen extends StatelessWidget {
       appBar: appBarWithActions(context, 'Drivers', () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const AddDriversAdminScreen()),
+          MaterialPageRoute(
+              builder: (context) => const AddDriversAdminScreen()),
         );
       }),
       body: FutureBuilder<void>(
@@ -50,19 +51,19 @@ class DriversAdminScreen extends StatelessWidget {
                           _buildInfoRow(
                               icon: Icons.person,
                               label: 'Name',
-                              value: driver.name,
+                              value: driver.name!,
                               status:
                                   1), // You can adjust status logic as needed
                           const SizedBox(height: 5),
                           _buildInfoRow(
                               icon: Icons.email,
                               label: 'Email',
-                              value: driver.email),
+                              value: driver.email!),
                           const SizedBox(height: 5),
                           _buildInfoRow(
                               icon: Icons.phone,
                               label: 'Phone',
-                              value: driver.phone),
+                              value: driver.phone!),
                           const SizedBox(height: 5),
                           _buildInfoRow(
                               icon: Icons.money,
@@ -118,5 +119,4 @@ class DriversAdminScreen extends StatelessWidget {
       ],
     );
   }
-
 }

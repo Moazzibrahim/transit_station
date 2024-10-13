@@ -1,28 +1,32 @@
 class Driver {
-  final int id;
-  final int parkingId;
-  final String name;
-  final String email;
-  final String phone;
-  final String image;
-  final int salary;
-  final int locationId;
-  final int carsPerMonth;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final int? parkingId;
+  final String? name;
+  final String? email;
+  final String? phone;
+  final String? image;
+  final int? salary;
+  final int? locationId;
+  final int? carsPerMonth;
+  final String? locationAddress;  
+  final String? parkingName;      
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Driver({
-    required this.id,
-    required this.parkingId,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.image,
-    required this.salary,
-    required this.locationId,
-    required this.carsPerMonth,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.parkingId,
+    this.name,
+    this.email,
+    this.phone,
+    this.image,
+    this.salary,
+    this.locationId,
+    this.carsPerMonth,
+    this.locationAddress,
+    this.parkingName,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Driver.fromJson(Map<String, dynamic> json) {
@@ -35,9 +39,11 @@ class Driver {
       image: json['image'],
       salary: json['salary'],
       locationId: json['location_id'],
-      carsPerMonth: json['cars_per_mounth'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      carsPerMonth: json['cars_per_mounth'],  // Fixed typo
+      locationAddress: json['location_address'],
+      parkingName: json['parking_name'],
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
     );
   }
 
@@ -52,28 +58,30 @@ class Driver {
       'salary': salary,
       'location_id': locationId,
       'cars_per_mounth': carsPerMonth,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'location_address': locationAddress,
+      'parking_name': parkingName,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }
 
 class Drivers {
-  final List<Driver> drivers;
+  final List<Driver>? drivers;
 
-  Drivers({required this.drivers});
+  Drivers({this.drivers});
 
   factory Drivers.fromJson(Map<String, dynamic> json) {
     return Drivers(
-      drivers: List<Driver>.from(
-        json['drivers'].map((driver) => Driver.fromJson(driver)),
-      ),
+      drivers: json['drivers'] != null
+          ? List<Driver>.from(json['drivers'].map((driver) => Driver.fromJson(driver)))
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'drivers': drivers.map((driver) => driver.toJson()).toList(),
+      'drivers': drivers?.map((driver) => driver.toJson()).toList(),
     };
   }
 }

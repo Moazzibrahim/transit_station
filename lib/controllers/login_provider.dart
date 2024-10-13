@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transit_station/constants/widgets.dart';
+import 'package:transit_station/views/Driver/screens/driver_home_screen.dart';
 import 'package:transit_station/views/admin/screens/admin_dashboard_screen.dart';
 import 'package:transit_station/views/home_views/screens/home_screen.dart';
 
@@ -139,6 +140,11 @@ class LoginModel with ChangeNotifier {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
+        );
+      } else if (role == 'driver') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeDriverScreen()),
         );
       } else {
         _showSnackbar(context, 'Unknown user role');
