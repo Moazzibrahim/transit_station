@@ -59,16 +59,23 @@ class RequestAdminScreen extends StatelessWidget {
                           return const Center(
                               child: Text('No requests found.'));
                         } else {
-                          final carRequests = snapshot.data!;
+                          // Filter current requests
+                          final carRequests = snapshot.data!
+                              .where((e) => e.status == 1)
+                              .toList();
+
+                          // Sort by nearest pickUpDate
+                          carRequests.sort((a, b) {
+                            DateTime dateA = DateTime.parse(a.pickUpDate);
+                            DateTime dateB = DateTime.parse(b.pickUpDate);
+                            return dateA
+                                .compareTo(dateB); // Sorts by nearest date
+                          });
+
                           return ListView.builder(
                             itemCount: carRequests.length,
                             itemBuilder: (context, index) {
-                              final filteredRequests = carRequests
-                                  .where(
-                                    (e) => e.status == 1,
-                                  )
-                                  .toList();
-                              final request = filteredRequests[index];
+                              final request = carRequests[index];
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -135,6 +142,7 @@ class RequestAdminScreen extends StatelessWidget {
                         }
                       },
                     ),
+
                     // history widgets***************
                     FutureBuilder<List<Request>>(
                       future: fetchRequests(context),
