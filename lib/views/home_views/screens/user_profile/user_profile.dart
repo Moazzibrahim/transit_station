@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
@@ -40,8 +42,8 @@ class UserProfile extends StatelessWidget {
                                   backgroundImage: profileProvider
                                               .userProfileModel?.image !=
                                           null
-                                      ? NetworkImage(
-                                          '${profileProvider.userProfileModel!.image}')
+                                      ? MemoryImage(base64Decode(profileProvider
+                                          .userProfileModel!.image!))
                                       : const AssetImage(
                                               'assets/images/boy.png')
                                           as ImageProvider, // Default image
