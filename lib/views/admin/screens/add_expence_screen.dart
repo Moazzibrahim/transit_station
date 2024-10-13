@@ -30,28 +30,29 @@ class _AddExpenceScreenState extends State<AddExpenceScreen> {
             Expanded(
               child: Column(
                 children: [
-                  TextFormField(
-                    readOnly: true,
-                    decoration: inputDecoration('pick a date'),
-                    controller: TextEditingController(
-                      text: selectedDate == null
-                          ? ''
-                          : "${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}",
-                    ),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
-                      );
-                      if (pickedDate != null) {
-                        setState(() {
-                          selectedDate = pickedDate;
-                        });
-                      }
-                    },
-                  ),
+                 TextFormField(
+  readOnly: true,
+  decoration: inputDecoration('pick a date'),
+  controller: TextEditingController(
+    text: selectedDate == null
+        ? ''
+        : "${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}",
+  ),
+  onTap: () async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(), // Set the initial date to today
+      firstDate: DateTime.now(),   // Set the first date to today
+      lastDate: DateTime(2101),    // Set a far future date as the last date
+    );
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate; // Update the selected date
+      });
+    }
+  },
+),
+
                   const SizedBox(
                     height: 20,
                   ),

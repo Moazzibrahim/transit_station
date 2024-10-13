@@ -171,7 +171,7 @@ class _RequestFormState extends State<AddSubscriptions> {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2101),
                     );
                     if (pickedDate != null) {
@@ -199,7 +199,7 @@ class _RequestFormState extends State<AddSubscriptions> {
                     DateTime? pickedEndDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2101),
                     );
                     if (pickedEndDate != null) {

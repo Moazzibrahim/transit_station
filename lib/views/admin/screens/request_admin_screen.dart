@@ -142,7 +142,6 @@ class RequestAdminScreen extends StatelessWidget {
                         }
                       },
                     ),
-
                     // history widgets***************
                     FutureBuilder<List<Request>>(
                       future: fetchRequests(context),

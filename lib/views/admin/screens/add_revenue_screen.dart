@@ -42,7 +42,7 @@ class _AddRevenueScreenState extends State<AddRevenueScreen> {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
+                        firstDate: DateTime.now(),
                         lastDate: DateTime(2101),
                       );
                       if (pickedDate != null) {
@@ -93,7 +93,7 @@ class _AddRevenueScreenState extends State<AddRevenueScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async{
+                onPressed: () async {
                   // Check if all fields are filled
                   if (selectedDate == null ||
                       _selectedRevenueType == null ||

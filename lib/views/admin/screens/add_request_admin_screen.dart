@@ -234,7 +234,7 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2101),
                     );
                     if (pickedDate != null) {
@@ -304,7 +304,7 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2101),
                     );
                     if (pickedDate != null) {
