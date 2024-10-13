@@ -30,9 +30,9 @@ class UserOffersResponse {
 class UserOffer {
   final int id;
   final int userId;
-  final String offerName;
-  final DateTime startDate;
-  final DateTime endDate;
+  final String? offerName;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final double amount;
   final int status;
 
@@ -67,8 +67,8 @@ class UserOffer {
       'user_id': userId,
       'offer_name': offerName,
       'start_date':
-          dateFormat.format(startDate), // Format start date as yyyy-MM-dd
-      'end_date': dateFormat.format(endDate), // Format end date as yyyy-MM-dd
+          dateFormat.format(startDate!), // Format start date as yyyy-MM-dd
+      'end_date': dateFormat.format(endDate!), // Format end date as yyyy-MM-dd
       'amount': amount,
       'status': status,
     };

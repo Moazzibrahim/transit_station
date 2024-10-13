@@ -11,9 +11,6 @@ class PickupContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isBase64(String image) {
-    return !image.startsWith('https');
-  }
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -24,7 +21,7 @@ class PickupContainer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          isBase64(image)? Image.memory(base64Decode(image),height: 96,width: 84,) : Image.network(image,width: 84,height: 96,),
+          Image.memory(base64Decode(image.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '')), height: 96, width: 84,),
           const SizedBox(width: 10,),
           Expanded(
             child: Column(

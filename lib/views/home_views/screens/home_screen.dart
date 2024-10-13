@@ -164,13 +164,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Hello,',
                               style: TextStyle(
                                   color: defaultColor,
-                                  fontSize: 32,
+                                  fontSize: 25,
                                   fontWeight: FontWeight.w400),
                             ),
                             Text(
                               profileProvider.userProfileModel?.name ?? 'Guest',
                               style: const TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.w400),
+                                  fontSize: 25, fontWeight: FontWeight.w400),
                             )
                           ],
                         ),
@@ -180,14 +180,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               children: [
                                 Builder(
-                                  builder: (context) => IconButton(
-                                    icon: const Icon(Icons.menu,
-                                        color: defaultColor),
-                                    onPressed: () {
-                                      Scaffold.of(context)
-                                          .openDrawer(); // Open the drawer
-                                    },
-                                  ),
+                                  builder: (context)=> GestureDetector(
+                                  onTap: () {
+                                    Scaffold.of(context)
+                                          .openDrawer();
+                                  },
+                                  child: const Icon(Icons.menu,color: defaultColor))
                                 ),
                               ],
                             ),
@@ -196,86 +194,95 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     Container(
-                      height: 180, // Adjusted height to fit two rows
+                      height: 220,
                       width: double.infinity,
-                      padding: const EdgeInsets.all(17),
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                       decoration: BoxDecoration(
                         color: yellowColor,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
-                            'Enjoy feature-packed parking',
-                            style: TextStyle(
-                              color: defaultColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const RequestForm(),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  backgroundColor: defaultColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 9, horizontal: 8),
-                                ),
-                                child: const Text(
-                                  'New Request',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ReturnRequestScreen(),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  backgroundColor: defaultColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 9, horizontal: 8),
-                                ),
-                                child: const Text(
-                                  'Return Request',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                              Text(
+                                'Booking managment',
+                                style: TextStyle(
+                                  color: defaultColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],
                           ),
-                          Center(
+                          const SizedBox(height: 10,),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const RequestForm(),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    backgroundColor: defaultColor,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 9, horizontal: 8),
+                                  ),
+                                  child: const Text(
+                                    'New Request',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                          ),
+                              const SizedBox(height: 10,),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ReturnRequestScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                backgroundColor: defaultColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 9, horizontal: 8),
+                              ),
+                              child: const Text(
+                                'Return Request',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          SizedBox(
+                            width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(

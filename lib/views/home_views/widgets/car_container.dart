@@ -24,13 +24,15 @@ class CarContainer extends StatelessWidget {
         children: [
           Container(
             width: 96,
-            height: 99,
+            height: 92,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: Colors.white,
             ),
             child: Center(
-              child: image == null ? const Text('No image') : Image.memory(base64Decode(image!)),
+              child: image == null ? const Text('No image') : ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.memory(base64Decode(image!),fit: BoxFit.cover,height: 90,)),
             ),
           ),
           const SizedBox(height: 10,),

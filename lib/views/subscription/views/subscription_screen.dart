@@ -120,9 +120,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
               final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
               final String formattedStartDate =
-                  dateFormat.format(subscription.startDate);
+                  dateFormat.format(subscription.startDate!);
               final String formattedEndDate =
-                  dateFormat.format(subscription.endDate);
+                  dateFormat.format(subscription.endDate!);
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
