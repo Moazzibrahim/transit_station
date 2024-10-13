@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
@@ -48,32 +50,55 @@ class DriversAdminScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Display the driver's image at the top (once per driver)
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30, // Adjust size as needed
+                                backgroundImage: driver.image != null &&
+                                        driver.image!.isNotEmpty
+                                    ? MemoryImage(base64Decode(driver.image!))
+                                    : const AssetImage('assets/images/boy.png')
+                                        as ImageProvider, // Placeholder image
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                driver.name!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: defaultColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                              height: 10), // Add space after the image and name
+
+                          // Display the rest of the driver information
                           _buildInfoRow(
-                              icon: Icons.person,
-                              label: 'Name',
-                              value: driver.name!,
-                              status:
-                                  1), // You can adjust status logic as needed
+                            icon: Icons.email,
+                            label: 'Email',
+                            value: driver.email!,
+                          ),
                           const SizedBox(height: 5),
                           _buildInfoRow(
-                              icon: Icons.email,
-                              label: 'Email',
-                              value: driver.email!),
+                            icon: Icons.phone,
+                            label: 'Phone',
+                            value: driver.phone!,
+                          ),
                           const SizedBox(height: 5),
                           _buildInfoRow(
-                              icon: Icons.phone,
-                              label: 'Phone',
-                              value: driver.phone!),
+                            icon: Icons.money,
+                            label: 'Salary',
+                            value: driver.salary.toString(),
+                          ),
                           const SizedBox(height: 5),
                           _buildInfoRow(
-                              icon: Icons.money,
-                              label: 'Salary',
-                              value: driver.salary.toString()),
-                          const SizedBox(height: 5),
-                          _buildInfoRow(
-                              icon: Icons.directions_car,
-                              label: 'Cars/Month',
-                              value: driver.carsPerMonth.toString()),
+                            icon: Icons.directions_car,
+                            label: 'Cars/Month',
+                            value: driver.carsPerMonth.toString(),
+                          ),
                         ],
                       ),
                     ),
