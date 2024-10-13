@@ -9,19 +9,18 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:transit_station/controllers/login_provider.dart';
-
 import '../../../controllers/admin_dropdown_provider.dart';
 
-class AddRequestAdminScreen extends StatefulWidget {
-  const AddRequestAdminScreen({super.key});
+class ReturnRequest extends StatefulWidget {
+  const ReturnRequest({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
   _AddRequestAdminScreenState createState() => _AddRequestAdminScreenState();
 }
 
-class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
-  Future<void> submitRequest(BuildContext context) async {
+class _AddRequestAdminScreenState extends State<ReturnRequest> {
+  Future<void> submitReturnRequest(BuildContext context) async {
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final String? token = tokenProvider.token;
 
@@ -119,8 +118,8 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
   String? selectedUser;
 
   DateTime? selectedDate;
-  DateTime? selectedEndDate;
   TimeOfDay? selectedTime;
+  DateTime? selectedEndDate;
   List<dynamic> locations = [];
   List<dynamic> cars = [];
   List<dynamic> drivers = [];
@@ -278,49 +277,13 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
                     }
                   },
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                    labelText: ' Return date',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: defaultColor),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: defaultColor),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  controller: TextEditingController(
-                    text: selectedEndDate == null
-                        ? ''
-                        : "${selectedEndDate!.year}-${selectedEndDate!.month}-${selectedEndDate!.day}",
-                  ),
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        selectedEndDate = pickedDate;
-                      });
-                    }
-                  },
-                ),
               ],
             ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  submitRequest(context);
+                  submitReturnRequest(context);
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
