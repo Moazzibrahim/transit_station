@@ -396,10 +396,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontSize: 24, fontWeight: FontWeight.w400),
                               ),
                               const SizedBox(height: 10),
-                              if (userOffer != null) ...[
+                              if (userOffer != null &&
+                                  userOffer.offerName != null &&
+                                  userOffer.startDate != null &&
+                                  userOffer.endDate != null) ...[
                                 // Format the dates
                                 Text(
-                                  '${userOffer.offerName} was renewed on ${DateFormat('yyyy-MM-dd').format(userOffer.startDate)} and is valid until ${DateFormat('yyyy-MM-dd').format(userOffer.endDate)}',
+                                  '${userOffer.offerName} was renewed on ${DateFormat('yyyy-MM-dd').format(userOffer.startDate!)} and is valid until ${DateFormat('yyyy-MM-dd').format(userOffer.endDate!)}',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16),
@@ -450,8 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
                                     decoration: BoxDecoration(
-                                      color:
-                                          defaultColor, // Optional: change color for "Subscription"
+                                      color: defaultColor,
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: const Center(

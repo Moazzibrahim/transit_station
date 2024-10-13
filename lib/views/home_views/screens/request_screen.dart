@@ -9,6 +9,7 @@ import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/Driver/screens/status_screen.dart';
+import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
 
 class RequestForm extends StatefulWidget {
   const RequestForm({super.key});
@@ -51,6 +52,7 @@ class _RequestFormState extends State<RequestForm> {
         "${selectedReturnDate!.year}-${selectedReturnDate!.month.toString().padLeft(2, '0')}-${selectedReturnDate!.day.toString().padLeft(2, '0')}";
     String formattedTime =
         "${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}";
+
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final token = tokenProvider.token;
 
@@ -86,11 +88,86 @@ class _RequestFormState extends State<RequestForm> {
                 MaterialPageRoute(builder: (context) => const StatusScreen()));
           },
         );
+      } else if (response.statusCode == 403) {
+        var responseBody = jsonDecode(response.body);
+        if (responseBody['message'] == 'Please subscribe first') {
+          showDialog(
+            context: context,
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: const Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded,
+                        color: Colors.red, size: 28),
+                    SizedBox(width: 10),
+                    Text('Subscription Required'),
+                  ],
+                ),
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'You need to subscribe to proceed. Would you like to view subscription plans?',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[400],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop(); // Close the dialog
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: defaultColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Subscribe',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop(); // Close the dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const SubscriptionPlanScreens()),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          log('Request failed with status: ${response.statusCode}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Request failed: ${responseBody['message']}')),
+          );
+        }
       } else {
-        // Error - Handle the error
         log('Request failed with status: ${response.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed: ${response.body}')),
+          SnackBar(content: Text('Request failed: ${response.body}')),
         );
       }
     } catch (error) {
