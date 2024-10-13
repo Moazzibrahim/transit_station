@@ -136,7 +136,7 @@ class ExpencesProvider with ChangeNotifier {
         body: jsonEncode({
           'date': formattedDate,
           'type_expence_id': typeId,
-          'revenue_amount': amount,
+          'expence_amount': amount,
         }),
       );
 
@@ -160,7 +160,7 @@ class ExpencesProvider with ChangeNotifier {
       final tokenProvider = Provider.of<TokenModel>(context, listen: false);
       final token = tokenProvider.token;
       final response = await http.get(
-        Uri.parse('https://transitstation.online/api/admin/revenue/types'),
+        Uri.parse('https://transitstation.online/api/admin/expence/types'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

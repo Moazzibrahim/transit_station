@@ -30,42 +30,43 @@ class _AddExpenceScreenState extends State<AddExpenceScreen> {
             Expanded(
               child: Column(
                 children: [
-                 TextFormField(
-  readOnly: true,
-  decoration: inputDecoration('pick a date'),
-  controller: TextEditingController(
-    text: selectedDate == null
-        ? ''
-        : "${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}",
-  ),
-  onTap: () async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(), // Set the initial date to today
-      firstDate: DateTime.now(),   // Set the first date to today
-      lastDate: DateTime(2101),    // Set a far future date as the last date
-    );
-    if (pickedDate != null) {
-      setState(() {
-        selectedDate = pickedDate; // Update the selected date
-      });
-    }
-  },
-),
-
+                  TextFormField(
+                    readOnly: true,
+                    decoration: inputDecoration('pick a date'),
+                    controller: TextEditingController(
+                      text: selectedDate == null
+                          ? ''
+                          : "${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}",
+                    ),
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            DateTime.now(), // Set the initial date to today
+                        firstDate:
+                            DateTime.now(), // Set the first date to today
+                        lastDate: DateTime(
+                            2101), // Set a far future date as the last date
+                      );
+                      if (pickedDate != null) {
+                        setState(() {
+                          selectedDate = pickedDate; // Update the selected date
+                        });
+                      }
+                    },
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   Consumer<ExpencesProvider>(
                     builder: (context, expenceProvder, child) {
-                      // Fetch revenue types if not loaded yet
                       if (expenceProvder.expenceTypesData.isEmpty) {
                         expenceProvder.fetchExpenceTypes(context);
                       }
 
                       return DropdownButtonFormField<ExpenceType>(
                         value: _selectedExpenceType,
-                        decoration: inputDecoration('Select revenue type'),
+                        decoration: inputDecoration('Select expence type'),
                         items: expenceProvder.expenceTypesData
                             .map((ExpenceType type) {
                           return DropdownMenuItem<ExpenceType>(
@@ -94,7 +95,7 @@ class _AddExpenceScreenState extends State<AddExpenceScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async{
+                onPressed: () async {
                   // Check if all fields are filled
                   if (selectedDate == null ||
                       _selectedExpenceType == null ||
