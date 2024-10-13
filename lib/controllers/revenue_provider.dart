@@ -19,6 +19,9 @@ class RevenueProvider with ChangeNotifier {
   List<RevenueType> _revenueTypesData = [];
   List<RevenueType> get revenueTypesData => _revenueTypesData;
 
+  double _totalAmount = 0;
+  double get totalAmount => _totalAmount;
+
   Future<void> addTypeRevenue(BuildContext context, String name) async {
     try {
       final tokenProvider = Provider.of<TokenModel>(context, listen: false);
@@ -77,8 +80,7 @@ class RevenueProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addRevenue(
-      BuildContext context, DateTime date, int typeId, double amount) async {
+  Future<void> addRevenue(BuildContext context, DateTime date, int typeId, double amount) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
@@ -145,30 +147,30 @@ class RevenueProvider with ChangeNotifier {
 
   void filterRevenuesByDate(String filter) {
     DateTime now = DateTime.now();
+    _totalAmount = 0;
 
     if (filter == 'Yearly') {
       _filteredRevenues = _revenuesData.where((revenue) {
         DateTime revenueDate = DateTime.parse(revenue.date);
-        return revenueDate.year == now.year; // Match current year (e.g., 2024)
+        return revenueDate.year == now.year;
       }).toList();
     } else if (filter == 'Monthly') {
       _filteredRevenues = _revenuesData.where((revenue) {
         DateTime revenueDate = DateTime.parse(revenue.date);
-        return revenueDate.year == now.year &&
-            revenueDate.month == now.month; // Current month
+        return revenueDate.year == now.year && revenueDate.month == now.month;
       }).toList();
     } else if (filter == 'Weekly') {
       _filteredRevenues = _revenuesData.where((revenue) {
         DateTime revenueDate = DateTime.parse(revenue.date);
         final currentWeekStart = now.subtract(Duration(days: now.weekday));
         final currentWeekEnd = currentWeekStart.add(const Duration(days: 7));
-        return revenueDate.isAfter(currentWeekStart) &&
-            revenueDate.isBefore(currentWeekEnd);
+        return revenueDate.isAfter(currentWeekStart) && revenueDate.isBefore(currentWeekEnd);
       }).toList();
     } else {
       _filteredRevenues = _revenuesData; // Show all data for 'All'
     }
 
+    _totalAmount = _filteredRevenues.fold(0, (sum, revenue) => sum + revenue.amount);
     notifyListeners();
   }
 }

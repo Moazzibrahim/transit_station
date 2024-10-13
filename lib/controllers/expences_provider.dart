@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +14,21 @@ class ExpencesProvider with ChangeNotifier {
   List<Expence> get expenceData =>
       _filteredexpenses.isEmpty ? _expenceData : _filteredexpenses;
 
+  double get totalExpenses {
+    double totalAmount = 0.0;
+    for (var expence
+        in _filteredexpenses.isEmpty ? _expenceData : _filteredexpenses) {
+      totalAmount += expence.amount;
+    }
+    return totalAmount;
+  }
+
   bool isTypeAdded = false;
   bool isExpenceAdded = false;
 
   List<ExpenceType> _expenceTypesData = [];
   List<ExpenceType> get expenceTypesData => _expenceTypesData;
+
   void filterExpencesByDate(String filter) {
     DateTime now = DateTime.now();
     _filteredexpenses =
@@ -173,5 +182,14 @@ class ExpencesProvider with ChangeNotifier {
     } catch (e) {
       log('error in fetch types data: $e');
     }
+  }
+
+  double getTotalAmount() {
+    double totalAmount = 0.0;
+    for (var expence
+        in _filteredexpenses.isEmpty ? _expenceData : _filteredexpenses) {
+      totalAmount += expence.amount;
+    }
+    return totalAmount;
   }
 }

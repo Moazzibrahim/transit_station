@@ -44,8 +44,8 @@ class RequestAdminScreen extends StatelessWidget {
               Expanded(
                 child: TabBarView(
                   children: [
-                    FutureBuilder<List<CarRequest>>(
-                      future: fetchCarRequests(context),
+                    FutureBuilder<List<Request>>(
+                      future: fetchRequests(context),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -136,8 +136,8 @@ class RequestAdminScreen extends StatelessWidget {
                       },
                     ),
                     // history widgets***************
-                    FutureBuilder<List<CarRequest>>(
-                      future: fetchCarRequests(context),
+                    FutureBuilder<List<Request>>(
+                      future: fetchRequests(context),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

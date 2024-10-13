@@ -13,7 +13,7 @@ class RevenueScreen extends StatefulWidget {
 }
 
 class _RevenueScreenState extends State<RevenueScreen> {
-  String _selectedFilter = 'All'; // Filter options: All, Weekly, Monthly, Yearly
+  String _selectedFilter = 'All';
 
   @override
   void initState() {
@@ -22,7 +22,8 @@ class _RevenueScreenState extends State<RevenueScreen> {
   }
 
   void _applyFilter() {
-    final revenueProvider = Provider.of<RevenueProvider>(context, listen: false);
+    final revenueProvider =
+        Provider.of<RevenueProvider>(context, listen: false);
     revenueProvider.filterRevenuesByDate(_selectedFilter);
   }
 
@@ -69,106 +70,125 @@ class _RevenueScreenState extends State<RevenueScreen> {
           const SizedBox(width: 3),
         ],
       ),
-      body: Column(
-        children: [
-          // Dropdown for filter selection
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<String>(
-              value: _selectedFilter,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedFilter = newValue!;
-                });
-                _applyFilter();
-              },
-              items: <String>['All', 'Weekly', 'Monthly', 'Yearly']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              icon: const Icon(Icons.filter_list),
-            ),
-          ),
-          Expanded(
-            child: Consumer<RevenueProvider>(
-              builder: (context, revenueProvider, _) {
-                if (revenueProvider.revenueData.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: revenueProvider.revenueData.length,
-                    itemBuilder: (context, index) {
-                      final revenue = revenueProvider.revenueData[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        color: Colors.grey[100],
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildInfoRow(
-                                icon: Icons.date_range,
-                                label: 'Date',
-                                value: revenue.date,
-                              ),
-                              const SizedBox(height: 8),
-                              _buildInfoRow(
-                                icon: Icons.money,
-                                label: 'Amount',
-                                value: revenue.amount.toString(),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildInfoRow(
-                                icon: Icons.category,
-                                label: 'Type',
-                                value: revenue.type,
-                              ),
-                            ],
-                          ),
-                        ),
+      body: Consumer<RevenueProvider>(
+        builder: (context, revenueProvider, child) {
+          return Column(
+            children: [
+              // Dropdown for filter selection
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton<String>(
+                  value: _selectedFilter,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedFilter = newValue!;
+                    });
+                    _applyFilter();
+                  },
+                  items: <String>['All', 'Weekly', 'Monthly', 'Yearly']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  icon: const Icon(Icons.filter_list),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Total Revenue: \$${revenueProvider.totalAmount.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: defaultColor,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Consumer<RevenueProvider>(
+                  builder: (context, revenueProvider, _) {
+                    if (revenueProvider.revenueData.isEmpty) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
-                    },
-                  );
-                }
-              },
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) => const AddRevenueScreen()));
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: defaultColor,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                    } else {
+                      return ListView.builder(
+                        itemCount: revenueProvider.revenueData.length,
+                        itemBuilder: (context, index) {
+                          final revenue = revenueProvider.revenueData[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 8),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            color: Colors.grey[100],
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildInfoRow(
+                                    icon: Icons.date_range,
+                                    label: 'Date',
+                                    value: revenue.date,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _buildInfoRow(
+                                    icon: Icons.money,
+                                    label: 'Amount',
+                                    value: revenue.amount.toString(),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _buildInfoRow(
+                                    icon: Icons.category,
+                                    label: 'Type',
+                                    value: revenue.type,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 18,
-                )),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.add),
-                Text(
-                  'Add',
-                  style: TextStyle(fontSize: 20),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const AddRevenueScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: defaultColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 18,
+                      )),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add),
+                      Text(
+                        'Add',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }

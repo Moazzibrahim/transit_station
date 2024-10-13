@@ -106,6 +106,17 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
                       icon: const Icon(Icons.filter_list),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Total Expenses: \$${expenceProvider.totalExpenses.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: defaultColor,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: expenceProvider.expenceData.length,
@@ -207,4 +218,30 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
       ],
     );
   }
+}
+
+Widget _buildInfoRow(
+    {required IconData icon, required String label, required String value}) {
+  return Row(
+    children: [
+      Icon(icon, color: defaultColor, size: 20),
+      const SizedBox(width: 10),
+      Text(
+        '$label:',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: defaultColor,
+        ),
+      ),
+      const SizedBox(width: 5),
+      Expanded(
+        child: Text(
+          value,
+          style: const TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
+    ],
+  );
 }

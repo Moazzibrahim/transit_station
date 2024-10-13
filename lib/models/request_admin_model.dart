@@ -1,4 +1,4 @@
-class CarRequest {
+class Request {
   int id;
   int carId;
   int userId;
@@ -12,7 +12,7 @@ class CarRequest {
   User user;
   Location location;
 
-  CarRequest({
+  Request({
     required this.id,
     required this.carId,
     required this.userId,
@@ -27,8 +27,8 @@ class CarRequest {
     required this.location,
   });
 
-  factory CarRequest.fromJson(Map<String, dynamic> json) {
-    return CarRequest(
+  factory Request.fromJson(Map<String, dynamic> json) {
+    return Request(
       id: json['id'] ?? 0,
       carId: json['car_id'] ?? 0,
       userId: json['user_id'] ?? 0,
