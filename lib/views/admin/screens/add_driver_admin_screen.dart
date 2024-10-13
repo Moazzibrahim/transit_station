@@ -208,43 +208,6 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                 },
               ),
               const SizedBox(height: 16.0),
-              Consumer<ImageServices>(
-                builder: (context, imageServices, child) {
-                  return Row(
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: imageServices.pickImage,
-                        icon: const Icon(Icons.add_a_photo),
-                        label: const Text('Select extra Images'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      imageServices.image != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                imageServices.image!,
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : const Icon(
-                              Icons.image_not_supported,
-                              size: 100,
-                              color: Colors.grey,
-                            ),
-                    ],
-                  );
-                },
-              ),
-              const SizedBox(height: 16.0),
               // Dropdown for selecting location
               Consumer<DashboardController>(
                 builder: (context, getDropdowndataProvider, child) {
