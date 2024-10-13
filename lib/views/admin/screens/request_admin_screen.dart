@@ -60,7 +60,7 @@ class RequestAdminScreen extends StatelessWidget {
                               child: Text('No requests found.'));
                         } else {
                           // Filter current requests
-                          final carRequests = snapshot.data!
+                          List<Request> carRequests = snapshot.data!
                               .where((e) => e.status == 1)
                               .toList();
 
