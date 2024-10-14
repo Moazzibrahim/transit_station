@@ -37,6 +37,7 @@ class Parking {
     };
   }
 }
+
 class Driver {
   final int id;
   final int parkingId;
@@ -67,19 +68,21 @@ class Driver {
   });
 
   factory Driver.fromJson(Map<String, dynamic> json) {
+    print(json); // Print to check incoming JSON structure
     return Driver(
-      id: json['id'],
-      parkingId: json['parking_id'],
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
+      id: json['id'] ?? 0,
+      parkingId: json['parking_id'] ?? 0,
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
       image: json['image'] ?? '',
-      salary: json['salary'].toDouble(),
-      locationId: json['location_id'],
-      carsPerMonth: json['cars_per_mounth'],
+      salary: json['salary'] != null ? json['salary'].toDouble() : 0.0,
+      locationId: json['location_id'] ?? 0,
+      carsPerMonth:
+          json['cars_per_month'] != null ? json['cars_per_month'] : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      role: json['role'],
+      role: json['role'] ?? '',
     );
   }
 
