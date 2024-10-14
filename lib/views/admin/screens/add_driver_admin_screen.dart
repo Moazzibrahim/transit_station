@@ -209,6 +209,33 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                 },
               ),
               const SizedBox(height: 16.0),
+              // Dropdown for selecting location
+              Consumer<DashboardController>(
+                builder: (context, getDropdowndataProvider, child) {
+                  final locations = getDropdowndataProvider.locationData;
+                  return DropdownButtonFormField<String>(
+                    decoration: inputDecoration('Select Location'),
+                    value: selectedLocation,
+                    items: locations.map((location) {
+                      return DropdownMenuItem<String>(
+                        value: location.id.toString(),
+                        child: Text(
+                          getShortenedString(location.pickupAddress,
+                              30), // Apply the substring function
+                          style:
+                              const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedLocation = newValue;
+                      });
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 16.0),
 
               // Dropdown for selecting parking
               Consumer<ParkingController>(

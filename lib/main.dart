@@ -11,6 +11,7 @@ import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/parking_controller.dart';
 import 'package:transit_station/controllers/revenue_provider.dart';
+import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
 import 'package:transit_station/views/splash_screen.dart';
 
 void main() {
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => GetDropdowndataSubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => GetDriverDataProvider()),
+        ChangeNotifierProvider(create: (_) => GetRequestDriverProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
