@@ -18,7 +18,7 @@ class StatusScreen extends StatelessWidget {
               title: 'Pending Request',
               time: '',
               isActive: true,
-              isCompleted: false,
+              isCompleted: true,
             ),
             _buildDashedLine(),
             _buildStatusItem(
@@ -42,7 +42,7 @@ class StatusScreen extends StatelessWidget {
               title: 'Car In The Parking',
               time: '13 Minutes',
               isActive: false,
-              isCompleted: false,
+              isCompleted: false, // Completed item example
             ),
           ],
         ),
@@ -59,10 +59,11 @@ class StatusScreen extends StatelessWidget {
   }) {
     return Row(
       children: [
+        // Main status icon on the left
         Icon(
           icon,
           color: isCompleted
-              ? Colors.green
+              ? defaultColor
               : isActive
                   ? defaultColor
                   : Colors.grey,
@@ -89,6 +90,11 @@ class StatusScreen extends StatelessWidget {
             ],
           ),
         ),
+        if (isCompleted)
+          Icon(
+            Icons.verified,
+            color: defaultColor,
+          ),
       ],
     );
   }
