@@ -15,12 +15,33 @@ class ExpencesScreen extends StatefulWidget {
 class _ExpencesScreenState extends State<ExpencesScreen> {
   String _selectedFilter =
       'All'; // Filter options: All, Weekly, Monthly, Yearly
+  bool _isFirstBuild = true;
 
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ExpencesProvider>(context, listen: false)
+          .fetchExpences(context);
+      _applyFilter();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     Provider.of<ExpencesProvider>(context, listen: false)
         .fetchExpences(context);
-    super.initState();
+        
+    if (_isFirstBuild) {
+      _selectedFilter = 'All';
+      _isFirstBuild = false; // Set the flag to false after the first build
+    }
+
+    // Use addPostFrameCallback to apply the filter after the build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyFilter();
+    });
   }
 
   void _applyFilter() {
