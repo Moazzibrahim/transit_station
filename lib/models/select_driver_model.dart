@@ -47,7 +47,7 @@ class Driver {
   final String image;
   final double salary;
   final int locationId;
-  final int carsPerMonth;
+  final int? carsPerMonth; // Nullable since it can be null
   final DateTime createdAt;
   final DateTime updatedAt;
   final String role;
@@ -61,14 +61,13 @@ class Driver {
     required this.image,
     required this.salary,
     required this.locationId,
-    required this.carsPerMonth,
+    this.carsPerMonth, // Nullable
     required this.createdAt,
     required this.updatedAt,
     required this.role,
   });
 
   factory Driver.fromJson(Map<String, dynamic> json) {
-    print(json); // Print to check incoming JSON structure
     return Driver(
       id: json['id'] ?? 0,
       parkingId: json['parking_id'] ?? 0,
@@ -76,10 +75,11 @@ class Driver {
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
       image: json['image'] ?? '',
-      salary: json['salary'] != null ? json['salary'].toDouble() : 0.0,
+      salary: (json['salary'] != null ? json['salary'].toDouble() : 0.0),
       locationId: json['location_id'] ?? 0,
-      carsPerMonth:
-          json['cars_per_month'] != null ? json['cars_per_month'] : null,
+      carsPerMonth: json['cars_per_month'] != null
+          ? json['cars_per_month'] as int?
+          : null, // Nullable handling
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       role: json['role'] ?? '',
@@ -96,7 +96,7 @@ class Driver {
       'image': image,
       'salary': salary,
       'location_id': locationId,
-      'cars_per_mounth': carsPerMonth,
+      'cars_per_month': carsPerMonth, // Nullable field
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'role': role,

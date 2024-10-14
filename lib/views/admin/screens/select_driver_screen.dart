@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,10 +14,10 @@ import '../../../models/select_driver_model.dart';
 class SelectDriverScreen extends StatefulWidget {
   final String requestId;
 
-  const SelectDriverScreen({Key? key, required this.requestId})
-      : super(key: key);
+  const SelectDriverScreen({super.key, required this.requestId});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SelectDriverScreenState createState() => _SelectDriverScreenState();
 }
 
@@ -68,7 +70,7 @@ class _SelectDriverScreenState extends State<SelectDriverScreen> {
         // Navigate to the RequestAdminScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => RequestAdminScreen()),
+          MaterialPageRoute(builder: (context) => const RequestAdminScreen()),
         );
       } else {
         // Handle error response
