@@ -24,7 +24,15 @@ class _ParkingScreenState extends State<ParkingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, '#Parking'),
+      appBar: appBarWithActions(
+        context,
+        '#Parking',
+        () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (ctx) => const AddParkingScreen()),
+          );
+        },
+      ),
       body: Consumer<ParkingController>(
         builder: (context, parkingProvider, _) {
           if (parkingProvider.parkingData.isEmpty) {
@@ -88,33 +96,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
                   ),
                   const SizedBox(
                     height: 5,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (ctx) => const AddParkingScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: defaultColor,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        )),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add),
-                        Text(
-                          'Add',
-                          style: TextStyle(fontSize: 20),
-                        )
-                      ],
-                    ),
                   ),
                 ],
               ),
