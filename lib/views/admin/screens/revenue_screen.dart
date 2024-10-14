@@ -14,11 +14,35 @@ class RevenueScreen extends StatefulWidget {
 
 class _RevenueScreenState extends State<RevenueScreen> {
   String _selectedFilter = 'All';
+  bool _isFirstBuild = true;
 
   @override
   void initState() {
-    Provider.of<RevenueProvider>(context, listen: false).fetchRevenues(context);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<RevenueProvider>(context, listen: false)
+          .fetchRevenues(context);
+      _applyFilter(); // Apply the filter after fetching revenues
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Fetch revenues every time the screen is built
+    Provider.of<RevenueProvider>(context, listen: false).fetchRevenues(context);
+
+    // Reset the filter to 'All' on first build
+    if (_isFirstBuild) {
+      _selectedFilter = 'All';
+      _isFirstBuild = false; // Set the flag to false after the first build
+    }
+
+    // Use addPostFrameCallback to apply the filter after the build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyFilter();
+    });
   }
 
   void _applyFilter() {

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'dart:developer';
 
@@ -48,12 +48,17 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
   }
 
   Future<void> submitFormDriver() async {
+    final imageService = Provider.of<ImageServices>(context, listen: false);
+    String? base64Image = imageService.image != null
+        ? imageService.convertImageToBase64(imageService.image!)
+        : null;
     if (firstNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         phoneController.text.isEmpty ||
         passwordController.text.isEmpty ||
         selectedParking == null ||
         selectedLocation == null ||
+        base64Image == null ||
         carsPerMonthController.text.isEmpty ||
         salaryController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -64,10 +69,6 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
 
     final tokenProvider = Provider.of<TokenModel>(context, listen: false);
     final token = tokenProvider.token;
-    final imageService = Provider.of<ImageServices>(context, listen: false);
-    String? base64Image = imageService.image != null
-        ? imageService.convertImageToBase64(imageService.image!)
-        : null;
 
     const apiUrl = 'https://transitstation.online/api/admin/drivers/add';
 
@@ -204,33 +205,6 @@ class _AddDriversAdminScreenState extends State<AddDriversAdminScreen> {
                               color: Colors.grey,
                             ),
                     ],
-                  );
-                },
-              ),
-              const SizedBox(height: 16.0),
-              // Dropdown for selecting location
-              Consumer<DashboardController>(
-                builder: (context, getDropdowndataProvider, child) {
-                  final locations = getDropdowndataProvider.locationData;
-                  return DropdownButtonFormField<String>(
-                    decoration: inputDecoration('Select Location'),
-                    value: selectedLocation,
-                    items: locations.map((location) {
-                      return DropdownMenuItem<String>(
-                        value: location.id.toString(),
-                        child: Text(
-                          getShortenedString(location.pickupAddress,
-                              30), // Apply the substring function
-                          style:
-                              const TextStyle(overflow: TextOverflow.ellipsis),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        selectedLocation = newValue;
-                      });
-                    },
                   );
                 },
               ),
