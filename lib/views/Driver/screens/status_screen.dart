@@ -91,7 +91,7 @@ class StatusScreen extends StatelessWidget {
           ),
         ),
         if (isCompleted)
-          Icon(
+          const Icon(
             Icons.verified,
             color: defaultColor,
           ),

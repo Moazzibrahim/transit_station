@@ -84,7 +84,6 @@ class LoginModel with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        log(response.body);
         log("token: ${responseData['token']}");
 
         if (responseData.containsKey('faield')) {

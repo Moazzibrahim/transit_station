@@ -79,8 +79,7 @@ class RequestAdminScreen extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (ctx) =>
-                                          const SelectDriverScreen()));
+                                      builder: (ctx) => const SelectDriverScreen()));
                                 },
                                 child: Card(
                                   margin: const EdgeInsets.symmetric(
@@ -161,6 +160,7 @@ class RequestAdminScreen extends StatelessWidget {
                           final carRequests = snapshot.data!;
                           final filteredRequests = carRequests
                               .where(
+                                // ignore: unrelated_type_equality_checks
                                 (e) => e.status == 0,
                               )
                               .toList();

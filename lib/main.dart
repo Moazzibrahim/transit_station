@@ -8,10 +8,8 @@ import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/image_services.dart';
-
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/parking_controller.dart';
-import 'package:transit_station/controllers/request_admin_provider.dart';
 import 'package:transit_station/controllers/revenue_provider.dart';
 import 'package:transit_station/views/splash_screen.dart';
 
@@ -44,7 +42,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => GetDropdowndataSubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => GetDriverDataProvider()),
-        ChangeNotifierProvider(create: (_) => RequestAdminProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

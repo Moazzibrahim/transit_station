@@ -116,7 +116,6 @@ class DriversAdminScreen extends StatelessWidget {
     required IconData icon,
     required String label,
     required String value,
-    int? status,
   }) {
     return Row(
       children: [

@@ -219,29 +219,3 @@ class _ExpencesScreenState extends State<ExpencesScreen> {
     );
   }
 }
-
-Widget _buildInfoRow(
-    {required IconData icon, required String label, required String value}) {
-  return Row(
-    children: [
-      Icon(icon, color: defaultColor, size: 20),
-      const SizedBox(width: 10),
-      Text(
-        '$label:',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          color: defaultColor,
-        ),
-      ),
-      const SizedBox(width: 5),
-      Expanded(
-        child: Text(
-          value,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
-    ],
-  );
-}
