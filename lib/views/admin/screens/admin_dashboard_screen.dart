@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'dart:convert';
 import 'dart:developer';
@@ -40,238 +40,247 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          drawer: Drawer(
-            child: Consumer<DashboardController>(
-              builder: (context, dashboardProvider, _) {
-                if (dashboardProvider.dashboardData == null) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView(
-                    padding: EdgeInsets.zero,
-                    children: [
-                      const DrawerHeader(
-                        decoration: BoxDecoration(
-                          color: defaultColor,
-                        ),
-                        child: Text('Admin Menu',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 24)),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.location_on),
-                        title: Text(
-                            'Pick-Up Locations (${dashboardProvider.dashboardData!.pickUpLocationCount})'),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const PickupLocationScreen()));
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.local_parking),
-                        title: Text(
-                            'Parking (${dashboardProvider.dashboardData!.parkingCount})'),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const ParkingScreen()));
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.next_plan),
-                        title: const Text('Plans'),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const PlansAdminScreen()));
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.logout),
-                        title: const Text('Logout'),
-                        onTap: () async {
-                          const url =
-                              'https://transitstation.online/api/admin/logout';
-                          final tokenProvider =
-                              Provider.of<TokenModel>(context, listen: false);
-                          final token = tokenProvider.token;
-                          try {
-                            final response =
-                                await http.post(Uri.parse(url), headers: {
-                              'Content-Type': 'application/json',
-                              'Accept': 'application/json',
-                              'Authorization': 'Bearer $token',
-                            });
-                            if (response.statusCode == 200) {
-                              final responseBody = json.decode(response.body);
-                              log('logout response $responseBody');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoginScreen()));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Logout successful')));
-                            } else {
-                              log('Failed to load profile data (Error: ${response.statusCode})');
-                            }
-                          } catch (e) {
-                            log('An error occurred: $e');
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () async {
+        return Future.value(false); // Prevent back navigation
+      },
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Scaffold(
+            drawer: Drawer(
+              child: Consumer<DashboardController>(
+                builder: (context, dashboardProvider, _) {
+                  if (dashboardProvider.dashboardData == null) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return ListView(
+                      padding: EdgeInsets.zero,
                       children: [
-                        Text(
-                          'Hello, Admin',
-                          style: TextStyle(
-                              color: defaultColor,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w400),
+                        const DrawerHeader(
+                          decoration: BoxDecoration(
+                            color: defaultColor,
+                          ),
+                          child: Text('Admin Menu',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24)),
                         ),
-                        SizedBox(height: 30)
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 10,
+                        ListTile(
+                          leading: const Icon(Icons.location_on),
+                          title: Text(
+                              'Pick-Up Locations (${dashboardProvider.dashboardData!.pickUpLocationCount})'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) =>
+                                    const PickupLocationScreen()));
+                          },
                         ),
-                        Row(
-                          children: [
-                            const Icon(Icons.notifications_outlined),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Builder(
-                              builder: (context) => IconButton(
-                                icon:
-                                    const Icon(Icons.menu, color: defaultColor),
-                                onPressed: () {
-                                  Scaffold.of(context).openDrawer();
-                                },
-                              ),
-                            ),
-                          ],
+                        ListTile(
+                          leading: const Icon(Icons.local_parking),
+                          title: Text(
+                              'Parking (${dashboardProvider.dashboardData!.parkingCount})'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const ParkingScreen()));
+                          },
                         ),
-                        const SizedBox(
-                          height: 50,
+                        ListTile(
+                          leading: const Icon(Icons.next_plan),
+                          title: const Text('Plans'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const PlansAdminScreen()));
+                          },
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Consumer<DashboardController>(
-                  builder: (context, dashboardProvider, _) {
-                    if (dashboardProvider.dashboardData == null) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return Expanded(
-                        child: GridView.count(
-                          crossAxisCount: 3, // Number of columns
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (ctx) =>
-                                          const UsersAdminScreen()));
-                                },
-                                child: StatContainer(
-                                    title: 'users',
-                                    statNum: dashboardProvider
-                                        .dashboardData!.usercount)),
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (ctx) =>
-                                          const RequestAdminScreen()));
-                                },
-                                child: StatContainer(
-                                    title: 'requests',
-                                    statNum: dashboardProvider
-                                        .dashboardData!.requestcount)),
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (ctx) =>
-                                          const SubscriptionsAdminScreen()));
-                                },
-                                child: StatContainer(
-                                    title: '#Subscriptions',
-                                    statNum: dashboardProvider
-                                        .dashboardData!.subscriptionCount)),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const RevenueScreen()));
-                              },
-                              child: StatContainer(
-                                  title: 'Revenue',
-                                  statNum: dashboardProvider
-                                      .dashboardData!.revenueAmount
-                                      .toInt()),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const ExpencesScreen()));
-                              },
-                              child: StatContainer(
-                                  title: 'Expenses',
-                                  statNum: dashboardProvider
-                                      .dashboardData!.expenceAmount
-                                      .toInt()),
-                            ),
-                            GestureDetector(
-                              onTap: () {
+                        ListTile(
+                          leading: const Icon(Icons.logout),
+                          title: const Text('Logout'),
+                          onTap: () async {
+                            const url =
+                                'https://transitstation.online/api/admin/logout';
+                            final tokenProvider =
+                                Provider.of<TokenModel>(context, listen: false);
+                            final token = tokenProvider.token;
+                            try {
+                              final response =
+                                  await http.post(Uri.parse(url), headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'Authorization': 'Bearer $token',
+                              });
+                              if (response.statusCode == 200) {
+                                final responseBody = json.decode(response.body);
+                                log('logout response $responseBody');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const DriversAdminScreen()));
-                              },
-                              child: StatContainer(
-                                  title: '#Drivers',
-                                  statNum: dashboardProvider
-                                      .dashboardData!.driverCount),
-                            ),
-                          ],
+                                            const LoginScreen()));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Logout successful')));
+                              } else {
+                                log('Failed to load profile data (Error: ${response.statusCode})');
+                              }
+                            } catch (e) {
+                              log('An error occurred: $e');
+                            }
+                          },
                         ),
-                      );
-                    }
-                  },
-                ),
-                const Expanded(child: ProfitBarChart()),
-                const SizedBox(
-                  height: 60,
-                )
-              ],
+                      ],
+                    );
+                  }
+                },
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hello, Admin',
+                            style: TextStyle(
+                                color: defaultColor,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(height: 30)
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.notifications_outlined),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Builder(
+                                builder: (context) => IconButton(
+                                  icon: const Icon(Icons.menu,
+                                      color: defaultColor),
+                                  onPressed: () {
+                                    Scaffold.of(context).openDrawer();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Consumer<DashboardController>(
+                    builder: (context, dashboardProvider, _) {
+                      if (dashboardProvider.dashboardData == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return Expanded(
+                          child: GridView.count(
+                            crossAxisCount: 3, // Number of columns
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const UsersAdminScreen()));
+                                  },
+                                  child: StatContainer(
+                                      title: 'users',
+                                      statNum: dashboardProvider
+                                          .dashboardData!.usercount)),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const RequestAdminScreen()));
+                                  },
+                                  child: StatContainer(
+                                      title: 'requests',
+                                      statNum: dashboardProvider
+                                          .dashboardData!.requestcount)),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const SubscriptionsAdminScreen()));
+                                  },
+                                  child: StatContainer(
+                                      title: '#Subscriptions',
+                                      statNum: dashboardProvider
+                                          .dashboardData!.subscriptionCount)),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (ctx) => const RevenueScreen()));
+                                },
+                                child: StatContainer(
+                                    title: 'Revenue',
+                                    statNum: dashboardProvider
+                                        .dashboardData!.revenueAmount
+                                        .toInt()),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (ctx) =>
+                                          const ExpencesScreen()));
+                                },
+                                child: StatContainer(
+                                    title: 'Expenses',
+                                    statNum: dashboardProvider
+                                        .dashboardData!.expenceAmount
+                                        .toInt()),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const DriversAdminScreen()));
+                                },
+                                child: StatContainer(
+                                    title: '#Drivers',
+                                    statNum: dashboardProvider
+                                        .dashboardData!.driverCount),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const Expanded(child: ProfitBarChart()),
+                  const SizedBox(
+                    height: 60,
+                  )
+                ],
+              ),
             ),
           ),
         ),

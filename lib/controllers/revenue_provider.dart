@@ -71,6 +71,11 @@ class RevenueProvider with ChangeNotifier {
               (e) => Revenue.fromJson(e),
             )
             .toList();
+
+        // Calculate the total amount when data is fetched
+        _totalAmount =
+            _revenuesData.fold(0, (sum, revenue) => sum + revenue.amount);
+
         notifyListeners();
       } else {
         log('error with status code: ${response.statusCode}');
@@ -80,7 +85,8 @@ class RevenueProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addRevenue(BuildContext context, DateTime date, int typeId, double amount) async {
+  Future<void> addRevenue(
+      BuildContext context, DateTime date, int typeId, double amount) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
@@ -164,13 +170,27 @@ class RevenueProvider with ChangeNotifier {
         DateTime revenueDate = DateTime.parse(revenue.date);
         final currentWeekStart = now.subtract(Duration(days: now.weekday));
         final currentWeekEnd = currentWeekStart.add(const Duration(days: 7));
-        return revenueDate.isAfter(currentWeekStart) && revenueDate.isBefore(currentWeekEnd);
+        return revenueDate.isAfter(currentWeekStart) &&
+            revenueDate.isBefore(currentWeekEnd);
       }).toList();
     } else {
-      _filteredRevenues = _revenuesData; // Show all data for 'All'
+      // Show all data for 'All'
+      _filteredRevenues = _revenuesData;
     }
 
-    _totalAmount = _filteredRevenues.fold(0, (sum, revenue) => sum + revenue.amount);
+    // Calculate total amount
+    _totalAmount =
+        _filteredRevenues.fold(0, (sum, revenue) => sum + revenue.amount);
+
+    notifyListeners();
+  }
+
+  void resetFilter() {
+    // Show all revenues and recalculate the total amount
+    _filteredRevenues = List.from(_revenuesData); // Copy all revenues
+    _totalAmount =
+        _filteredRevenues.fold(0, (sum, revenue) => sum + revenue.amount);
+
     notifyListeners();
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'dart:convert';
 import 'dart:developer';
@@ -74,417 +74,435 @@ class _HomeScreenState extends State<HomeScreen> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return Container(
-          color: Colors.white,
-          child: SafeArea(
-            child: Scaffold(
-              drawer: Drawer(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    const DrawerHeader(
-                        decoration: BoxDecoration(color: defaultColor),
-                        child: Text('Menu',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 24))),
-                    ListTile(
-                      leading: SvgPicture.asset('assets/images/person.svg'),
-                      title: const Text('Personal info'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const UserProfile()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.help,
-                        color: defaultColor,
-                      ),
-                      title: const Text('Technical support'),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const TechnicalSupportScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.logout,
-                        color: defaultColor,
-                      ),
-                      title: const Text('logout'),
-                      onTap: () async {
-                        const url =
-                            'https://transitstation.online/api/user/logout';
-                        final tokenProvider =
-                            Provider.of<TokenModel>(context, listen: false);
-                        final token = tokenProvider.token;
-                        try {
-                          final response =
-                              await http.post(Uri.parse(url), headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'Authorization': 'Bearer $token',
-                          });
-                          if (response.statusCode == 200) {
-                            final responseBody = json.decode(response.body);
-                            log('logout response $responseBody');
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('logout successful')));
-                          } else {
-                            log('Failed to load profile data (Error: ${response.statusCode})');
-                          }
-                        } catch (e) {
-                          log('An error occurred: $e');
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Hello,',
+        return WillPopScope(
+          onWillPop: () async {
+            return Future.value(false); // Prevent back navigation
+          },
+          child: Container(
+            color: Colors.white,
+            child: SafeArea(
+              child: Scaffold(
+                drawer: Drawer(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      const DrawerHeader(
+                          decoration: BoxDecoration(color: defaultColor),
+                          child: Text('Menu',
                               style: TextStyle(
-                                  color: defaultColor,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Text(
-                              profileProvider.userProfileModel?.name ?? 'Guest',
-                              style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Builder(
-                                  builder: (context)=> GestureDetector(
-                                  onTap: () {
-                                    Scaffold.of(context)
-                                          .openDrawer();
-                                  },
-                                  child: const Icon(Icons.menu,color: defaultColor))
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 50),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      height: 220,
-                      width: double.infinity,
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                      decoration: BoxDecoration(
-                        color: yellowColor,
-                        borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white, fontSize: 24))),
+                      ListTile(
+                        leading: SvgPicture.asset('assets/images/person.svg'),
+                        title: const Text('Personal info'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const UserProfile()));
+                        },
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      ListTile(
+                        leading: const Icon(
+                          Icons.help,
+                          color: defaultColor,
+                        ),
+                        title: const Text('Technical support'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) =>
+                                  const TechnicalSupportScreen()));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.logout,
+                          color: defaultColor,
+                        ),
+                        title: const Text('logout'),
+                        onTap: () async {
+                          const url =
+                              'https://transitstation.online/api/user/logout';
+                          final tokenProvider =
+                              Provider.of<TokenModel>(context, listen: false);
+                          final token = tokenProvider.token;
+                          try {
+                            final response =
+                                await http.post(Uri.parse(url), headers: {
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                              'Authorization': 'Bearer $token',
+                            });
+                            if (response.statusCode == 200) {
+                              final responseBody = json.decode(response.body);
+                              log('logout response $responseBody');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('logout successful')));
+                            } else {
+                              log('Failed to load profile data (Error: ${response.statusCode})');
+                            }
+                          } catch (e) {
+                            log('An error occurred: $e');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Booking managment',
-                                style: TextStyle(
-                                  color: defaultColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10,),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const RequestForm(),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    backgroundColor: defaultColor,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 9, horizontal: 8),
-                                  ),
-                                  child: const Text(
-                                    'New Request',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                          ),
-                              const SizedBox(height: 10,),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ReturnRequestScreen(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                backgroundColor: defaultColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 9, horizontal: 8),
-                              ),
-                              child: const Text(
-                                'Return Request',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const StatusScreen(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                backgroundColor: defaultColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 15),
-                              ),
-                              child: const Text(
-                                'My Request',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Your Cars',
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w500),
-                        ),
-                        cars == null || cars!.isEmpty
-                            ? TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const AddCarScreen(),
-                                  ));
-                                },
-                                child: const Text(
-                                  'ADD',
-                                  style: TextStyle(
-                                    color: defaultColor,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: defaultColor,
-                                  ),
-                                ),
-                              )
-                            : TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const MyCarsScreen(),
-                                  ));
-                                },
-                                child: const Text(
-                                  'See all',
-                                  style: TextStyle(
-                                    color: defaultColor,
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 18,
-                                    decorationColor: defaultColor,
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : (cars == null || cars!.isEmpty
-                            ? const Center(
-                                child: Text(
-                                    'No cars available. You should add your car'))
-                            : SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: cars!.map((car) {
-                                    String carImage = (car.carImage != null &&
-                                            car.carImage!.isNotEmpty)
-                                        ? car.carImage!
-                                        : 'assets/images/bmw.png';
-
-                                    return CarContainer(
-                                      name: car.carName,
-                                      image: carImage,
-                                      selectedItem: selectedItem,
-                                    );
-                                  }).toList(),
-                                ),
-                              )),
-                    const SizedBox(height: 20),
-                    FutureBuilder<UserOffersResponse?>(
-                      future: _subscriptionData,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasData) {
-                          final userOffer =
-                              snapshot.data?.user.isNotEmpty == true
-                                  ? snapshot.data!.user.first
-                                  : null;
-
-                          return Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Your active subscription',
+                                'Hello,',
                                 style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w400),
+                                    color: defaultColor,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w400),
                               ),
-                              const SizedBox(height: 10),
-                              if (userOffer != null &&
-                                  userOffer.offerName != null &&
-                                  userOffer.startDate != null &&
-                                  userOffer.endDate != null) ...[
-                                // Format the dates
+                              Text(
+                                profileProvider.userProfileModel?.name ??
+                                    'Guest',
+                                style: const TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Builder(
+                                      builder: (context) => GestureDetector(
+                                          onTap: () {
+                                            Scaffold.of(context).openDrawer();
+                                          },
+                                          child: const Icon(Icons.menu,
+                                              color: defaultColor))),
+                                ],
+                              ),
+                              const SizedBox(height: 50),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 220,
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                        decoration: BoxDecoration(
+                          color: yellowColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 Text(
-                                  '${userOffer.offerName} was renewed on ${DateFormat('yyyy-MM-dd').format(userOffer.startDate!)} and is valid until ${DateFormat('yyyy-MM-dd').format(userOffer.endDate!)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16),
+                                  'Booking managment',
+                                  style: TextStyle(
+                                    color: defaultColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                                const SizedBox(height: 20),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                const SubscriptionScreen()));
-                                  },
-                                  child: Container(
-                                    width: 220,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: defaultColor),
-                                      borderRadius: BorderRadius.circular(20),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const RequestForm(),
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Subscription upgrade',
-                                        style: TextStyle(
-                                            color: defaultColor,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  backgroundColor: defaultColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 9, horizontal: 8),
+                                ),
+                                child: const Text(
+                                  'New Request',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ReturnRequestScreen(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  backgroundColor: defaultColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 9, horizontal: 8),
+                                ),
+                                child: const Text(
+                                  'Return Request',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const StatusScreen(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  backgroundColor: defaultColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 15),
+                                ),
+                                child: const Text(
+                                  'My Request',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Your Cars',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.w500),
+                          ),
+                          cars == null || cars!.isEmpty
+                              ? TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (ctx) => const AddCarScreen(),
+                                    ));
+                                  },
+                                  child: const Text(
+                                    'ADD',
+                                    style: TextStyle(
+                                      color: defaultColor,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: defaultColor,
                                     ),
                                   ),
                                 )
-                              ] else ...[
-                                const Text(
-                                  'No subscription found. You should subscribe.',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16),
-                                ),
-                                const SizedBox(height: 20),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            const SubscriptionPlanScreens()));
+                              : TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (ctx) => const MyCarsScreen(),
+                                    ));
                                   },
-                                  child: Container(
-                                    width: 220,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
+                                  child: const Text(
+                                    'See all',
+                                    style: TextStyle(
                                       color: defaultColor,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Subscription',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 18,
+                                      decorationColor: defaultColor,
                                     ),
                                   ),
                                 ),
-                              ]
-                            ],
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return const Text('No subscription data available.');
-                        }
-                      },
-                    )
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : (cars == null || cars!.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                      'No cars available. You should add your car'))
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: cars!.map((car) {
+                                      String carImage = (car.carImage != null &&
+                                              car.carImage!.isNotEmpty)
+                                          ? car.carImage!
+                                          : 'assets/images/bmw.png';
+
+                                      return CarContainer(
+                                        name: car.carName,
+                                        image: carImage,
+                                        selectedItem: selectedItem,
+                                      );
+                                    }).toList(),
+                                  ),
+                                )),
+                      const SizedBox(height: 20),
+                      FutureBuilder<UserOffersResponse?>(
+                        future: _subscriptionData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasData) {
+                            final userOffer =
+                                snapshot.data?.user.isNotEmpty == true
+                                    ? snapshot.data!.user.first
+                                    : null;
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Your active subscription',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(height: 10),
+                                if (userOffer != null &&
+                                    userOffer.offerName != null &&
+                                    userOffer.startDate != null &&
+                                    userOffer.endDate != null) ...[
+                                  // Format the dates
+                                  Text(
+                                    '${userOffer.offerName} was renewed on ${DateFormat('yyyy-MM-dd').format(userOffer.startDate!)} and is valid until ${DateFormat('yyyy-MM-dd').format(userOffer.endDate!)}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const SubscriptionScreen()));
+                                    },
+                                    child: Container(
+                                      width: 220,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: defaultColor),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Subscription upgrade',
+                                          style: TextStyle(
+                                              color: defaultColor,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ] else ...[
+                                  const Text(
+                                    'No subscription found. You should subscribe.',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (ctx) =>
+                                              const SubscriptionPlanScreens()));
+                                    },
+                                    child: Container(
+                                      width: 220,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: defaultColor,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Subscription',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ]
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return const Text(
+                                'No subscription data available.');
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
