@@ -61,7 +61,7 @@ class RequestAdminScreen extends StatelessWidget {
                         } else {
                           // Filter current requests
                           List<Request> carRequests = snapshot.data!
-                              .where((e) => e.status == 1)
+                              .where((e) => e.status == 'pending')
                               .toList();
 
                           // Sort by nearest pickUpDate

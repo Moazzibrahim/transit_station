@@ -5,7 +5,7 @@ class Request {
   int locationId;
   String requestTime;
   String pickUpDate;
-  int status;
+  String status;
   String createdAt;
   String updatedAt;
   int? driverId;
