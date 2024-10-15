@@ -1,187 +1,81 @@
 class Request {
   int id;
+  String carName;
   int carId;
+  String userName;
+  String userPhone;
   int userId;
+  String locationName;
   int locationId;
+  String pickUpAddress;
   String requestTime;
   String pickUpDate;
+  String returnTime;
+  String type;
   String status;
-  String createdAt;
-  String updatedAt;
-  int? driverId;
-  User user;
-  Location location;
+  int? offerId;
+  String offerName;
 
   Request({
     required this.id,
+    required this.carName,
     required this.carId,
+    required this.userName,
+    required this.userPhone,
     required this.userId,
+    required this.locationName,
     required this.locationId,
+    required this.pickUpAddress,
     required this.requestTime,
     required this.pickUpDate,
+    required this.returnTime,
+    required this.type,
     required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    this.driverId,
-    required this.user,
-    required this.location,
+    this.offerId,
+    required this.offerName,
   });
 
+  // Factory method to create an instance from JSON data
   factory Request.fromJson(Map<String, dynamic> json) {
     return Request(
       id: json['id'] ?? 0,
+      carName: json['car_name'] ?? '',
       carId: json['car_id'] ?? 0,
+      userName: json['user_name'] ?? '',
+      userPhone: json['user_phone'] ?? '',
       userId: json['user_id'] ?? 0,
+      locationName: json['location_name'] ?? '',
       locationId: json['location_id'] ?? 0,
+      pickUpAddress: json['pick_up_address'] ?? '',
       requestTime: json['request_time'] ?? '',
       pickUpDate: json['pick_up_date'] ?? '',
-      status: json['status'] ?? 0,
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-      driverId: json['driver_id'], 
-      user: User.fromJson(json['user'] ?? {}),
-      location: Location.fromJson(json['location'] ?? {}),
+      returnTime: json['return_time'] ?? '',
+      type: json['type'] ?? '',
+      status: json['status'] ?? '',
+      offerId: json['offer_id'],
+      offerName: json['offer_name'] ?? 'N/A',
     );
   }
-}
 
-class User {
-  int id;
-  String name;
-  String email;
-  String phone;
-  String? image;
-  String role;
-  List<Subscription> subscription;
-
-  User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.phone,
-    this.image,
-    required this.role,
-    required this.subscription,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    var subs = (json['subscription'] as List?)
-            ?.map((e) => Subscription.fromJson(e))
-            .toList() ??
-        [];
-    return User(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      image: json['image'],
-      role: json['role'] ?? '',
-      subscription: subs,
-    );
-  }
-}
-
-class Subscription {
-  int id;
-  int userId;
-  int offerId;
-  String startDate;
-  String endDate;
-  int amount;
-  int status;
-  String createdAt;
-  String updatedAt;
-  Offer offer;
-
-  Subscription({
-    required this.id,
-    required this.userId,
-    required this.offerId,
-    required this.startDate,
-    required this.endDate,
-    required this.amount,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.offer,
-  });
-
-  factory Subscription.fromJson(Map<String, dynamic> json) {
-    return Subscription(
-      id: json['id'] ?? 0,
-      userId: json['user_id'] ?? 0,
-      offerId: json['offer_id'] ?? 0,
-      startDate: json['start_date'] ?? '',
-      endDate: json['end_date'] ?? '',
-      amount: json['amount'] ?? 0,
-      status: json['status'] ?? 0,
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-      offer: Offer.fromJson(json['offer'] ?? {}),
-    );
-  }
-}
-
-class Offer {
-  int id;
-  int price;
-  int priceDiscount;
-  String offerName;
-  int duration;
-  String createdAt;
-  String updatedAt;
-
-  Offer({
-    required this.id,
-    required this.price,
-    required this.priceDiscount,
-    required this.offerName,
-    required this.duration,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Offer.fromJson(Map<String, dynamic> json) {
-    return Offer(
-      id: json['id'] ?? 0,
-      price: json['price'] ?? 0,
-      priceDiscount: json['price_discount'] ?? 0,
-      offerName: json['offer_name'] ?? '',
-      duration: json['duration'] ?? 0,
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-    );
-  }
-}
-
-class Location {
-  int id;
-  String pickUpAddress;
-  String locationImage;
-  String address;
-  String addressInDetail;
-  String createdAt;
-  String updatedAt;
-
-  Location({
-    required this.id,
-    required this.pickUpAddress,
-    required this.locationImage,
-    required this.address,
-    required this.addressInDetail,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      id: json['id'] ?? 0,
-      pickUpAddress: json['pick_up_address'] ?? '',
-      locationImage: json['location_image'] ?? '',
-      address: json['address'] ?? '',
-      addressInDetail: json['address_in_detail'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-    );
+  // Method to convert an instance to JSON data
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'car_name': carName,
+      'car_id': carId,
+      'user_name': userName,
+      'user_phone': userPhone,
+      'user_id': userId,
+      'location_name': locationName,
+      'location_id': locationId,
+      'pick_up_address': pickUpAddress,
+      'request_time': requestTime,
+      'pick_up_date': pickUpDate,
+      'return_time': returnTime,
+      'type': type,
+      'status': status,
+      'offer_id': offerId,
+      'offer_name': offerName,
+    };
   }
 }

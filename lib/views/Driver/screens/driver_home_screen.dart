@@ -1,14 +1,18 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
 import 'package:transit_station/views/Driver/screens/details_driver_screen.dart';
 import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/Driver/screens/personal_info.dart';
+import 'package:transit_station/views/Driver/screens/technical_support_driver_screen.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
 import 'package:transit_station/views/auth_screens/views/login_screen.dart';
 
@@ -157,7 +161,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const TechnicalSupportScreen()));
+                              TechnicalSupportDriverScreen()));
                 },
               ),
               ListTile(
@@ -165,13 +169,34 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                   Icons.logout,
                   color: defaultColor,
                 ),
-                title: const Text('log out'),
-                onTap: () {
-                  // Handle Settings tap
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
+                title: const Text('logout'),
+                onTap: () async {
+                  const url = 'https://transitstation.online/api/driver/logout';
+                  final tokenProvider =
+                      Provider.of<TokenModel>(context, listen: false);
+                  final token = tokenProvider.token;
+                  try {
+                    final response = await http.post(Uri.parse(url), headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'Authorization': 'Bearer $token',
+                    });
+                    if (response.statusCode == 200) {
+                      final responseBody = json.decode(response.body);
+                      log('logout response $responseBody');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('logout successful')));
+                    } else {
+                      log(response.body);
+                      log('Failed to load profile data (Error: ${response.statusCode})');
+                    }
+                  } catch (e) {
+                    log('An error occurred: $e');
+                  }
                 },
               ),
             ],

@@ -77,14 +77,14 @@ class RequestAdminScreen extends StatelessWidget {
                             itemCount: carRequests.length,
                             itemBuilder: (context, index) {
                               final request = carRequests[index];
-                              
 
-    // Parse the pickUpDate and get the current date
-    DateTime pickUpDate = DateTime.parse(request.pickUpDate);
-    DateTime currentDate = DateTime.now();
+                              // Parse the pickUpDate and get the current date
+                              DateTime pickUpDate =
+                                  DateTime.parse(request.pickUpDate);
+                              DateTime currentDate = DateTime.now();
 
-    // Check if the current date exceeds the pickUpDate
-    bool isOverdue = currentDate.isAfter(pickUpDate);
+                              // Check if the current date exceeds the pickUpDate
+                              bool isOverdue = currentDate.isAfter(pickUpDate);
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
@@ -112,20 +112,18 @@ class RequestAdminScreen extends StatelessWidget {
                                         _buildInfoRow(
                                           icon: Icons.person,
                                           label: 'User Name',
-                                          value: request.user.name,
+                                          value: request.userName,
                                         ),
                                         _buildInfoRow(
                                           icon: Icons.phone,
                                           label: 'Phone',
-                                          value: request.user.phone,
+                                          value: request.userPhone,
                                         ),
                                         _buildInfoRow(
                                           icon: Icons.card_giftcard,
                                           label: 'Offer Name',
-                                          value: request
-                                                  .user.subscription.isNotEmpty
-                                              ? request.user.subscription[0]
-                                                  .offer.offerName
+                                          value: request.offerName.isNotEmpty
+                                              ? request.offerName
                                               : 'No offer available',
                                         ),
                                         _buildInfoRow(
@@ -141,20 +139,22 @@ class RequestAdminScreen extends StatelessWidget {
                                         _buildInfoRow(
                                           icon: Icons.location_on,
                                           label: 'Pick-Up Address',
-                                          value: request.location.pickUpAddress,
+                                          value: request.pickUpAddress,
                                         ),
                                         const SizedBox(height: 8),
                                         if (isOverdue)
-                const Row(
-                  children: [
-                    Icon(Icons.warning, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text(
-                      'Pick-up date exceeded!',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
-                ),
+                                          const Row(
+                                            children: [
+                                              Icon(Icons.warning,
+                                                  color: Colors.red),
+                                              SizedBox(width: 8),
+                                              Text(
+                                                'Pick-up date exceeded!',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
                                         const SizedBox(height: 8),
                                         const Divider(),
                                         const SizedBox(height: 8),
@@ -198,84 +198,89 @@ class RequestAdminScreen extends StatelessWidget {
                           });
 
                           return ListView.builder(
-  itemCount: carRequests.length,
-  itemBuilder: (context, index) {
-    final request = carRequests[index];
+                            itemCount: carRequests.length,
+                            itemBuilder: (context, index) {
+                              final request = carRequests[index];
 
-    // Parse the pickUpDate and get the current date
-    DateTime pickUpDate = DateTime.parse(request.pickUpDate);
-    DateTime currentDate = DateTime.now();
+                              // Parse the pickUpDate and get the current date
+                              DateTime pickUpDate =
+                                  DateTime.parse(request.pickUpDate);
+                              DateTime currentDate = DateTime.now();
 
-    // Check if the current date exceeds the pickUpDate
-    bool isOverdue = currentDate.isAfter(pickUpDate);
+                              // Check if the current date exceeds the pickUpDate
+                              bool isOverdue = currentDate.isAfter(pickUpDate);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfoRow(
-              icon: Icons.person,
-              label: 'User Name',
-              value: request.user.name,
-            ),
-            _buildInfoRow(
-              icon: Icons.phone,
-              label: 'Phone',
-              value: request.user.phone,
-            ),
-            _buildInfoRow(
-              icon: Icons.card_giftcard,
-              label: 'Offer Name',
-              value: request.user.subscription.isNotEmpty
-                  ? request.user.subscription[0].offer.offerName
-                  : 'No offer available',
-            ),
-            _buildInfoRow(
-              icon: Icons.calendar_today,
-              label: 'Pick-Up Date',
-              value: request.pickUpDate,
-            ),
-            _buildInfoRow(
-              icon: Icons.access_time,
-              label: 'Request Time',
-              value: request.requestTime,
-            ),
-            _buildInfoRow(
-              icon: Icons.location_on,
-              label: 'Pick-Up Address',
-              value: request.location.pickUpAddress,
-            ),
-            const SizedBox(height: 8),
-    
-            // Show warning if the current date exceeds the pick-up date
-            if (isOverdue)
-              const Row(
-                children: [
-                  Icon(Icons.warning, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text(
-                    'Pick-up date exceeded!',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-    
-            const SizedBox(height: 8),
-            const Divider(),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  },
-);
+                              return Card(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildInfoRow(
+                                        icon: Icons.person,
+                                        label: 'User Name',
+                                        value: request.userName,
+                                      ),
+                                      _buildInfoRow(
+                                        icon: Icons.phone,
+                                        label: 'Phone',
+                                        value: request.userPhone,
+                                      ),
+                                      _buildInfoRow(
+                                        icon: Icons.card_giftcard,
+                                        label: 'Offer Name',
+                                        value: request.offerName.isNotEmpty
+                                            ? request.offerName
+                                            : 'No offer available',
+                                      ),
+                                      _buildInfoRow(
+                                        icon: Icons.calendar_today,
+                                        label: 'Pick-Up Date',
+                                        value: request.pickUpDate,
+                                      ),
+                                      _buildInfoRow(
+                                        icon: Icons.access_time,
+                                        label: 'Request Time',
+                                        value: request.requestTime,
+                                      ),
+                                      _buildInfoRow(
+                                        icon: Icons.location_on,
+                                        label: 'Pick-Up Address',
+                                        value: request.pickUpAddress,
+                                      ),
+                                      const SizedBox(height: 8),
+
+                                      // Show warning if the current date exceeds the pick-up date
+                                      if (isOverdue)
+                                        const Row(
+                                          children: [
+                                            Icon(Icons.warning,
+                                                color: Colors.red),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Pick-up date exceeded!',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+
+                                      const SizedBox(height: 8),
+                                      const Divider(),
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         }
                       },
                     ),
@@ -327,20 +332,18 @@ class RequestAdminScreen extends StatelessWidget {
                                         _buildInfoRow(
                                           icon: Icons.person,
                                           label: 'User Name',
-                                          value: request.user.name,
+                                          value: request.userName,
                                         ),
                                         _buildInfoRow(
                                           icon: Icons.phone,
                                           label: 'Phone',
-                                          value: request.user.phone,
+                                          value: request.userPhone,
                                         ),
                                         _buildInfoRow(
                                           icon: Icons.card_giftcard,
                                           label: 'Offer Name',
-                                          value: request
-                                                  .user.subscription.isNotEmpty
-                                              ? request.user.subscription[0]
-                                                  .offer.offerName
+                                          value: request.offerName.isNotEmpty
+                                              ? request.offerName
                                               : 'No offer available',
                                         ),
                                         _buildInfoRow(
@@ -356,7 +359,7 @@ class RequestAdminScreen extends StatelessWidget {
                                         _buildInfoRow(
                                           icon: Icons.location_on,
                                           label: 'Pick-Up Address',
-                                          value: request.location.pickUpAddress,
+                                          value: request.pickUpAddress,
                                         ),
                                         const SizedBox(height: 8),
                                         const Divider(),

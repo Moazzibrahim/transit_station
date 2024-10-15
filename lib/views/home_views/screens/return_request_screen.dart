@@ -63,6 +63,7 @@ class _ReturnRequestScreenState extends State<ReturnRequestScreen> {
           'location_id': selectedLocation,
           'pick_up_date': formattedDate,
           'request_time': formattedTime,
+          'return_time': ''
         }),
       );
 
