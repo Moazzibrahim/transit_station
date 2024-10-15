@@ -10,6 +10,9 @@ class GetRequestDriverProvider with ChangeNotifier {
   RequestModel? _requestModel;
   RequestModel? get requestModel => _requestModel;
 
+  final bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   Future<void> getRequestDriverProviderdata(BuildContext context) async {
     try {
       final tokenProvider = Provider.of<TokenModel>(context, listen: false);

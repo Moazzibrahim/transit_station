@@ -11,6 +11,7 @@ class DetailsRequestScreen extends StatefulWidget {
   String carname;
   String parking;
   String carnumber;
+  String pickupdate;
 
   DetailsRequestScreen({
     super.key,
@@ -20,6 +21,7 @@ class DetailsRequestScreen extends StatefulWidget {
     required this.phone,
     required this.parking,
     required this.carnumber,
+    required this.pickupdate,
   });
 
   @override
@@ -45,6 +47,7 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
             TextDetail(title: 'Car Number', value: '   "${widget.carnumber}"'),
             TextDetail(title: 'Location', value: widget.location),
             TextDetail(title: 'Parking', value: widget.parking),
+            TextDetail(title: 'pickup date', value: widget.pickupdate),
             const SizedBox(height: 30),
             // The Start button
             Center(
