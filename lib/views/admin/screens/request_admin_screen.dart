@@ -152,15 +152,55 @@ class RequestAdminScreen extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 8),
                                               if (isOverdue)
-                                                const Row(
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Icon(Icons.warning,
-                                                        color: Colors.red),
-                                                    SizedBox(width: 8),
-                                                    Text(
-                                                      'Pick-up date exceeded!',
-                                                      style: TextStyle(
-                                                          color: Colors.red),
+                                                    const Row(
+                                                      children: [
+                                                        Icon(Icons.warning, color: Colors.red),
+                                                        SizedBox(width: 8),
+                                                        Text(
+                                                          'Pick-up date exceeded!',
+                                                          style: TextStyle(color:Colors.red),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              title: const Text('Choose an action'),
+                                                              content: const Text('Select an option:'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    updateStatus(
+                                                                        context,
+                                                                        request.id);
+                                                                  },
+                                                                  child: const Text(
+                                                                      'Move to History'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                            builder: (ctx) =>
+                                                                                SelectDriverScreen(requestId: request.id.toString())));
+                                                                  },
+                                                                  child: const Text('Select Driver'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      child:
+                                                          const Text('action'),
                                                     ),
                                                   ],
                                                 ),
