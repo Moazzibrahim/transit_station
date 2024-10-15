@@ -85,13 +85,14 @@ class RequestAdminScreen extends StatelessWidget {
 
                               // Check if the current date exceeds the pickUpDate
                               bool isOverdue = currentDate.isAfter(pickUpDate);
+
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (ctx) => SelectDriverScreen(
-                                          requestId: request.id
-                                              .toString()), // Pass request ID here
+                                        requestId: request.id.toString(),
+                                      ),
                                     ),
                                   );
                                   print(request.id);
@@ -105,59 +106,94 @@ class RequestAdminScreen extends StatelessWidget {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
-                                    child: Column(
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        _buildInfoRow(
-                                          icon: Icons.person,
-                                          label: 'User Name',
-                                          value: request.userName,
-                                        ),
-                                        _buildInfoRow(
-                                          icon: Icons.phone,
-                                          label: 'Phone',
-                                          value: request.userPhone,
-                                        ),
-                                        _buildInfoRow(
-                                          icon: Icons.card_giftcard,
-                                          label: 'Offer Name',
-                                          value: request.offerName.isNotEmpty
-                                              ? request.offerName
-                                              : 'No offer available',
-                                        ),
-                                        _buildInfoRow(
-                                          icon: Icons.calendar_today,
-                                          label: 'Pick-Up Date',
-                                          value: request.pickUpDate,
-                                        ),
-                                        _buildInfoRow(
-                                          icon: Icons.access_time,
-                                          label: 'Request Time',
-                                          value: request.requestTime,
-                                        ),
-                                        _buildInfoRow(
-                                          icon: Icons.location_on,
-                                          label: 'Pick-Up Address',
-                                          value: request.pickUpAddress,
-                                        ),
-                                        const SizedBox(height: 8),
-                                        if (isOverdue)
-                                          const Row(
+                                        // First Column for request information
+                                        Expanded(
+                                          flex: 2, // Adjust flex as needed
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.warning,
-                                                  color: Colors.red),
-                                              SizedBox(width: 8),
-                                              Text(
-                                                'Pick-up date exceeded!',
-                                                style: TextStyle(
-                                                    color: Colors.red),
+                                              _buildInfoRow(
+                                                icon: Icons.person,
+                                                label: 'User Name',
+                                                value: request.userName,
                                               ),
+                                              _buildInfoRow(
+                                                icon: Icons.phone,
+                                                label: 'Phone',
+                                                value: request.userPhone,
+                                              ),
+                                              _buildInfoRow(
+                                                icon: Icons.card_giftcard,
+                                                label: 'Offer Name',
+                                                value:
+                                                    request.offerName.isNotEmpty
+                                                        ? request.offerName
+                                                        : 'No offer available',
+                                              ),
+                                              _buildInfoRow(
+                                                icon: Icons.calendar_today,
+                                                label: 'Pick-Up Date',
+                                                value: request.pickUpDate,
+                                              ),
+                                              _buildInfoRow(
+                                                icon: Icons.access_time,
+                                                label: 'Request Time',
+                                                value: request.requestTime,
+                                              ),
+                                              _buildInfoRow(
+                                                icon: Icons.location_on,
+                                                label: 'Pick-Up Address',
+                                                value: request.pickUpAddress,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              if (isOverdue)
+                                                const Row(
+                                                  children: [
+                                                    Icon(Icons.warning,
+                                                        color: Colors.red),
+                                                    SizedBox(width: 8),
+                                                    Text(
+                                                      'Pick-up date exceeded!',
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                  ],
+                                                ),
+                                              const SizedBox(height: 8),
+                                              const Divider(),
+                                              const SizedBox(height: 8),
                                             ],
                                           ),
-                                        const SizedBox(height: 8),
-                                        const Divider(),
-                                        const SizedBox(height: 8),
+                                        ),
+                                        // Second Column for request type
+                                        Expanded(
+                                          flex: 1, // Adjust flex as needed
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: request.type == 'new_req'
+                                                  ? defaultColor
+                                                  : Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 16),
+                                            child: Text(
+                                              request.type == 'new_req'
+                                                  ? 'New Request'
+                                                  : 'Return',
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                              textAlign: TextAlign
+                                                  .center, // Center text in the container
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
