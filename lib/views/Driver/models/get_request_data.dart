@@ -5,7 +5,8 @@ class RequestModel {
 
   factory RequestModel.fromJson(Map<String, dynamic> json) {
     return RequestModel(
-      requests: List<Request>.from(json['requests'].map((x) => Request.fromJson(x))),
+      requests:
+          List<Request>.from(json['requests'].map((x) => Request.fromJson(x))),
     );
   }
 
@@ -27,6 +28,10 @@ class Request {
   String pickUpDate;
   String returnTime;
   String status;
+  String username;
+  String userphone;
+  String parkingname;
+  String carnumber;
   Driverdata driver;
 
   Request({
@@ -40,6 +45,10 @@ class Request {
     required this.pickUpDate,
     required this.returnTime,
     required this.status,
+    required this.username,
+    required this.userphone,
+    required this.parkingname,
+    required this.carnumber,
     required this.driver,
   });
 
@@ -55,6 +64,10 @@ class Request {
       pickUpDate: json['pick_up_date'],
       returnTime: json['return_time'],
       status: json['status'],
+      username: json['user_name'],
+      userphone: json['user_phone'],
+      parkingname: json['parking_name'],
+      carnumber: json['car_number'],
       driver: Driverdata.fromJson(json['driver']),
     );
   }
@@ -71,6 +84,10 @@ class Request {
       'pick_up_date': pickUpDate,
       'return_time': returnTime,
       'status': status,
+      'user_phone': userphone,
+      'user_name': username,
+      'parking_name': parkingname,
+      'car_number': carnumber,
       'driver': driver.toJson(),
     };
   }

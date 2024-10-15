@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
+import 'package:transit_station/views/Driver/screens/details_driver_screen.dart';
 import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/Driver/screens/personal_info.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
@@ -209,53 +210,74 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                       itemBuilder: (context, index) {
                         final request = requests[index];
                         final driverName = request.driver.name;
+                        final userphone = request.userphone;
+                        final username = request.username;
                         final carType = request.carName;
                         final location = request.locationName;
+                        final parking = request.parkingname;
                         final image = request.carImage;
+                        final carnumber = request.carnumber;
 
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            color: defaultColor,
-                            elevation: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                children: [
-                                  Image.memory(
-                                    base64Decode(image),
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Name: $driverName",
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        "Type: $carType",
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        "Location: ${getShortenedString(location, 22)}",
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DetailsRequestScreen(
+                                          carname: carType,
+                                          location: location,
+                                          name: username,
+                                          parking: parking,
+                                          phone: userphone,
+                                          carnumber: carnumber,
+                                        )));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              color: defaultColor,
+                              elevation: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  children: [
+                                    Image.memory(
+                                      base64Decode(image),
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Name: $driverName",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          "Type: $carType",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          "Location: ${getShortenedString(location, 22)}",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
