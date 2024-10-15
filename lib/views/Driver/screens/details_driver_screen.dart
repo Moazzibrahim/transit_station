@@ -1,8 +1,13 @@
-// ignore_for_file: must_be_immutable, library_private_types_in_public_api
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/constants/build_appbar.dart';
+import 'package:http/http.dart' as http;
+import 'package:transit_station/constants/widgets.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 
 class DetailsRequestScreen extends StatefulWidget {
   String name;
@@ -12,6 +17,7 @@ class DetailsRequestScreen extends StatefulWidget {
   String parking;
   String carnumber;
   String pickupdate;
+  int id;
 
   DetailsRequestScreen({
     super.key,
@@ -22,6 +28,7 @@ class DetailsRequestScreen extends StatefulWidget {
     required this.parking,
     required this.carnumber,
     required this.pickupdate,
+    required this.id,
   });
 
   @override
@@ -31,6 +38,120 @@ class DetailsRequestScreen extends StatefulWidget {
 class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
   // Flag to show/hide the "Car Received" and "Car Arrived" buttons
   bool _showCarButtons = false;
+
+  Future<void> putRequest() async {
+    const url =
+        'https://transitstation.online/api/driver/onthewayupdate'; // Replace with your API endpoint
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final body = json.encode({
+      'request_id': widget.id, // Add any additional fields you need for the API
+    });
+
+    try {
+      final response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        // Successfully updated
+        print('Car status updated successfully');
+        print(response.body);
+        setState(() {
+          _showCarButtons = true; // Show car buttons after successful start
+        });
+        showTopSnackBar(context, 'you started the request successfully',
+            Icons.check, defaultColor, const Duration(seconds: 2));
+      } else {
+        // Handle error response
+        print(
+            'Failed to update car status. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
+  Future<void> putRequestrecieved() async {
+    const url =
+        'https://transitstation.online/api/driver/carrecivedupdate'; // Replace with your API endpoint
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final body = json.encode({
+      'request_id': widget.id, // Add any additional fields you need for the API
+    });
+
+    try {
+      final response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        // Successfully updated
+        print('Car status updated successfully');
+        print(response.body);
+        setState(() {
+          _showCarButtons = true; // Show car buttons after successful start
+        });
+        showTopSnackBar(context, 'you recieved the car successfully',
+            Icons.check, defaultColor, const Duration(seconds: 2));
+      } else {
+        // Handle error response
+        print(
+            'Failed to update car status. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
+  Future<void> putRequestarrived() async {
+    const url =
+        'https://transitstation.online/api/driver/arrivedupdate'; // Replace with your API endpoint
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final body = json.encode({
+      'request_id': widget.id, // Add any additional fields you need for the API
+    });
+
+    try {
+      final response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        // Successfully updated
+        print('Car status updated successfully');
+        print(response.body);
+        setState(() {
+          _showCarButtons = true; // Show car buttons after successful start
+        });
+        showTopSnackBar(context, 'you arrived the car successfully',
+            Icons.check, defaultColor, const Duration(seconds: 2));
+      } else {
+        // Handle error response
+        print(
+            'Failed to update car status. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +177,7 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     // When pressed, show the car buttons
-                    setState(() {
-                      _showCarButtons = true;
-                    });
+                    putRequest();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -85,6 +204,7 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle car received action
+                        putRequestrecieved();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -106,6 +226,7 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle car arrived action
+                        putRequestarrived();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
