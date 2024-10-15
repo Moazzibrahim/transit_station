@@ -48,7 +48,22 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
         appBar: AppBar(
           title: Consumer<GetProfileDriver>(
             builder: (context, requestProvider, child) {
-              final driverName = requestProvider.profileDriver!.profile!.name!;
+              final profileDriver = requestProvider.profileDriver;
+
+              // Check if profileDriver or profile is null
+              if (profileDriver == null || profileDriver.profile == null) {
+                return const Text(
+                  'Hello,\nGuest',
+                  style: TextStyle(
+                    color: defaultColor,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }
+
+              final driverName =
+                  profileDriver.profile!.name ?? 'Driver'; // Fallback name
               return RichText(
                 text: TextSpan(
                   text: 'Hello,\n',
