@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225769217331",
+    "project_id": "transit-station-4c763",
+    "storage_bucket": "transit-station-4c763.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225769217331:android:0b960f0188f70b7ce6f246",
+        "android_client_info": {
+          "package_name": "com.app.transit_station"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSD8iEaDXfTanmOBUiv5VhgIV-gke_9R0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

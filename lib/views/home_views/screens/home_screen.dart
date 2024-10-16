@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
 import 'package:transit_station/views/Driver/screens/status_screen.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
@@ -46,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    int id  = Provider.of<LoginModel>(context,listen: false).id;
+    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id);
     _subscriptionData = ApiServicesub().fetchUserSubscription(context);
 
     fetchCars();

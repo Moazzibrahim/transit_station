@@ -9,13 +9,20 @@ import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/controllers/parking_controller.dart';
 import 'package:transit_station/controllers/revenue_provider.dart';
 import 'package:transit_station/views/Driver/controller/get_profile_driver.dart';
 import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
 import 'package:transit_station/views/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+void main() async{
 
-void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 
@@ -46,6 +53,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetDriverDataProvider()),
         ChangeNotifierProvider(create: (_) => GetRequestDriverProvider()),
         ChangeNotifierProvider(create: (_) => GetProfileDriver()),
+        ChangeNotifierProvider(create: (_) => NotificationsServices()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
