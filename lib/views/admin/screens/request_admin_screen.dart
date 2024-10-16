@@ -152,87 +152,118 @@ class RequestAdminScreen extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 8),
                                               if (isOverdue)
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                const Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    const Row(
+                                                    Row(
                                                       children: [
-                                                        Icon(Icons.warning, color: Colors.red),
+                                                        Icon(Icons.warning,
+                                                            color: Colors.red),
                                                         SizedBox(width: 8),
                                                         Text(
                                                           'Pick-up date exceeded!',
-                                                          style: TextStyle(color:Colors.red),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
                                                         ),
                                                       ],
                                                     ),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return AlertDialog(
-                                                              title: const Text('Choose an action'),
-                                                              content: const Text('Select an option:'),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    updateStatus(
-                                                                        context,
-                                                                        request.id);
-                                                                  },
-                                                                  child: const Text(
-                                                                      'Move to History'),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                                            builder: (ctx) =>
-                                                                                SelectDriverScreen(requestId: request.id.toString())));
-                                                                  },
-                                                                  child: const Text('Select Driver'),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child:
-                                                          const Text('action'),
-                                                    ),
+                                                    SizedBox(height: 8),
                                                   ],
                                                 ),
-                                              const SizedBox(height: 8),
-                                              const Divider(),
                                               const SizedBox(height: 8),
                                             ],
                                           ),
                                         ),
-                                        // Second Column for request type
-                                        Expanded(
-                                          flex: 1, // Adjust flex as needed
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: request.type == 'new_req'
-                                                  ? defaultColor
-                                                  : Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween, // Ensures the column takes the minimum height needed
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: request.type == 'new_req'
+                                                    ? defaultColor
+                                                    : Colors.blue,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 16),
+                                              child: Text(
+                                                request.type == 'new_req'
+                                                    ? 'New Request'
+                                                    : 'Return',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 16),
-                                            child: Text(
-                                              request.type == 'new_req'
-                                                  ? 'New Request'
-                                                  : 'Return',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                              textAlign: TextAlign
-                                                  .center, // Center text in the container
-                                            ),
-                                          ),
+                                            const SizedBox(height: 250),
+                                            if (isOverdue)
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              'Choose an action'),
+                                                          content: const Text(
+                                                              'Select an option:'),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                updateStatus(
+                                                                    context,
+                                                                    request.id);
+                                                              },
+                                                              child: const Text(
+                                                                  'Move to History'),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (ctx) =>
+                                                                            SelectDriverScreen(
+                                                                      requestId:
+                                                                          request
+                                                                              .id
+                                                                              .toString(),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: const Text(
+                                                                  'Select Driver'),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              defaultColor),
+                                                  child: const Text(
+                                                    'Action',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              )
+                                          ],
                                         ),
                                       ],
                                     ),

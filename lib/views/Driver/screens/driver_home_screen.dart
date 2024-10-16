@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:developer';
@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/views/Driver/controller/get_profile_driver.dart';
 import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
 import 'package:transit_station/views/Driver/screens/details_driver_screen.dart';
 import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/Driver/screens/personal_info.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_driver_screen.dart';
-import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
 import 'package:transit_station/views/auth_screens/views/login_screen.dart';
 
 class HomeDriverScreen extends StatefulWidget {
@@ -30,6 +30,8 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
 
     Provider.of<GetRequestDriverProvider>(context, listen: false)
         .getRequestDriverProviderdata(context);
+    Provider.of<GetProfileDriver>(context, listen: false)
+        .getProfileDriverProviderdata(context);
   }
 
   String getShortenedString(String str, int maxLength) {
@@ -44,13 +46,24 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Consumer<GetRequestDriverProvider>(
+          title: Consumer<GetProfileDriver>(
             builder: (context, requestProvider, child) {
-              final driverName =
-                  requestProvider.requestModel?.requests.isNotEmpty == true
-                      ? requestProvider.requestModel!.requests[0].driver.name
-                      : 'Driver';
+              final profileDriver = requestProvider.profileDriver;
 
+              // Check if profileDriver or profile is null
+              if (profileDriver == null || profileDriver.profile == null) {
+                return const Text(
+                  'Hello,\nGuest',
+                  style: TextStyle(
+                    color: defaultColor,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }
+
+              final driverName =
+                  profileDriver.profile!.name ?? 'Driver'; // Fallback name
               return RichText(
                 text: TextSpan(
                   text: 'Hello,\n',
@@ -161,7 +174,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              TechnicalSupportDriverScreen()));
+                              const TechnicalSupportDriverScreen()));
                 },
               ),
               ListTile(
@@ -234,6 +247,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                       itemCount: requests.length,
                       itemBuilder: (context, index) {
                         final request = requests[index];
+                        final id = request.id;
                         final driverName = request.driver.name;
                         final userphone = request.userphone;
                         final username = request.username;
@@ -242,71 +256,78 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                         final parking = request.parkingname;
                         final image = request.carImage;
                         final carnumber = request.carnumber;
-
+                        final pickupdate = request.pickUpDate;
                         return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DetailsRequestScreen(
-                                          carname: carType,
-                                          location: location,
-                                          name: username,
-                                          parking: parking,
-                                          phone: userphone,
-                                          carnumber: carnumber,
-                                        )));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              color: defaultColor,
-                              elevation: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Row(
-                                  children: [
-                                    Image.memory(
-                                      base64Decode(image),
-                                      height: 100,
-                                      fit: BoxFit.cover,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailsRequestScreen(
+                                            carname: carType,
+                                            location: location,
+                                            name: username,
+                                            parking: parking,
+                                            phone: userphone,
+                                            carnumber: carnumber,
+                                            pickupdate: pickupdate,
+                                            id: id,
+                                          )));
+                            },
+                            child: request.status == 'current'
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 16.0),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      color: defaultColor,
+                                      elevation: 4,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          children: [
+                                            Image.memory(
+                                              base64Decode(image),
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Name: $driverName",
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Text(
+                                                  "Type: $carType",
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Text(
+                                                  "Location: ${getShortenedString(location, 22)}",
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Name: $driverName",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          "Type: $carType",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          "Location: ${getShortenedString(location, 22)}",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                                  )
+                                : const Text('No requests available'));
                       },
                     ),
                   ),

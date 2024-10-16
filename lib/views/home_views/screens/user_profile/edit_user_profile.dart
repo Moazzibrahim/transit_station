@@ -112,7 +112,6 @@ class _EditProfileUserState extends State<EditProfileUser> {
             profileProvider.getprofile(context);
           });
         }
-
         // Pre-fill text fields with current profile data
         originalName = profileProvider.userProfileModel?.name ?? '';
         originalEmail = profileProvider.userProfileModel?.email ?? '';

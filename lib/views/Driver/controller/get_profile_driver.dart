@@ -10,6 +10,9 @@ class GetProfileDriver with ChangeNotifier {
   ProfileResponse? _profileDriver;
   ProfileResponse? get profileDriver => _profileDriver;
 
+  final bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   Future<void> getProfileDriverProviderdata(BuildContext context) async {
     try {
       final tokenProvider = Provider.of<TokenModel>(context, listen: false);
