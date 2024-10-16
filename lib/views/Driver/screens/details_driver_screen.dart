@@ -36,8 +36,13 @@ class DetailsRequestScreen extends StatefulWidget {
 }
 
 class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
-  // Flag to show/hide the "Car Received" and "Car Arrived" buttons
+  // Flags to show/hide the "Car Received" and "Car Arrived" buttons
   bool _showCarButtons = false;
+
+  // Flags to track if the buttons have been pressed
+  bool _carReceivedPressed = false;
+  bool _carArrivedPressed = false;
+  bool _startPressed = false; // Flag for the Start button
 
   Future<void> putRequest() async {
     const url =
@@ -63,10 +68,11 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
         print('Car status updated successfully');
         print(response.body);
         setState(() {
+          _startPressed = true; // Disable the start button after pressing
           _showCarButtons = true; // Show car buttons after successful start
         });
         showTopSnackBar(context, 'you started the request successfully',
-            Icons.check, defaultColor, const Duration(seconds: 2));
+            Icons.check, defaultColor, const Duration(seconds: 3));
       } else {
         // Handle error response
         print(
@@ -101,10 +107,10 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
         print('Car status updated successfully');
         print(response.body);
         setState(() {
-          _showCarButtons = true; // Show car buttons after successful start
+          _carReceivedPressed = true; // Disable after pressing
         });
-        showTopSnackBar(context, 'you recieved the car successfully',
-            Icons.check, defaultColor, const Duration(seconds: 2));
+        showTopSnackBar(context, 'you received the car successfully',
+            Icons.check, defaultColor, const Duration(seconds: 3));
       } else {
         // Handle error response
         print(
@@ -139,10 +145,10 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
         print('Car status updated successfully');
         print(response.body);
         setState(() {
-          _showCarButtons = true; // Show car buttons after successful start
+          _carArrivedPressed = true; // Disable after pressing
         });
         showTopSnackBar(context, 'you arrived the car successfully',
-            Icons.check, defaultColor, const Duration(seconds: 2));
+            Icons.check, defaultColor, const Duration(seconds: 3));
       } else {
         // Handle error response
         print(
@@ -175,10 +181,12 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // When pressed, show the car buttons
-                    putRequest();
-                  },
+                  onPressed: _startPressed
+                      ? null // Disable if already pressed
+                      : () {
+                          // When pressed, show the car buttons and disable Start
+                          putRequest();
+                        },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     shape: RoundedRectangleBorder(
@@ -187,9 +195,22 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                     textStyle: const TextStyle(fontSize: 18),
                     backgroundColor: defaultColor,
                   ),
-                  child: const Text(
-                    'Start',
-                    style: TextStyle(color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Start',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      if (_startPressed)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -202,10 +223,12 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle car received action
-                        putRequestrecieved();
-                      },
+                      onPressed: _carReceivedPressed
+                          ? null // Disable if already pressed
+                          : () {
+                              // Handle car received action
+                              putRequestrecieved();
+                            },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
@@ -214,9 +237,22 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                         textStyle: const TextStyle(fontSize: 18),
                         backgroundColor: defaultColor,
                       ),
-                      child: const Text(
-                        'Car Received',
-                        style: TextStyle(color: Colors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Car Received',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          if (_carReceivedPressed)
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -224,10 +260,12 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle car arrived action
-                        putRequestarrived();
-                      },
+                      onPressed: _carArrivedPressed
+                          ? null // Disable if already pressed
+                          : () {
+                              // Handle car arrived action
+                              putRequestarrived();
+                            },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
@@ -236,9 +274,22 @@ class _DetailsRequestScreenState extends State<DetailsRequestScreen> {
                         textStyle: const TextStyle(fontSize: 18),
                         backgroundColor: defaultColor,
                       ),
-                      child: const Text(
-                        'Car Arrived',
-                        style: TextStyle(color: Colors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Car Arrived',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          if (_carArrivedPressed)
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
