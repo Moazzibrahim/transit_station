@@ -8,6 +8,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/views/Driver/screens/status_screen.dart';
 import 'package:transit_station/views/subscription/views/Subscription_plan_screens.dart';
 
@@ -31,6 +32,8 @@ class _RequestFormState extends State<RequestForm> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<GetDropdowndataProvider>(context, listen: false)
           .getdropdown(context);
+      Provider.of<NotificationsServices>(context, listen: false)
+          .getAccessToken();
     });
   }
 
@@ -81,6 +84,10 @@ class _RequestFormState extends State<RequestForm> {
               backgroundColor: defaultColor,
               content: Text('Request successful!')),
         );
+        final notificationService =
+            Provider.of<NotificationsServices>(context, listen: false);
+        notificationService.sendNotification('Request Submitted',
+            'Your request has been successfully submitted!');
         Future.delayed(
           const Duration(seconds: 2),
           () {
