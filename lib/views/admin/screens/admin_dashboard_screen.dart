@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/views/admin/screens/drivers_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
@@ -33,6 +34,9 @@ class AdminDashboardScreen extends StatefulWidget {
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
+    int id  = Provider.of<LoginModel>(context,listen: false).id;
+    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id,'admin');
+    log('message');
     Provider.of<DashboardController>(context, listen: false)
         .fetchDashboardData(context);
     super.initState();

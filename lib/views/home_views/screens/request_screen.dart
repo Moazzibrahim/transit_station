@@ -87,7 +87,7 @@ class _RequestFormState extends State<RequestForm> {
         final notificationService =
             Provider.of<NotificationsServices>(context, listen: false);
         notificationService.sendNotification('Request Submitted',
-            'Your request has been successfully submitted!');
+            'Your request has been successfully submitted!','admin');
         Future.delayed(
           const Duration(seconds: 2),
           () {

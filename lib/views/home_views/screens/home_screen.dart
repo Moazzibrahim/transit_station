@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     int id  = Provider.of<LoginModel>(context,listen: false).id;
-    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id);
+    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id,'user');
     _subscriptionData = ApiServicesub().fetchUserSubscription(context);
 
     fetchCars();

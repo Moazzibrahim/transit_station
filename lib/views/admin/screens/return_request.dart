@@ -63,7 +63,7 @@ class _AddRequestAdminScreenState extends State<ReturnRequest> {
           final notificationService =
               Provider.of<NotificationsServices>(context, listen: false);
           notificationService.sendNotification('Request Submitted',
-              'Your return request has been successfully submitted!');
+              'Your return request has been successfully submitted!','admin');
 
           // Show success Snackbar
           ScaffoldMessenger.of(context).showSnackBar(

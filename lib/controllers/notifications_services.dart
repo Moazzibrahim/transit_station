@@ -1,18 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'  as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
+Future<void> handleBackGoroundMessage(RemoteMessage message) async{
+  log('message: ${message.notification!.title}');
+}
+
 class NotificationsServices with ChangeNotifier {
   String accessToken = '';
 
-  Future<void> sendNotification(String title, String message) async {
+  Future<void> sendNotification(String title, String message,String role) async {
   try {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+    if(role == 'admin'){
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('admins').get();
 
     // List to keep track of the users that received the notification
     List<String> tokens = [];
@@ -36,9 +40,71 @@ class NotificationsServices with ChangeNotifier {
       await firestore.collection('messages').add({
         'title': title,
         'body': message,
+        'role' : 'admin',
         'timestamp': FieldValue.serverTimestamp(),
-        'sentToCount': tokens.length, // Optional: Track how many users received the notification
+        'sentToCount': tokens.length,
       });
+    }
+    }else if(role == 'user'){
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+
+    // List to keep track of the users that received the notification
+    List<String> tokens = [];
+
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        String? token = data['fcm_token'];
+
+        if (token != null) {
+          tokens.add(token); // Add token to the list
+          await sendPushNotification(accessToken, token, title, message);
+        }
+      }
+    }
+
+    // Store the notification message in Firestore only once
+    if (tokens.isNotEmpty) {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore.collection('messages').add({
+        'title': title,
+        'body': message,
+        'role' : 'user',
+        'timestamp': FieldValue.serverTimestamp(),
+        'sentToCount': tokens.length,
+      });
+    }
+    }else{
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('drivers').get();
+
+    // List to keep track of the users that received the notification
+    List<String> tokens = [];
+
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        String? token = data['fcm_token'];
+
+        if (token != null) {
+          tokens.add(token); // Add token to the list
+          await sendPushNotification(accessToken, token, title, message);
+        }
+      }
+    }
+
+    // Store the notification message in Firestore only once
+    if (tokens.isNotEmpty) {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore.collection('messages').add({
+        'title': title,
+        'body': message,
+        'role' : 'driver',
+        'timestamp': FieldValue.serverTimestamp(),
+        'sentToCount': tokens.length,
+      });
+    }
     }
   } catch (e) {
     log('Error sending notification: $e');
@@ -119,20 +185,54 @@ class NotificationsServices with ChangeNotifier {
     }
   }
 
-  Future<void> initFCMToken(int userId) async {
+  Future<void> initFCMToken(int userId, String role) async {
+    FirebaseMessaging.onBackgroundMessage(handleBackGoroundMessage);
+
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // Get the FCM token
     String? token = await messaging.getToken();
 
     if (token != null) {
-      await FirebaseFirestore.instance.collection('users').doc(userId.toString()).set({
+      if(role == 'admin'){
+        await FirebaseFirestore.instance.collection('admins').doc(userId.toString()).set({
         'fcm_token': token,
-      }, SetOptions(merge: true));
+      });
+
+      log("FCM Token stored for admin $userId: $token");
+      }else if(role == 'user'){
+        await FirebaseFirestore.instance.collection('users').doc(userId.toString()).set({
+        'fcm_token': token,
+      });
 
       log("FCM Token stored for user $userId: $token");
+      }else{
+        await FirebaseFirestore.instance.collection('drivers').doc(userId.toString()).set({
+        'fcm_token': token,
+      });
+
+      log("FCM Token stored for driver $userId: $token");
+      }
     } else {
       log("Failed to get FCM token");
     }
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        log('App opened from terminated state by notification: ${message.notification?.title}');
+        // Handle the data message here
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Received message in foreground: ${message.notification?.title}');
+      // Handle foreground message
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log('App opened by notification: ${message.notification?.title}');
+      // Handle the case when the app is opened by tapping a notification
+    });
+
   }
-}
+  }
