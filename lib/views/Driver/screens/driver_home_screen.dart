@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/views/Driver/controller/get_profile_driver.dart';
 import 'package:transit_station/views/Driver/controller/get_request_driver_provider.dart';
 import 'package:transit_station/views/Driver/screens/details_driver_screen.dart';
@@ -27,7 +28,8 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
   @override
   void initState() {
     super.initState();
-
+  int id  = Provider.of<LoginModel>(context,listen: false).id;
+    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id,'driver');
     Provider.of<GetRequestDriverProvider>(context, listen: false)
         .getRequestDriverProviderdata(context);
     Provider.of<GetProfileDriver>(context, listen: false)
