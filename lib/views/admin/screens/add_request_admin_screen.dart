@@ -9,6 +9,7 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:transit_station/controllers/login_provider.dart';
+import 'package:transit_station/controllers/notifications_services.dart';
 
 import '../../../controllers/admin_dropdown_provider.dart';
 
@@ -60,6 +61,11 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
         if (response.statusCode == 200) {
           var responseData = json.decode(response.body);
           print("Request submitted successfully: $responseData");
+
+          final notificationService =
+              Provider.of<NotificationsServices>(context, listen: false);
+          notificationService.sendNotification('Request Submitted',
+              'Your return request has been successfully submitted!', 'driver');
 
           // Show success Snackbar
           ScaffoldMessenger.of(context).showSnackBar(
@@ -131,6 +137,10 @@ class _AddRequestAdminScreenState extends State<AddRequestAdminScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotificationsServices>(context, listen: false)
+          .getAccessToken();
+    });
     fetchDropdownData(context).then((data) {
       if (data != null) {
         setState(() {
