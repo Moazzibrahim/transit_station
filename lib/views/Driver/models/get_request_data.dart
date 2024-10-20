@@ -62,7 +62,7 @@ class Request {
       locationName: json['location_name'],
       requestTime: json['request_time'],
       pickUpDate: json['pick_up_date'],
-      returnTime: json['return_time'],
+      returnTime: json['return_time'] ?? '',
       status: json['status'],
       username: json['user_name'],
       userphone: json['user_phone'],
