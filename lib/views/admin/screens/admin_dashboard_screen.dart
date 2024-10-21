@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/colors.dart';
@@ -11,6 +10,7 @@ import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/views/admin/screens/drivers_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
+import 'package:transit_station/views/admin/screens/get_colors_screen.dart';
 import 'package:transit_station/views/admin/screens/notifications_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
@@ -21,7 +21,6 @@ import 'package:transit_station/views/admin/screens/users_admin_screen.dart';
 import 'package:transit_station/views/admin/widgets/profit_bar_chart.dart';
 import 'package:transit_station/views/admin/widgets/stat_container.dart';
 import 'package:transit_station/views/auth_screens/views/login_screen.dart';
-
 import 'subscriptions_admin_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,8 +34,9 @@ class AdminDashboardScreen extends StatefulWidget {
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
-    int id  = Provider.of<LoginModel>(context,listen: false).id;
-    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id,'admin');
+    int id = Provider.of<LoginModel>(context, listen: false).id;
+    Provider.of<NotificationsServices>(context, listen: false)
+        .initFCMToken(id, 'admin');
     log('message');
     Provider.of<DashboardController>(context, listen: false)
         .fetchDashboardData(context);
@@ -97,6 +97,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (ctx) => const PlansAdminScreen()));
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.color_lens),
+                          title: const Text('colors'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const ColorListScreen()));
                           },
                         ),
                         ListTile(
@@ -169,12 +177,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap: (){
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (ctx)=> const NotificationsAdminScreen(role: 'admin',))
-                                  );
-                                },
-                                child: const Icon(Icons.notifications_outlined)),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const NotificationsAdminScreen(
+                                                  role: 'admin',
+                                                )));
+                                  },
+                                  child:
+                                      const Icon(Icons.notifications_outlined)),
                               const SizedBox(
                                 width: 10,
                               ),

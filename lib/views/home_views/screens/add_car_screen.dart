@@ -229,7 +229,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'Upload Image',
+                                  'Upload Car Image',
                                   style: TextStyle(
                                     color: defaultColor,
                                     fontSize: 16,
