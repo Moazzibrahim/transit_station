@@ -11,6 +11,7 @@ import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/views/admin/screens/drivers_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/expences_screen.dart';
+import 'package:transit_station/views/admin/screens/notifications_admin_screen.dart';
 import 'package:transit_station/views/admin/screens/parking_screen.dart';
 import 'package:transit_station/views/admin/screens/pickup_location_screen.dart';
 import 'package:transit_station/views/admin/screens/plans_admin_screen.dart';
@@ -167,7 +168,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.notifications_outlined),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (ctx)=> const NotificationsAdminScreen(role: 'admin',))
+                                  );
+                                },
+                                child: const Icon(Icons.notifications_outlined)),
                               const SizedBox(
                                 width: 10,
                               ),

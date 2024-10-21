@@ -41,7 +41,7 @@ class NotificationsServices with ChangeNotifier {
         'title': title,
         'body': message,
         'role' : 'admin',
-        'timestamp': FieldValue.serverTimestamp(),
+        'createdAt': FieldValue.serverTimestamp(),
         'sentToCount': tokens.length,
       });
     }
@@ -102,7 +102,6 @@ class NotificationsServices with ChangeNotifier {
         'body': message,
         'role' : 'driver',
         'timestamp': FieldValue.serverTimestamp(),
-        'sentToCount': tokens.length,
       });
     }
     }
@@ -235,4 +234,26 @@ class NotificationsServices with ChangeNotifier {
     });
 
   }
+
+
+  Future<List<Map<String, dynamic>>> fetchMessagesByRole(String role) async {
+  try {
+    // Reference to the Firestore collection 'messages'
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('messages')
+        .where('role', isEqualTo: role)
+        .get();
+
+    // Extracting documents and converting them to a list of maps
+    List<Map<String, dynamic>> messages = querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+
+    return messages;
+  } catch (e) {
+    log('Error fetching messages: $e');
+    return [];
+  }
+}
+
   }

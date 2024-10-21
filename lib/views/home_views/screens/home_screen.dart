@@ -12,6 +12,7 @@ import 'package:transit_station/controllers/get_profile_data.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
+import 'package:transit_station/views/Driver/screens/notifications_screen.dart';
 import 'package:transit_station/views/Driver/screens/status_screen.dart';
 import 'package:transit_station/views/Driver/screens/technical_support_screen.dart';
 import 'package:transit_station/views/auth_screens/views/login_screen.dart';
@@ -114,6 +115,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) =>
                                   const TechnicalSupportScreen()));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.notifications_on_outlined,
+                          color: defaultColor,
+                        ),
+                        title: const Text('Notifications'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) =>
+                                  const NotificationsScreen(role: 'user',)));
                         },
                       ),
                       ListTile(

@@ -4,16 +4,16 @@ import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/controllers/notifications_services.dart';
 
-class NotificationsScreen extends StatefulWidget {
+class NotificationsAdminScreen extends StatefulWidget {
   final String role; // 'admin', 'user', or 'driver'
 
-  const NotificationsScreen({super.key, required this.role});
+  const NotificationsAdminScreen({super.key, required this.role});
 
   @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
+  State<NotificationsAdminScreen> createState() => _NotificationsAdminScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
+class _NotificationsAdminScreenState extends State<NotificationsAdminScreen> {
   late Future<List<Map<String, dynamic>>> messagesFuture;
 
   @override

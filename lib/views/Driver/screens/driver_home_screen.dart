@@ -127,7 +127,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const NotificationScreen()));
+                            builder: (context) => const NotificationsScreen(role: 'driver',)));
                   },
                 );
               },
