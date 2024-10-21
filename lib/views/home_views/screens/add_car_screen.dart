@@ -3,8 +3,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http; // Import http package
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/widgets.dart';
@@ -25,9 +26,53 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final TextEditingController _carNumberController = TextEditingController();
   String? base64Image;
   File? _image;
+
+  Color? pickedColor;
+  List<Color> pickedColors = [];
+
+  void pickColor(BuildContext context) {
+    Color selectedColor = Colors.white;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick a Color'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: selectedColor,
+              onColorChanged: (Color color) {
+                selectedColor = color;
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Select'),
+              onPressed: () {
+                setState(() {
+                  pickedColor = selectedColor;
+                  pickedColors.add(selectedColor);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Convert color to hex
+  String colorToHex(Color color) {
+    log('$pickedColor');
+    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+  }
+
   Future<void> _postCarDetails() async {
     if (_carNameController.text.isEmpty ||
         _carNumberController.text.isEmpty ||
+        pickedColor == null || // Add color validation
         _image == null) {
       showTopSnackBar(context, 'You must fill all the fields', Icons.error,
           Colors.red, const Duration(seconds: 4));
@@ -45,6 +90,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     Map<String, dynamic> body = {
       'car_name': _carNameController.text,
       'car_number': int.parse(_carNumberController.text),
+      'car_color': colorToHex(pickedColor!), // Convert color to hex string
       if (base64Image != null) 'car_image': base64Image
     };
 
@@ -63,6 +109,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
       );
       log(body.toString());
       if (response.statusCode == 200) {
+        if (!mounted) {
+          return; // Ensure the widget is still mounted before navigation
+        }
+        log('$pickedColor');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               backgroundColor: defaultColor,
@@ -71,7 +121,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         Future.delayed(
           const Duration(seconds: 1),
           () {
-            Navigator.push(context,
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
           },
         );
@@ -101,7 +151,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     'Write your car details to identify it',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                      fontSize: 22,
                       color: Color.fromRGBO(94, 94, 94, 1),
                     ),
                   ),
@@ -113,7 +163,34 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   const SizedBox(height: 15),
                   TextField(
                     controller: _carNumberController,
+                    keyboardType:
+                        TextInputType.number, // Restrict input to numbers
                     decoration: inputDecoration('Car Number'),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      pickedColor != null
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: CircleAvatar(
+                                backgroundColor: pickedColor,
+                                radius: 20,
+                              ),
+                            )
+                          : const SizedBox(),
+                      GestureDetector(
+                        onTap: () => pickColor(context),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[300],
+                          radius: 20,
+                          child: const Icon(Icons.add, color: Colors.black),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 30),
                   Row(
@@ -208,18 +285,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: defaultColor,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 140),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
-              child: const Text(
-                'Done',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 10),
+                  Text('Add Car',
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ],
               ),
             ),
           ),
