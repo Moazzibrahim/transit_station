@@ -83,18 +83,14 @@ class ColorListScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
-                    leading: const Icon(
-                      Icons.color_lens,
-                      color: Colors
-                          .blueAccent, // A static icon since color_code is null
-                    ),
                     trailing: color.colorCode != null
                         ? Container(
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: Color(int.parse('0xff${color.colorCode}')),
+                              // Remove the '#' from the colorCode before parsing
+                              color: Color(int.parse(
+                                  '0xff${color.colorCode!.replaceAll('#', '')}')),
                               shape: BoxShape.circle,
                             ),
                           )

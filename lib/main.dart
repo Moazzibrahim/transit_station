@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:transit_station/controllers/dashboard_controller.dart';
 import 'package:transit_station/controllers/expences_provider.dart';
 import 'package:transit_station/controllers/get_admin_drivers.dart';
+import 'package:transit_station/controllers/get_colors_user_provider.dart';
 import 'package:transit_station/controllers/get_dropdown_subscriptions.dart';
 import 'package:transit_station/controllers/get_dropdowndata_provider.dart';
 import 'package:transit_station/controllers/get_profile_data.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetProfileDriver()),
         ChangeNotifierProvider(create: (_) => NotificationsServices()),
         ChangeNotifierProvider(create: (_) => ColorServiceprovider()),
+        ChangeNotifierProvider(create: (_) => GetColorsUserProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
