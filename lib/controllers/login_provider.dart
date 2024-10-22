@@ -46,6 +46,8 @@ class LoginModel with ChangeNotifier {
   String? get name => _name;
   String? get phone => _phone;
   String? get email => _email;
+  String? _code;
+  String? get code => _code;
   late int _id;
   int get id => _id;
 
@@ -100,6 +102,7 @@ class LoginModel with ChangeNotifier {
           _phone = userdata['phone'];
           _email = userdata['email'];
           int id = userdata['id'];
+          _code = userdata['user_code'];
           setId(id);
 
           _handleuserdata(context, userdata);

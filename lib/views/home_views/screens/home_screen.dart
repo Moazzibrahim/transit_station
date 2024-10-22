@@ -44,11 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
   int? selectedItem;
   List<Car>? cars; // Store the fetched cars here
   bool isLoading = true;
+  String? usercode;
 
   @override
   void initState() {
     super.initState();
     int id = Provider.of<LoginModel>(context, listen: false).id;
+    usercode = Provider.of<LoginModel>(context, listen: false).code;
     Provider.of<NotificationsServices>(context, listen: false)
         .initFCMToken(id, 'user');
     _subscriptionData = ApiServicesub().fetchUserSubscription(context);
@@ -185,20 +187,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Hello,',
-                                  style: TextStyle(
+                                Text(
+                                  'Hello, ${profileProvider.userProfileModel?.name}',
+                                  style: const TextStyle(
                                       color: defaultColor,
                                       fontSize: 25,
                                       fontWeight: FontWeight.w400),
                                 ),
                                 Text(
-                                  profileProvider.userProfileModel?.name ??
-                                      'Guest',
+                                  usercode!,
                                   style: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w400),
-                                )
+                                ),
                               ],
                             ),
                             Column(
