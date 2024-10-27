@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously, unused_local_variable
 
 import 'dart:convert';
 import 'dart:developer';
@@ -28,8 +28,9 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
   @override
   void initState() {
     super.initState();
-  int id  = Provider.of<LoginModel>(context,listen: false).id;
-    Provider.of<NotificationsServices>(context,listen: false).initFCMToken(id,'driver');
+    int? id = Provider.of<LoginModel>(context, listen: false).id;
+    Provider.of<NotificationsServices>(context, listen: false)
+        .initFCMToken(id!, 'driver');
     Provider.of<GetRequestDriverProvider>(context, listen: false)
         .getRequestDriverProviderdata(context);
     Provider.of<GetProfileDriver>(context, listen: false)
@@ -111,9 +112,10 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                             minWidth: 12,
                             minHeight: 12,
                           ),
-                          child: Text(
-                            '$driverrequests',
-                            style: const TextStyle(
+                          child: const Text(
+                            //'$driverrequests',
+                            '0',
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
                             ),
@@ -127,7 +129,9 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const NotificationsScreen(role: 'driver',)));
+                            builder: (context) => const NotificationsScreen(
+                                  role: 'driver',
+                                )));
                   },
                 );
               },
