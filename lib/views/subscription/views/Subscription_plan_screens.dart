@@ -1,10 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api, file_names
+// ignore_for_file: unused_field, library_private_types_in_public_api, file_names
+
 import 'package:flutter/material.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/constants/widgets.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
 import 'package:transit_station/models/subscription_model.dart';
-import 'package:transit_station/views/home_views/screens/payment_screen.dart'; // Your model import
+import 'package:transit_station/views/home_views/screens/payment_screen.dart';
 
 class SubscriptionPlanScreens extends StatefulWidget {
   const SubscriptionPlanScreens({super.key});
@@ -15,9 +17,11 @@ class SubscriptionPlanScreens extends StatefulWidget {
 }
 
 class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
-  int selectedIndex = 0; // Track selected card index
-  UserOffersResponse? _userOffersResponse; // To store fetched data
-  bool _isLoading = true; // Loading state
+  int selectedIndex = 0;
+  UserOffersResponse? _userOffersResponse;
+  bool _isLoading = true;
+  final TextEditingController _promoCodeController = TextEditingController();
+  bool _isPromoApplied = false;
 
   @override
   void initState() {
@@ -42,13 +46,21 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
     }
   }
 
+  void _applyPromoCode() {
+    // Add your promo code validation logic here
+    setState(() {
+      _isPromoApplied = true;
+    });
+    showTopSnackBar(context, 'promo code applied', Icons.check, Colors.green,
+        const Duration(seconds: 2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context, 'Subscription Plan'),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator()) // Loading indicator
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -72,11 +84,11 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                                       _userOffersResponse!.offers[index];
                                   return _buildSubscriptionCard(
                                     offer.offerName,
-                                    "${offer.duration} days", // Assuming duration is in months
+                                    "${offer.duration} days",
                                     "${offer.price}\$",
-                                    "150\$", // Adjust as per your requirements
+                                    "150\$",
                                     index,
-                                    cardWidth, // Pass the calculated width
+                                    cardWidth,
                                   );
                                 },
                               ),
@@ -86,6 +98,18 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                       : const Center(
                           child: Text("No subscription plans available"),
                         ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _promoCodeController,
+                    decoration: InputDecoration(
+                      labelText: 'Promo Code',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.check),
+                        onPressed: _applyPromoCode,
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 30),
                   Center(
                     child: ElevatedButton(
@@ -122,11 +146,11 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
 
   Widget _buildSubscriptionCard(String title, String duration, String price,
       String originalPrice, int index, double cardWidth) {
-    bool isSelected = selectedIndex == index; // Check if this card is selected
+    bool isSelected = selectedIndex == index;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: cardWidth, // Use the calculated width
+      width: cardWidth,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isSelected ? defaultColor : Colors.white,
@@ -145,7 +169,7 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
       child: InkWell(
         onTap: () {
           setState(() {
-            selectedIndex = index; // Update selected index on tap
+            selectedIndex = index;
           });
         },
         child: Column(
