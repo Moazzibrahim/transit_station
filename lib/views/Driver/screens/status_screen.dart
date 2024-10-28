@@ -1,9 +1,69 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
+import 'package:transit_station/controllers/login_provider.dart';
 
-class StatusScreen extends StatelessWidget {
+class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
+
+  @override
+  _StatusScreenState createState() => _StatusScreenState();
+}
+
+class _StatusScreenState extends State<StatusScreen> {
+  final List<String> statusSequence = [
+    'pending request',
+    'on the way',
+    'car received',
+    'arrived'
+  ];
+
+  String currentStatus = 'pending request';
+
+  Future<void> getDriverStatus() async {
+    final tokenProvider = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenProvider.token;
+
+    final url = Uri.parse(
+        'https://transitstation.online/api/user/request/getdriverstatus');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        setState(() {
+          currentStatus = data['driver_status'];
+        });
+      } else {
+        print(
+            'Failed to load driver status. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
+  }
+
+  bool isStatusCompleted(String status) {
+    final currentIndex = statusSequence.indexOf(currentStatus);
+    final statusIndex = statusSequence.indexOf(status);
+    return statusIndex <= currentIndex;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDriverStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,31 +78,31 @@ class StatusScreen extends StatelessWidget {
               title: 'Pending Request',
               time: '',
               isActive: true,
-              isCompleted: true,
+              isCompleted: isStatusCompleted('pending request'),
             ),
             _buildDashedLine(),
             _buildStatusItem(
               icon: Icons.directions_car,
               title: 'Driver On The Way',
-              time: '7 Minutes',
-              isActive: false,
-              isCompleted: false,
+              time: '',
+              isActive: currentStatus == 'on the way',
+              isCompleted: isStatusCompleted('on the way'),
             ),
             _buildDashedLine(),
             _buildStatusItem(
               icon: Icons.directions_car,
               title: 'Car Taken',
-              time: '10 Minutes',
-              isActive: false,
-              isCompleted: false,
+              time: '',
+              isActive: currentStatus == 'car received',
+              isCompleted: isStatusCompleted('car received'),
             ),
             _buildDashedLine(),
             _buildStatusItem(
               icon: Icons.check_circle,
               title: 'Car In The Parking',
-              time: '13 Minutes',
-              isActive: false,
-              isCompleted: false, // Completed item example
+              time: '',
+              isActive: currentStatus == 'arrived',
+              isCompleted: isStatusCompleted('arrived'),
             ),
           ],
         ),
@@ -57,16 +117,17 @@ class StatusScreen extends StatelessWidget {
     required bool isActive,
     required bool isCompleted,
   }) {
+    final itemColor = isCompleted
+        ? defaultColor
+        : isActive
+            ? defaultColor
+            : Colors.grey;
+
     return Row(
       children: [
-        // Main status icon on the left
         Icon(
           icon,
-          color: isCompleted
-              ? defaultColor
-              : isActive
-                  ? defaultColor
-                  : Colors.grey,
+          color: itemColor,
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -76,9 +137,10 @@ class StatusScreen extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    color: isActive ? defaultColor : Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                  color: itemColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
               if (time.isNotEmpty)
                 Text(
@@ -91,9 +153,9 @@ class StatusScreen extends StatelessWidget {
           ),
         ),
         if (isCompleted)
-          const Icon(
+          Icon(
             Icons.verified,
-            color: defaultColor,
+            color: itemColor,
           ),
       ],
     );
