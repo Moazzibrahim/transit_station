@@ -37,7 +37,17 @@ class PromoCodeController with ChangeNotifier {
         // Display success message and discounted price
         showTopSnackBar(context, message, Icons.check, Colors.green,
             const Duration(seconds: 2));
-      } else {
+      } else if (response.statusCode == 400) {
+        showTopSnackBar(context, 'Promo code usage limit reached', Icons.error,
+            Colors.red, const Duration(seconds: 3));
+      } else if (response.statusCode == 401) {
+        showTopSnackBar(context, 'Promo code is not found', Icons.error,
+            Colors.red, const Duration(seconds: 3));
+      } else if (response.statusCode == 402) {
+        showTopSnackBar(context, 'Promo code is inactive', Icons.error,
+            Colors.red, const Duration(seconds: 3));
+      } 
+      else {
         // Display error message for other status codes
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
