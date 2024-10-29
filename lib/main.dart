@@ -12,6 +12,7 @@ import 'package:transit_station/controllers/image_services.dart';
 import 'package:transit_station/controllers/login_provider.dart';
 import 'package:transit_station/controllers/notifications_services.dart';
 import 'package:transit_station/controllers/parking_controller.dart';
+import 'package:transit_station/controllers/promo_code_controller.dart';
 import 'package:transit_station/controllers/revenue_provider.dart';
 import 'package:transit_station/views/Driver/controller/get_color_provider.dart';
 import 'package:transit_station/views/Driver/controller/get_profile_driver.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NotificationsServices()),
         ChangeNotifierProvider(create: (_) => ColorServiceprovider()),
         ChangeNotifierProvider(create: (_) => GetColorsUserProvider()),
+        ChangeNotifierProvider(create: (_)=> PromoCodeController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

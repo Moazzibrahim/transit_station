@@ -1,9 +1,11 @@
-// ignore_for_file: unused_field, library_private_types_in_public_api, file_names
+// ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:transit_station/constants/build_appbar.dart';
 import 'package:transit_station/constants/colors.dart';
 import 'package:transit_station/constants/widgets.dart';
+import 'package:transit_station/controllers/promo_code_controller.dart';
 import 'package:transit_station/controllers/subscription_provider.dart';
 import 'package:transit_station/models/subscription_model.dart';
 import 'package:transit_station/views/home_views/screens/payment_screen.dart';
@@ -46,13 +48,27 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
     }
   }
 
-  void _applyPromoCode() {
-    // Add your promo code validation logic here
+  Future<void> _applyPromoCode() async {
+    if (_userOffersResponse == null || _userOffersResponse!.offers.isEmpty) {
+      showTopSnackBar(context, 'No subscription plans available', Icons.error,
+          Colors.red, const Duration(seconds: 2));
+      return;
+    }
+
+    final String promocode = _promoCodeController.text.trim();
+    final int offerId = _userOffersResponse!.offers[selectedIndex].id;
+
+    if (promocode.isEmpty) {
+      showTopSnackBar(context, 'Please enter a promo code', Icons.error,
+          Colors.red, const Duration(seconds: 2));
+      return;
+    }
+
+    await Provider.of<PromoCodeController>(context, listen: false)
+        .submitPromoCode(promocode, offerId, context);
     setState(() {
       _isPromoApplied = true;
     });
-    showTopSnackBar(context, 'promo code applied', Icons.check, Colors.green,
-        const Duration(seconds: 2));
   }
 
   @override
@@ -110,12 +126,42 @@ class _SubscriptionPlanScreensState extends State<SubscriptionPlanScreens> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  // Display discounted price if promo code is applied
+                  Consumer<PromoCodeController>(
+                    builder: (context, promoCodeController, child) {
+                      if (_isPromoApplied &&
+                          promoCodeController.priceafterdiscount != null) {
+                        return Text(
+                          "Discounted Price: ${promoCodeController.priceafterdiscount}\$",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                   const SizedBox(height: 30),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PaymentScreen()));
+                        if (_isPromoApplied) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentScreen()),
+                          );
+                        } else {
+                          showTopSnackBar(
+                              context,
+                              'Please apply a promo code before proceeding',
+                              Icons.error,
+                              Colors.red,
+                              const Duration(seconds: 2));
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: defaultColor,
